@@ -5,131 +5,197 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>熱門股券商進出排行</title>
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: 'Microsoft JhengHei', Arial, sans-serif; font-size: 13px; background: #f0f2f5; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    /* 頁首 */
+    body {
+      font-family: 'Microsoft JhengHei', 'PingFang TC', Arial, sans-serif;
+      font-size: 13px;
+      background: #eef1f6;
+      color: #1a1a2e;
+    }
+
+    /* ── 頁首 ── */
     .header {
-      background: #1a56a0;
+      background: linear-gradient(135deg, #1a3a6b 0%, #2563a8 100%);
       color: white;
-      padding: 10px 16px;
+      padding: 12px 16px;
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
       flex-wrap: wrap;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+      position: sticky;
+      top: 0;
+      z-index: 100;
     }
-    .header h1 { font-size: 15px; white-space: nowrap; }
+
+    .header h1 {
+      font-size: 15px;
+      font-weight: bold;
+      letter-spacing: 0.5px;
+      white-space: nowrap;
+    }
+
+    .tab-group { display: flex; gap: 6px; }
 
     .tab-btn {
       padding: 5px 14px;
-      border: 1px solid rgba(255,255,255,0.6);
-      border-radius: 3px;
+      border: 1.5px solid rgba(255,255,255,0.5);
+      border-radius: 20px;
       background: transparent;
-      color: white;
+      color: rgba(255,255,255,0.85);
       cursor: pointer;
-      font-size: 13px;
+      font-size: 12px;
+      transition: all .2s;
     }
-    .tab-btn.active { background: white; color: #1a56a0; font-weight: bold; border-color: white; }
+    .tab-btn:hover { background: rgba(255,255,255,0.15); }
+    .tab-btn.active {
+      background: white;
+      color: #1a3a6b;
+      font-weight: bold;
+      border-color: white;
+    }
 
     .refresh-btn {
       padding: 5px 12px;
-      border: 1px solid rgba(255,255,255,0.6);
-      border-radius: 3px;
+      border: 1.5px solid rgba(255,255,255,0.5);
+      border-radius: 20px;
       background: transparent;
       color: white;
       cursor: pointer;
-      font-size: 13px;
+      font-size: 12px;
+      transition: all .2s;
     }
     .refresh-btn:hover { background: rgba(255,255,255,0.15); }
 
-    .update-time { font-size: 12px; opacity: 0.85; margin-left: auto; }
+    .update-time {
+      font-size: 11px;
+      opacity: 0.75;
+      margin-left: auto;
+      white-space: nowrap;
+    }
 
-    /* 主內容 */
-    .content { padding: 12px; }
-    .loading { text-align: center; padding: 40px; color: #666; }
-    .error { text-align: center; padding: 20px; color: #c00; }
+    /* ── 主內容 ── */
+    .content { padding: 14px; max-width: 1400px; margin: 0 auto; }
 
-    /* 彙總表 */
-    .summary-wrap { margin-bottom: 14px; }
-    .section-title {
-      background: #1a56a0;
+    .loading { text-align: center; padding: 60px; color: #666; font-size: 14px; }
+    .error { text-align: center; padding: 30px; color: #c00; font-size: 13px; }
+
+    /* ── 卡片區塊 ── */
+    .card {
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 1px 6px rgba(0,0,0,0.1);
+      overflow: hidden;
+      margin-bottom: 14px;
+    }
+
+    .card-title {
+      background: linear-gradient(90deg, #1a3a6b, #2563a8);
       color: white;
-      padding: 5px 10px;
+      padding: 8px 14px;
       font-weight: bold;
       font-size: 13px;
-      margin-bottom: 2px;
+      letter-spacing: 0.3px;
     }
+
+    /* ── 彙總表 ── */
     .summary-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 2px;
+      gap: 0;
     }
     .sum-table {
       width: 100%;
       border-collapse: collapse;
-      background: white;
     }
     .sum-table th {
-      background: #2e75b6;
-      color: white;
-      padding: 4px 8px;
+      background: #dde6f0;
+      color: #1a3a6b;
+      padding: 5px 10px;
       font-size: 12px;
       text-align: center;
+      border-bottom: 1px solid #c5d0de;
     }
     .sum-table td {
-      padding: 3px 8px;
-      border: 1px solid #d8dce0;
+      padding: 4px 10px;
+      border-bottom: 1px solid #edf0f4;
       font-size: 12px;
     }
+    .sum-table td:first-child { color: #333; }
     .sum-table td:last-child { text-align: right; font-weight: bold; }
+    .sum-table tr:hover td { background: #f5f8fc; }
 
-    /* 主明細表 */
-    .detail-wrap { overflow-x: auto; }
+    /* 左右分隔線 */
+    .sum-table:first-child { border-right: 1px solid #d0d9e4; }
+
+    /* ── 主明細表 ── */
+    .detail-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
     .main-table {
       width: 100%;
       border-collapse: collapse;
-      background: white;
+      min-width: 480px;
     }
     .main-table thead th {
-      background: #2e75b6;
-      color: white;
-      padding: 5px 8px;
+      background: #dde6f0;
+      color: #1a3a6b;
+      padding: 7px 10px;
       text-align: center;
-      border: 1px solid #1a56a0;
+      border-bottom: 2px solid #b0c4d8;
       white-space: nowrap;
       font-size: 12px;
+      position: sticky;
+      top: 48px;
     }
     .main-table td {
-      padding: 3px 8px;
-      border: 1px solid #d8dce0;
+      padding: 4px 10px;
+      border-bottom: 1px solid #edf0f4;
       font-size: 12px;
     }
-    /* 數字欄靠右 */
-    .main-table td:nth-child(n+3) { text-align: right; }
-    /* 排行欄置中 */
-    .main-table td:first-child { text-align: center; }
+    .main-table td:first-child { text-align: center; color: #666; width: 40px; }
+    .main-table td:nth-child(3),
+    .main-table td:nth-child(4),
+    .main-table td:nth-child(5) { text-align: right; }
+    .main-table tbody tr:hover td { background: #f5f8fc; }
 
     /* 股票標題列 */
-    .stock-hdr { background: #1a56a0; }
     .stock-hdr td {
-      color: white;
+      background: linear-gradient(90deg, #1a3a6b, #2563a8) !important;
+      color: white !important;
       font-weight: bold;
-      padding: 5px 10px;
+      padding: 6px 10px;
       font-size: 13px;
     }
     .stock-hdr td:last-child { text-align: right; }
+    .stock-hdr:hover td { filter: brightness(1.08); }
 
-    /* 顏色 */
-    .pos { background: #c6efce !important; color: #1e6b1e; font-weight: bold; }
-    .neg { background: #ffc7ce !important; color: #9c0006; font-weight: bold; }
+    /* ── 顏色（台股慣例：正=紅 / 負=綠）── */
+    .pos { background: #ffe4e4 !important; color: #c0392b; font-weight: bold; }
+    .neg { background: #e4f4e4 !important; color: #27ae60; font-weight: bold; }
+
+    /* stock-hdr 內的 pos/neg 加深一點以在深藍底上顯示 */
+    .stock-hdr .pos { background: #ff9999 !important; color: #7b0000; border-radius: 3px; padding: 1px 5px; }
+    .stock-hdr .neg { background: #99dd99 !important; color: #145214; border-radius: 3px; padding: 1px 5px; }
+
+    /* ── 手機版 ── */
+    @media (max-width: 600px) {
+      .content { padding: 8px; }
+      .summary-grid { grid-template-columns: 1fr; }
+      .sum-table:first-child { border-right: none; border-bottom: 1px solid #d0d9e4; }
+      .header h1 { font-size: 13px; }
+      .update-time { width: 100%; margin-left: 0; }
+    }
   </style>
 </head>
 <body>
 
 <div class="header">
   <h1>熱門股券商進出排行</h1>
-  <button class="tab-btn active" id="btn-amt" onclick="switchTab('amt')">依成交金額</button>
-  <button class="tab-btn" id="btn-vol" onclick="switchTab('vol')">依成交張數</button>
+  <div class="tab-group">
+    <button class="tab-btn active" id="btn-amt" onclick="switchTab('amt')">依成交金額</button>
+    <button class="tab-btn" id="btn-vol" onclick="switchTab('vol')">依成交張數</button>
+  </div>
   <button class="refresh-btn" onclick="manualRefresh()">↻ 重新整理</button>
   <span class="update-time" id="update-time">載入中...</span>
 </div>
@@ -143,8 +209,7 @@
   let cache = {};
 
   function fmt(n) {
-    if (n == null) return '-';
-    return n.toLocaleString();
+    return n == null ? '-' : n.toLocaleString();
   }
 
   function netClass(n) {
@@ -173,13 +238,12 @@
   }
 
   function render(data) {
-    const unit = data.unit;
-    const stocks = data.stocks;
-    document.getElementById('update-time').textContent = `資料時間：${data.updated_at}`;
+    const { unit, stocks, updated_at } = data;
+    document.getElementById('update-time').textContent = `資料時間：${updated_at}`;
 
-    // ── 彙總表（兩欄）──
+    // ── 彙總表 ──
     const half = Math.ceil(stocks.length / 2);
-    const left = stocks.slice(0, half);
+    const left  = stocks.slice(0, half);
     const right = stocks.slice(half);
 
     function sumRows(arr) {
@@ -191,8 +255,8 @@
     }
 
     const summaryHtml = `
-      <div class="summary-wrap">
-        <div class="section-title">各股買賣超合計（${unit}）</div>
+      <div class="card">
+        <div class="card-title">各股買賣超合計（${unit}）</div>
         <div class="summary-grid">
           <table class="sum-table">
             <tr><th>股票</th><th>買賣超 (${unit})</th></tr>
@@ -206,13 +270,13 @@
       </div>`;
 
     // ── 明細表 ──
-    const buyLabel = unit === '千元' ? '買進金額(千元)' : '總買量(張)';
+    const buyLabel  = unit === '千元' ? '買進金額(千元)' : '總買量(張)';
     const sellLabel = unit === '千元' ? '賣出金額(千元)' : '總賣量(張)';
 
     const detailRows = stocks.map(s => `
       <tr class="stock-hdr">
         <td colspan="4">${s.rank} - ${s.name}(${s.code})</td>
-        <td class="${netClass(s.total_net)}">${netText(s.total_net)}</td>
+        <td><span class="${netClass(s.total_net)}">${netText(s.total_net)}</span></td>
       </tr>
       ${s.brokers.map(b => `
         <tr>
@@ -225,20 +289,22 @@
     `).join('');
 
     const detailHtml = `
-      <div class="section-title" style="margin-bottom:2px">券商明細</div>
-      <div class="detail-wrap">
-        <table class="main-table">
-          <thead>
-            <tr>
-              <th>排行</th>
-              <th>證商名稱</th>
-              <th>${buyLabel}</th>
-              <th>${sellLabel}</th>
-              <th>買賣超 (${unit})</th>
-            </tr>
-          </thead>
-          <tbody>${detailRows}</tbody>
-        </table>
+      <div class="card">
+        <div class="card-title">券商明細</div>
+        <div class="detail-wrap">
+          <table class="main-table">
+            <thead>
+              <tr>
+                <th>排行</th>
+                <th>證商名稱</th>
+                <th>${buyLabel}</th>
+                <th>${sellLabel}</th>
+                <th>買賣超 (${unit})</th>
+              </tr>
+            </thead>
+            <tbody>${detailRows}</tbody>
+          </table>
+        </div>
       </div>`;
 
     document.getElementById('main-content').innerHTML = summaryHtml + detailHtml;
@@ -248,11 +314,7 @@
     currentTab = mode;
     document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
     document.getElementById(`btn-${mode}`).classList.add('active');
-    if (cache[mode]) {
-      render(cache[mode]);
-    } else {
-      loadData(mode);
-    }
+    cache[mode] ? render(cache[mode]) : loadData(mode);
   }
 
   function manualRefresh() {
@@ -261,10 +323,7 @@
   }
 
   // 每小時自動刷新
-  setInterval(() => {
-    delete cache[currentTab];
-    loadData(currentTab);
-  }, 60 * 60 * 1000);
+  setInterval(() => { delete cache[currentTab]; loadData(currentTab); }, 60 * 60 * 1000);
 
   loadData('amt');
 </script>
