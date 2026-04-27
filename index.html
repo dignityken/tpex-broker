@@ -153,22 +153,23 @@
       border-bottom: 1px solid #edf0f4;
       font-size: 12px;
     }
-    .main-table td:first-child { text-align: center; color: #666; width: 40px; }
+    .main-table tbody tr:not(.stock-hdr) td:first-child { text-align: center; color: #666; width: 40px; }
     .main-table td:nth-child(3),
     .main-table td:nth-child(4),
     .main-table td:nth-child(5) { text-align: right; }
-    .main-table tbody tr:hover td { background: #f5f8fc; }
+    .main-table tbody tr:not(.stock-hdr):hover td { background: #f5f8fc; }
 
     /* 股票標題列 */
-    .stock-hdr td {
-      background: linear-gradient(90deg, #1a3a6b, #2563a8) !important;
-      color: white !important;
+    .main-table tbody tr.stock-hdr td {
+      background: linear-gradient(90deg, #1a3a6b, #2563a8);
+      color: white;
       font-weight: bold;
       padding: 6px 10px;
       font-size: 13px;
+      border-bottom: none;
     }
-    .stock-hdr td:last-child { text-align: right; }
-    .stock-hdr:hover td { filter: brightness(1.08); }
+    .main-table tbody tr.stock-hdr td:last-child { text-align: right; }
+    .main-table tbody tr.stock-hdr:hover td { filter: brightness(1.1); }
 
     /* ── 顏色（台股慣例：正=紅 / 負=綠）── */
     .pos { background: #ffe4e4 !important; color: #c0392b; font-weight: bold; }
