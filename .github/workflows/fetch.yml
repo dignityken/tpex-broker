@@ -2,8 +2,13 @@ name: Fetch TPEX Data
 
 on:
   schedule:
-    - cron: '5 * * * *'  # 每小時第5分執行
-  workflow_dispatch:      # 允許手動觸發
+    - cron: '5 * * * *'
+  workflow_dispatch:
+    inputs:
+      hist_date:
+        description: 'Historical date (YYYY-MM-DD), leave empty for normal run'
+        required: false
+        default: ''
 
 permissions:
   contents: write
@@ -23,6 +28,8 @@ jobs:
 
       - name: Fetch TPEX data
         run: python scripts/fetch_data.py
+        env:
+          HIST_DATE: ${{ github.event.inputs.hist_date }}
 
       - name: Commit and push
         run: |
