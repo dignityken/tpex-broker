@@ -180,6 +180,48 @@
   function setStatus(msg) { document.getElementById('main-content').innerHTML = `<div class="loading">${msg}</div>`; }
   function setError(msg)  { document.getElementById('main-content').innerHTML = `<div class="error">${msg}</div>`; }
 
+  // ── HTML 解析（歷史直抓用）──
+  function parseNum(s) {
+    s = String(s).trim().replace(/,/g, '');
+    if (!s || s === '-' || s.toUpperCase() === 'FALSE') return null;
+    const n = parseFloat(s);
+    return isNaN(n) ? null : Math.round(n);
+  }
+
+  function parseHtmlTable(htmlText, unit) {
+    const doc = new DOMParser().parseFromString(htmlText, 'text/html');
+    let tbl = null;
+    for (const t of doc.querySelectorAll('table')) {
+      const tx = t.textContent;
+      if (tx.includes('元大') && tx.includes('凱基') && tx.includes('富邦')) { tbl = t; break; }
+    }
+    if (!tbl) throw new Error('找不到主表格（假日或資料未公布）');
+
+    const stocks = [], pat = /(\d+)\s*[-－]\s*(.+?)\((\d+[A-Z*]*)\)/;
+    let cur = null;
+    for (const row of tbl.querySelectorAll('tr')) {
+      const cells = [...row.querySelectorAll('td,th')];
+      if (!cells.length) continue;
+      const texts = cells.map(c => c.textContent.trim());
+      if (texts[0] === '排行' || texts[0] === '') continue;
+      const m = texts.join(' ').match(pat);
+      const isHdr = m && (cells.length <= 2 || !/^\d+$/.test(texts[0]));
+      if (isHdr) {
+        if (cur) stocks.push(cur);
+        cur = { rank: +m[1], name: m[2].trim(), code: m[3], brokers: [] };
+        continue;
+      }
+      if (cur && cells.length >= 4 && /^\d+$/.test(texts[0])) {
+        const buy = parseNum(texts[2]), sell = parseNum(texts[3]);
+        if (buy !== null && sell !== null)
+          cur.brokers.push({ rank: +texts[0], name: texts[1], buy, sell, net: buy - sell });
+      }
+    }
+    if (cur) stocks.push(cur);
+    stocks.forEach(s => { s.total_net = s.brokers.reduce((a, b) => a + b.net, 0); });
+    return { unit, stocks };
+  }
+
   // ── 即時：讀 JSON ──
   async function loadLive(tab) {
     setStatus('載入中...');
@@ -194,60 +236,69 @@
     }
   }
 
-  // ── 歷史：先找本地，找不到就觸發 Action ──
+  // ── 歷史：本地快取 → 直抓 TPEX → fallback Action ──
+  function tpexHistUrl(tab, date) {
+    const d = date.replace(/-/g, '/');
+    return tab === 'amt'
+      ? `https://www.tpex.org.tw/www/zh-tw/afterTrading/brokerAmt?date=${encodeURIComponent(d)}&id=&response=html`
+      : `https://www.tpex.org.tw/www/zh-tw/afterTrading/brokerVol?date=${encodeURIComponent(d)}&id=&response=html`;
+  }
+
   async function loadHistory(tab, date) {
     setStatus('查詢中...');
+
+    // 1. 本地快取
     try {
-      const resp = await fetch(`data/hist/${date}-${tab}.json?t=${Date.now()}`);
-      if (resp.ok) {
-        const data = await resp.json();
-        document.getElementById('update-time').textContent = `歷史資料：${date}`;
-        render(data);
-        return;
-      }
+      const r = await fetch(`data/hist/${date}-${tab}.json?t=${Date.now()}`);
+      if (r.ok) { const d = await r.json(); showHistData(d, date); return; }
     } catch (e) {}
 
-    // 本地沒有 → 觸發 Action
-    const token = getToken();
-    if (!token) {
-      setError('查無本地資料，需要設定 GitHub Token 才能查詢<br><small>請點右上角 ⚙ 設定</small>');
-      return;
+    // 2. 直接抓 TPEX（不用 proxy）
+    setStatus('直接讀取 TPEX 資料...');
+    try {
+      const r = await fetch(tpexHistUrl(tab, date));
+      if (r.ok) {
+        const html = await r.text();
+        const data = parseHtmlTable(html, UNITS[tab]);
+        showHistData(data, date);
+        return;
+      }
+    } catch (e) {
+      // CORS 被擋 → 繼續 fallback
     }
 
-    setStatus('觸發資料抓取中...');
+    // 3. Fallback：觸發 GitHub Action
+    const token = getToken();
+    if (!token) {
+      setError('TPEX 不允許直接讀取，需要設定 GitHub Token 才能查詢<br><small>請點右上角 ⚙ 設定 Token（只需設定一次）</small>');
+      return;
+    }
+    setStatus('觸發 GitHub Action 抓取資料...');
     try {
-      const trigResp = await fetch(
+      await fetch(
         `https://api.github.com/repos/${REPO}/actions/workflows/fetch.yml/dispatches`,
         { method: 'POST',
           headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
           body: JSON.stringify({ ref: 'main', inputs: { hist_date: date } }) }
       );
-      if (!trigResp.ok && trigResp.status !== 204)
-        throw new Error(`觸發失敗 HTTP ${trigResp.status}，請確認 Token 是否正確`);
-    } catch (e) {
-      setError(e.message);
-      return;
-    }
+    } catch (e) { setError(`觸發失敗：${e.message}`); return; }
 
-    // 輪詢等待結果（最多 90 秒）
-    setStatus('資料準備中，請稍候約 30~60 秒...');
+    // 輪詢
     const deadline = Date.now() + 90000;
     while (Date.now() < deadline) {
       await new Promise(r => setTimeout(r, 6000));
       try {
         const r = await fetch(`data/hist/${date}-${tab}.json?t=${Date.now()}`);
-        if (r.ok) {
-          const data = await r.json();
-          document.getElementById('update-time').textContent = `歷史資料：${date}`;
-          render(data);
-          return;
-        }
+        if (r.ok) { const d = await r.json(); showHistData(d, date); return; }
       } catch (e) {}
-      // 更新倒數
-      const left = Math.ceil((deadline - Date.now()) / 1000);
-      setStatus(`資料準備中，剩餘約 ${left} 秒...`);
+      setStatus(`準備中，剩餘約 ${Math.ceil((deadline - Date.now()) / 1000)} 秒...`);
     }
-    setError('查詢逾時，可能是假日無資料，或請稍後再試');
+    setError('查詢逾時，可能是假日無資料');
+  }
+
+  function showHistData(data, date) {
+    document.getElementById('update-time').textContent = `歷史資料：${date}`;
+    render(data);
   }
 
   // ── 盤中比較 ──
