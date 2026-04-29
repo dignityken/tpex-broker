@@ -6,91 +6,53 @@
   <title>熱門股券商進出排行</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    body {
-      font-family: 'Microsoft JhengHei', 'PingFang TC', Arial, sans-serif;
-      font-size: 13px;
-      background: #eef1f6;
-      color: #1a1a2e;
-    }
+    body { font-family: 'Microsoft JhengHei', 'PingFang TC', Arial, sans-serif; font-size: 13px; background: #eef1f6; color: #1a1a2e; }
 
     /* ── 頁首 ── */
-    .header {
-      background: linear-gradient(135deg, #1a3a6b 0%, #2563a8 100%);
-      color: white;
-      padding: 8px 14px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      flex-wrap: wrap;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.25);
-      position: sticky;
-      top: 0;
-      z-index: 100;
-    }
-
-    .header h1 { font-size: 15px; font-weight: bold; letter-spacing: 0.5px; white-space: nowrap; }
+    .header { background: linear-gradient(135deg, #1a3a6b 0%, #2563a8 100%); color: white; padding: 8px 14px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; box-shadow: 0 2px 8px rgba(0,0,0,0.25); position: sticky; top: 0; z-index: 100; }
+    .header h1 { font-size: 15px; font-weight: bold; white-space: nowrap; }
     .divider { width: 1px; height: 20px; background: rgba(255,255,255,0.3); flex-shrink: 0; }
     .tab-group { display: flex; gap: 5px; }
 
-    .tab-btn, .mode-btn, .refresh-btn, .query-btn {
-      padding: 5px 13px;
-      border-radius: 20px;
-      cursor: pointer;
-      font-size: 12px;
-      transition: all .2s;
-      white-space: nowrap;
+    .tab-btn, .mode-btn, .refresh-btn, .query-btn, .setting-btn {
+      padding: 5px 13px; border-radius: 20px; cursor: pointer; font-size: 12px; transition: all .2s; white-space: nowrap;
     }
-    .tab-btn {
-      border: 1.5px solid rgba(255,255,255,0.5);
-      background: transparent;
-      color: rgba(255,255,255,0.85);
-    }
+    .tab-btn  { border: 1.5px solid rgba(255,255,255,0.5); background: transparent; color: rgba(255,255,255,0.85); }
     .tab-btn:hover { background: rgba(255,255,255,0.15); }
     .tab-btn.active { background: white; color: #1a3a6b; font-weight: bold; border-color: white; }
-
-    .mode-btn {
-      border: 1.5px solid rgba(255,255,255,0.5);
-      background: transparent;
-      color: rgba(255,255,255,0.85);
-    }
+    .mode-btn { border: 1.5px solid rgba(255,255,255,0.5); background: transparent; color: rgba(255,255,255,0.85); }
     .mode-btn:hover { background: rgba(255,255,255,0.15); }
     .mode-btn.active { background: #f0a500; color: white; border-color: #f0a500; font-weight: bold; }
-
-    .refresh-btn {
-      border: 1.5px solid rgba(255,255,255,0.5);
-      background: transparent;
-      color: white;
-    }
+    .refresh-btn { border: 1.5px solid rgba(255,255,255,0.5); background: transparent; color: white; }
     .refresh-btn:hover { background: rgba(255,255,255,0.15); }
+    .query-btn  { border: none; background: #f0a500; color: white; font-weight: bold; }
+    .query-btn:hover { background: #d4920a; }
+    .setting-btn { border: 1.5px solid rgba(255,255,255,0.3); background: transparent; color: rgba(255,255,255,0.6); font-size: 11px; padding: 3px 8px; }
+    .setting-btn:hover { color: white; border-color: white; }
 
     #hist-controls { display: none; align-items: center; gap: 6px; }
-    #hist-controls input[type=date] {
-      padding: 4px 8px;
-      border: 1.5px solid rgba(255,255,255,0.6);
-      border-radius: 20px;
-      background: rgba(255,255,255,0.15);
-      color: white;
-      font-size: 12px;
-      outline: none;
-    }
+    #hist-controls input[type=date] { padding: 4px 8px; border: 1.5px solid rgba(255,255,255,0.6); border-radius: 20px; background: rgba(255,255,255,0.15); color: white; font-size: 12px; outline: none; }
     #hist-controls input[type=date]::-webkit-calendar-picker-indicator { filter: invert(1); cursor: pointer; }
-
-    .query-btn { border: none; background: #f0a500; color: white; font-weight: bold; }
-    .query-btn:hover { background: #d4920a; }
-
     .update-time { font-size: 11px; opacity: 0.8; margin-left: auto; white-space: nowrap; }
+
+    /* Token 設定 */
+    #token-bar { background: #fff3cd; color: #856404; padding: 8px 14px; font-size: 12px; display: none; align-items: center; gap: 8px; flex-wrap: wrap; }
+    #token-bar input { padding: 4px 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 12px; width: 320px; max-width: 100%; }
+    #token-bar button { padding: 4px 12px; border: none; border-radius: 4px; cursor: pointer; font-size: 12px; }
+    .btn-save { background: #1a3a6b; color: white; }
+    .btn-cancel { background: #ccc; color: #333; }
 
     /* ── 主內容 ── */
     .content { padding: 12px; max-width: 1400px; margin: 0 auto; }
     .loading { text-align: center; padding: 60px; color: #888; font-size: 14px; }
-    .error   { text-align: center; padding: 20px; color: #c00; font-size: 13px; line-height: 1.8; }
+    .error   { text-align: center; padding: 20px; color: #c00; font-size: 13px; line-height: 2; }
+    .info    { text-align: center; padding: 20px; color: #555; font-size: 13px; line-height: 2; }
 
     /* ── 卡片 ── */
     .card { background: white; border-radius: 8px; box-shadow: 0 1px 6px rgba(0,0,0,0.1); overflow: hidden; margin-bottom: 12px; }
     .card-title { background: linear-gradient(90deg, #1a3a6b, #2563a8); color: white; padding: 7px 14px; font-weight: bold; font-size: 13px; }
 
-    /* ── 彙總表（桌機：兩欄 / 手機：單欄）── */
+    /* ── 彙總表 ── */
     .summary-grid { display: grid; grid-template-columns: 1fr 1fr; }
     .sum-table { width: 100%; border-collapse: collapse; }
     .sum-table th { background: #dde6f0; color: #1a3a6b; padding: 5px 10px; font-size: 12px; text-align: center; border-bottom: 1px solid #c5d0de; }
@@ -107,45 +69,43 @@
     .main-table tbody tr:not(.stock-hdr) td:first-child { text-align: center; color: #888; width: 36px; }
     .main-table td:nth-child(3), .main-table td:nth-child(4), .main-table td:nth-child(5) { text-align: right; }
     .main-table tbody tr:not(.stock-hdr):hover td { background: #f5f8fc; }
-
     .main-table tbody tr.stock-hdr td { background: linear-gradient(90deg, #1a3a6b, #2563a8); color: white; font-weight: bold; padding: 6px 10px; font-size: 13px; border-bottom: none; }
     .main-table tbody tr.stock-hdr td:last-child { text-align: right; }
     .main-table tbody tr.stock-hdr:hover td { filter: brightness(1.1); }
 
-    /* ── 顏色（台股：正=紅 / 負=綠）── */
+    /* ── 盤中比較表 ── */
+    .cmp-table { width: 100%; border-collapse: collapse; min-width: 560px; }
+    .cmp-table thead th { background: #dde6f0; color: #1a3a6b; padding: 6px 10px; text-align: center; border-bottom: 2px solid #b0c4d8; font-size: 12px; white-space: nowrap; }
+    .cmp-table td { padding: 4px 10px; border-bottom: 1px solid #edf0f4; font-size: 12px; }
+    .cmp-table td:nth-child(1) { text-align: center; width: 60px; }
+    .cmp-table td:nth-child(3), .cmp-table td:nth-child(4), .cmp-table td:nth-child(5) { text-align: right; }
+    .cmp-table tr:hover td { background: #f5f8fc; }
+    .rank-up   { color: #c0392b; font-weight: bold; }
+    .rank-down { color: #27ae60; font-weight: bold; }
+    .rank-same { color: #888; }
+    .delta-pos { color: #c0392b; font-weight: bold; }
+    .delta-neg { color: #27ae60; font-weight: bold; }
+
+    /* ── 顏色 ── */
     .pos { background: #ffe4e4 !important; color: #c0392b; font-weight: bold; }
     .neg { background: #e4f4e4 !important; color: #27ae60; font-weight: bold; }
     .stock-hdr .pos { background: #ff9999 !important; color: #7b0000; border-radius: 3px; padding: 1px 5px; }
     .stock-hdr .neg { background: #99dd99 !important; color: #145214; border-radius: 3px; padding: 1px 5px; }
 
-    /* ══ 手機版 RWD ══ */
+    /* ── RWD ── */
     @media (max-width: 640px) {
-      /* 頁首：標題佔一整行，其餘換行排列 */
       .header { padding: 7px 10px; gap: 6px; }
       .header h1 { font-size: 14px; width: 100%; }
       .divider { display: none; }
       .update-time { margin-left: 0; font-size: 11px; width: 100%; order: 99; }
-
-      .tab-btn, .mode-btn, .refresh-btn, .query-btn { padding: 5px 11px; font-size: 12px; }
-      #hist-controls input[type=date] { font-size: 12px; padding: 4px 7px; max-width: 140px; }
-
-      /* 內容：減少邊距 */
+      .tab-btn, .mode-btn, .refresh-btn, .query-btn { padding: 5px 10px; font-size: 11px; }
+      #hist-controls input[type=date] { font-size: 11px; max-width: 130px; }
       .content { padding: 7px; }
-      .card { border-radius: 6px; margin-bottom: 8px; }
-      .card-title { padding: 6px 10px; font-size: 12px; }
-
-      /* 彙總：單欄 */
       .summary-grid { grid-template-columns: 1fr; }
       .sum-table:first-child { border-right: none; border-bottom: 2px solid #b0c4d8; }
-      .sum-table th { padding: 4px 8px; font-size: 12px; }
-      .sum-table td { padding: 4px 8px; font-size: 12px; }
-
-      /* 明細表：緊湊 */
+      .sum-table th, .sum-table td { padding: 4px 7px; font-size: 12px; }
       .main-table { min-width: 360px; }
-      .main-table thead th { padding: 5px 6px; font-size: 11px; }
-      .main-table td { padding: 4px 6px; font-size: 12px; }
-      .main-table tbody tr.stock-hdr td { padding: 5px 8px; font-size: 12px; }
-      .main-table tbody tr:not(.stock-hdr) td:first-child { width: 28px; }
+      .main-table thead th, .main-table td { padding: 4px 6px; font-size: 11px; }
     }
   </style>
 </head>
@@ -158,12 +118,11 @@
     <button class="mode-btn active" id="mode-live" onclick="switchMode('live')">即時</button>
     <button class="mode-btn" id="mode-hist" onclick="switchMode('hist')">歷史</button>
   </div>
-
   <div class="divider"></div>
-
   <div class="tab-group">
     <button class="tab-btn active" id="btn-amt" onclick="switchTab('amt')">依成交金額</button>
     <button class="tab-btn" id="btn-vol" onclick="switchTab('vol')">依成交張數</button>
+    <button class="tab-btn" id="btn-cmp" onclick="switchTab('cmp')">盤中比較</button>
   </div>
 
   <button class="refresh-btn" id="live-refresh" onclick="manualRefresh()">↻ 重新整理</button>
@@ -173,7 +132,17 @@
     <button class="query-btn" onclick="queryHistory()">查詢</button>
   </div>
 
+  <button class="setting-btn" onclick="showTokenBar()" title="設定 GitHub Token（歷史查詢用）">⚙</button>
   <span class="update-time" id="update-time">載入中...</span>
+</div>
+
+<!-- Token 設定列 -->
+<div id="token-bar">
+  <span>歷史查詢需要 GitHub Token（workflow 權限）：</span>
+  <input type="password" id="token-input" placeholder="ghp_xxxxxxxxxxxx">
+  <button class="btn-save" onclick="saveToken()">儲存</button>
+  <button class="btn-cancel" onclick="hideTokenBar()">取消</button>
+  <span id="token-status"></span>
 </div>
 
 <div class="content">
@@ -181,25 +150,39 @@
 </div>
 
 <script>
+  // ── 狀態 ──
   let currentMode = 'live';
   let currentTab  = 'amt';
   let liveCache   = {};
-
   const UNITS = { amt: '千元', vol: '張' };
+  const REPO  = 'dignityken/tpex-broker';
 
-  function fmt(n) { return n == null ? '-' : n.toLocaleString(); }
-  function netClass(n) { return n > 0 ? 'pos' : n < 0 ? 'neg' : ''; }
-  function netText(n) { if (n == null) return '-'; return (n > 0 ? '+' : '') + n.toLocaleString(); }
-
-  function parseNum(s) {
-    s = String(s).trim().replace(/,/g, '');
-    if (!s || s === '-' || s.toUpperCase() === 'FALSE') return null;
-    const n = parseFloat(s);
-    return isNaN(n) ? null : Math.round(n);
+  // ── Token 管理 ──
+  function getToken()   { return localStorage.getItem('gh_token') || ''; }
+  function saveToken()  {
+    const t = document.getElementById('token-input').value.trim();
+    if (!t) return;
+    localStorage.setItem('gh_token', t);
+    document.getElementById('token-status').textContent = '✓ 已儲存';
+    setTimeout(hideTokenBar, 1000);
   }
+  function showTokenBar() {
+    document.getElementById('token-bar').style.display = 'flex';
+    document.getElementById('token-input').value = getToken();
+    document.getElementById('token-status').textContent = '';
+  }
+  function hideTokenBar() { document.getElementById('token-bar').style.display = 'none'; }
 
-async function loadLive(tab) {
-    document.getElementById('main-content').innerHTML = '<div class="loading">載入中...</div>';
+  // ── 工具 ──
+  function fmt(n)       { return n == null ? '-' : n.toLocaleString(); }
+  function netClass(n)  { return n > 0 ? 'pos' : n < 0 ? 'neg' : ''; }
+  function netText(n)   { if (n == null) return '-'; return (n > 0 ? '+' : '') + n.toLocaleString(); }
+  function setStatus(msg) { document.getElementById('main-content').innerHTML = `<div class="loading">${msg}</div>`; }
+  function setError(msg)  { document.getElementById('main-content').innerHTML = `<div class="error">${msg}</div>`; }
+
+  // ── 即時：讀 JSON ──
+  async function loadLive(tab) {
+    setStatus('載入中...');
     try {
       const resp = await fetch(`data/${tab}.json?t=${Date.now()}`);
       if (!resp.ok) throw new Error('HTTP ' + resp.status);
@@ -207,51 +190,176 @@ async function loadLive(tab) {
       liveCache[tab] = data;
       render(data);
     } catch (e) {
-      document.getElementById('main-content').innerHTML =
-        `<div class="error">載入失敗：${e.message}<br><small>請確認 GitHub Actions 已執行過一次</small></div>`;
+      setError(`載入失敗：${e.message}`);
     }
   }
 
+  // ── 歷史：先找本地，找不到就觸發 Action ──
   async function loadHistory(tab, date) {
-    // date 格式 YYYY-MM-DD
-    document.getElementById('main-content').innerHTML = '<div class="loading">查詢中...</div>';
+    setStatus('查詢中...');
     try {
       const resp = await fetch(`data/hist/${date}-${tab}.json?t=${Date.now()}`);
-      if (!resp.ok) throw new Error(resp.status === 404 ? '該日無資料（假日或資料未公布）' : 'HTTP ' + resp.status);
-      const data = await resp.json();
-      document.getElementById('update-time').textContent = `歷史資料：${date}`;
-      render(data);
+      if (resp.ok) {
+        const data = await resp.json();
+        document.getElementById('update-time').textContent = `歷史資料：${date}`;
+        render(data);
+        return;
+      }
+    } catch (e) {}
+
+    // 本地沒有 → 觸發 Action
+    const token = getToken();
+    if (!token) {
+      setError('查無本地資料，需要設定 GitHub Token 才能查詢<br><small>請點右上角 ⚙ 設定</small>');
+      return;
+    }
+
+    setStatus('觸發資料抓取中...');
+    try {
+      const trigResp = await fetch(
+        `https://api.github.com/repos/${REPO}/actions/workflows/fetch.yml/dispatches`,
+        { method: 'POST',
+          headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
+          body: JSON.stringify({ ref: 'main', inputs: { hist_date: date } }) }
+      );
+      if (!trigResp.ok && trigResp.status !== 204)
+        throw new Error(`觸發失敗 HTTP ${trigResp.status}，請確認 Token 是否正確`);
     } catch (e) {
-      document.getElementById('main-content').innerHTML =
-        `<div class="error">${e.message}</div>`;
+      setError(e.message);
+      return;
+    }
+
+    // 輪詢等待結果（最多 90 秒）
+    setStatus('資料準備中，請稍候約 30~60 秒...');
+    const deadline = Date.now() + 90000;
+    while (Date.now() < deadline) {
+      await new Promise(r => setTimeout(r, 6000));
+      try {
+        const r = await fetch(`data/hist/${date}-${tab}.json?t=${Date.now()}`);
+        if (r.ok) {
+          const data = await r.json();
+          document.getElementById('update-time').textContent = `歷史資料：${date}`;
+          render(data);
+          return;
+        }
+      } catch (e) {}
+      // 更新倒數
+      const left = Math.ceil((deadline - Date.now()) / 1000);
+      setStatus(`資料準備中，剩餘約 ${left} 秒...`);
+    }
+    setError('查詢逾時，可能是假日無資料，或請稍後再試');
+  }
+
+  // ── 盤中比較 ──
+  async function loadComparison() {
+    setStatus('載入比較資料...');
+    try {
+      const mResp = await fetch(`data/intraday/manifest.json?t=${Date.now()}`);
+      if (!mResp.ok) throw new Error('尚無盤中快照資料');
+      const manifest = await mResp.json();
+
+      const today = new Date().toLocaleDateString('zh-TW', {
+        timeZone: 'Asia/Taipei', year: 'numeric', month: '2-digit', day: '2-digit'
+      }).replace(/\//g, '-').replace(/(\d+)-(\d+)-(\d+)/, '$1-$2-$3');
+
+      // 取 YYYY-MM-DD 格式
+      const d = new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Taipei' }));
+      const dateKey = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+
+      const hours = manifest[dateKey] || [];
+      if (hours.length < 1) throw new Error('今日尚無快照資料，請等下一整點後再試');
+
+      // 取最新與前一份
+      const curHour  = hours[hours.length - 1];
+      const prevHour = hours.length >= 2 ? hours[hours.length - 2] : null;
+
+      const [curAmt, curVol] = await Promise.all([
+        fetch(`data/intraday/${dateKey}/${curHour}-amt.json?t=${Date.now()}`).then(r => r.json()),
+        fetch(`data/intraday/${dateKey}/${curHour}-vol.json?t=${Date.now()}`).then(r => r.json()),
+      ]);
+
+      let prevAmt = null, prevVol = null;
+      if (prevHour) {
+        [prevAmt, prevVol] = await Promise.all([
+          fetch(`data/intraday/${dateKey}/${prevHour}-amt.json?t=${Date.now()}`).then(r => r.json()),
+          fetch(`data/intraday/${dateKey}/${prevHour}-vol.json?t=${Date.now()}`).then(r => r.json()),
+        ]);
+      }
+
+      renderComparison(curAmt, prevAmt, curVol, prevVol, curHour, prevHour);
+    } catch (e) {
+      setError(e.message);
     }
   }
 
+  function renderComparison(curAmt, prevAmt, curVol, prevVol, curH, prevH) {
+    const prevLabel = prevH ? `${prevH}:05` : '—';
+    const curLabel  = `${curH}:05`;
+    document.getElementById('update-time').textContent = `比較：${prevLabel} → ${curLabel}`;
+
+    function rankChange(cur, prev) {
+      if (!prev) return '<span class="rank-same">NEW</span>';
+      const d = prev - cur;
+      if (d > 0)  return `<span class="rank-up">▲${d}</span>`;
+      if (d < 0)  return `<span class="rank-down">▼${Math.abs(d)}</span>`;
+      return '<span class="rank-same">—</span>';
+    }
+    function deltaText(cur, prev) {
+      if (prev == null) return '—';
+      const d = cur - prev;
+      if (d > 0) return `<span class="delta-pos">+${d.toLocaleString()}</span>`;
+      if (d < 0) return `<span class="delta-neg">${d.toLocaleString()}</span>`;
+      return '<span class="rank-same">—</span>';
+    }
+
+    function buildCmpSection(cur, prev, unit) {
+      const prevMap = {};
+      if (prev) prev.stocks.forEach(s => { prevMap[s.code] = s; });
+
+      const rows = cur.stocks.map(s => {
+        const p = prevMap[s.code];
+        const pRank = p ? p.rank : null;
+        const pNet  = p ? p.total_net : null;
+        return `<tr>
+          <td>${rankChange(s.rank, pRank)}</td>
+          <td>${s.rank} - ${s.name}(${s.code})</td>
+          <td class="${netClass(s.total_net)}">${netText(s.total_net)}</td>
+          <td>${pNet != null ? netText(pNet) : '—'}</td>
+          <td>${deltaText(s.total_net, pNet)}</td>
+        </tr>`;
+      }).join('');
+
+      return `
+        <div class="card">
+          <div class="card-title">各股買賣超比較（${unit}）　${prevLabel} → ${curLabel}</div>
+          <div class="detail-wrap">
+            <table class="cmp-table">
+              <thead><tr>
+                <th>排名變化</th><th>股票</th>
+                <th>當前 (${unit})</th><th>前期 (${unit})</th><th>變化量</th>
+              </tr></thead>
+              <tbody>${rows}</tbody>
+            </table>
+          </div>
+        </div>`;
+    }
+
+    document.getElementById('main-content').innerHTML =
+      buildCmpSection(curAmt, prevAmt, '千元') +
+      buildCmpSection(curVol, prevVol, '張');
+  }
+
+  // ── 渲染主表 ──
   function render(data) {
     const { unit, stocks } = data;
     if (data.updated_at)
       document.getElementById('update-time').textContent = `資料時間：${data.updated_at}`;
 
     const half = Math.ceil(stocks.length / 2);
-    const sumRows = arr => arr.map(s => `<tr>
-      <td>${s.rank} - ${s.name}(${s.code})</td>
-      <td class="${netClass(s.total_net)}">${netText(s.total_net)}</td>
-    </tr>`).join('');
-
-    const summaryHtml = `
-      <div class="card">
-        <div class="card-title">各股買賣超合計（${unit}）</div>
-        <div class="summary-grid">
-          <table class="sum-table">
-            <tr><th>股票</th><th>買賣超 (${unit})</th></tr>
-            ${sumRows(stocks.slice(0, half))}
-          </table>
-          <table class="sum-table">
-            <tr><th>股票</th><th>買賣超 (${unit})</th></tr>
-            ${sumRows(stocks.slice(half))}
-          </table>
-        </div>
-      </div>`;
+    const sumRows = arr => arr.map(s =>
+      `<tr><td>${s.rank} - ${s.name}(${s.code})</td>
+       <td class="${netClass(s.total_net)}">${netText(s.total_net)}</td></tr>`
+    ).join('');
 
     const buyLabel  = unit === '千元' ? '買進金額(千元)' : '總買量(張)';
     const sellLabel = unit === '千元' ? '賣出金額(千元)' : '總賣量(張)';
@@ -267,7 +375,18 @@ async function loadLive(tab) {
         <td class="${netClass(b.net)}">${netText(b.net)}</td>
       </tr>`).join('')}`).join('');
 
-    document.getElementById('main-content').innerHTML = summaryHtml + `
+    document.getElementById('main-content').innerHTML = `
+      <div class="card">
+        <div class="card-title">各股買賣超合計（${unit}）</div>
+        <div class="summary-grid">
+          <table class="sum-table">
+            <tr><th>股票</th><th>買賣超 (${unit})</th></tr>${sumRows(stocks.slice(0, half))}
+          </table>
+          <table class="sum-table">
+            <tr><th>股票</th><th>買賣超 (${unit})</th></tr>${sumRows(stocks.slice(half))}
+          </table>
+        </div>
+      </div>
       <div class="card">
         <div class="card-title">券商明細</div>
         <div class="detail-wrap">
@@ -282,6 +401,7 @@ async function loadLive(tab) {
       </div>`;
   }
 
+  // ── 切換模式 ──
   function switchMode(mode) {
     currentMode = mode;
     document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
@@ -289,27 +409,36 @@ async function loadLive(tab) {
     const isHist = mode === 'hist';
     document.getElementById('hist-controls').style.display = isHist ? 'flex' : 'none';
     document.getElementById('live-refresh').style.display  = isHist ? 'none' : '';
+    // 歷史模式隱藏盤中比較tab
+    document.getElementById('btn-cmp').style.display = isHist ? 'none' : '';
+
     if (mode === 'live') {
-      liveCache[currentTab] ? render(liveCache[currentTab]) : loadLive(currentTab);
+      if (currentTab === 'cmp') loadComparison();
+      else liveCache[currentTab] ? render(liveCache[currentTab]) : loadLive(currentTab);
     } else {
-      document.getElementById('main-content').innerHTML = '<div class="loading">請選擇日期後按查詢</div>';
-      document.getElementById('update-time').textContent = '';
+      if (currentTab === 'cmp') switchTab('amt');
+      else { setStatus('請選擇日期後按查詢'); document.getElementById('update-time').textContent = ''; }
     }
   }
 
+  // ── 切換 tab ──
   function switchTab(tab) {
     currentTab = tab;
     document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
     document.getElementById(`btn-${tab}`).classList.add('active');
+
     if (currentMode === 'live') {
+      if (tab === 'cmp') { loadComparison(); return; }
       liveCache[tab] ? render(liveCache[tab]) : loadLive(tab);
     } else {
       const date = document.getElementById('hist-date').value;
       if (date) loadHistory(tab, date);
+      else { setStatus('請選擇日期後按查詢'); }
     }
   }
 
   function manualRefresh() {
+    if (currentTab === 'cmp') { loadComparison(); return; }
     delete liveCache[currentTab];
     loadLive(currentTab);
   }
@@ -323,7 +452,10 @@ async function loadLive(tab) {
   document.getElementById('hist-date').max = new Date().toISOString().slice(0, 10);
 
   setInterval(() => {
-    if (currentMode === 'live') { delete liveCache[currentTab]; loadLive(currentTab); }
+    if (currentMode !== 'live') return;
+    if (currentTab === 'cmp') { loadComparison(); return; }
+    delete liveCache[currentTab];
+    loadLive(currentTab);
   }, 60 * 60 * 1000);
 
   loadLive('amt');
