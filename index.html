@@ -185,14 +185,6 @@
   let currentTab  = 'amt';
   let liveCache   = {};
 
-  // ── CORS proxy：整個 TPEX URL 做 encodeURIComponent，避免 & 符號干擾 proxy ──
-  function histUrl(tab, date) {
-    const base = tab === 'amt'
-      ? `https://www.tpex.org.tw/www/zh-tw/afterTrading/brokerAmt?date=${date}&id=&response=html`
-      : `https://www.tpex.org.tw/www/zh-tw/afterTrading/brokerVol?date=${date}&id=&response=html`;
-    return 'https://corsproxy.io/?url=' + encodeURIComponent(base);
-  }
-
   const UNITS = { amt: '千元', vol: '張' };
 
   function fmt(n) { return n == null ? '-' : n.toLocaleString(); }
@@ -206,47 +198,7 @@
     return isNaN(n) ? null : Math.round(n);
   }
 
-  function parseHtmlTable(htmlText, unit) {
-    const doc = new DOMParser().parseFromString(htmlText, 'text/html');
-    let mainTable = null;
-    for (const t of doc.querySelectorAll('table')) {
-      const txt = t.textContent;
-      if (txt.includes('元大') && txt.includes('凱基') && txt.includes('富邦')) {
-        mainTable = t; break;
-      }
-    }
-    if (!mainTable) throw new Error('找不到主表格，可能是假日或資料尚未公布');
-
-    const stocks = [];
-    let cur = null;
-    const pat = /(\d+)\s*[-－]\s*(.+?)\((\d+[A-Z*]*)\)/;
-
-    for (const row of mainTable.querySelectorAll('tr')) {
-      const cells = [...row.querySelectorAll('td, th')];
-      if (!cells.length) continue;
-      const texts = cells.map(c => c.textContent.trim());
-      if (texts[0] === '排行' || texts[0] === '') continue;
-
-      const m = texts.join(' ').match(pat);
-      const isHdr = m && (cells.length <= 2 || !/^\d+$/.test(texts[0]));
-
-      if (isHdr) {
-        if (cur) stocks.push(cur);
-        cur = { rank: +m[1], name: m[2].trim(), code: m[3], brokers: [] };
-        continue;
-      }
-      if (cur && cells.length >= 4 && /^\d+$/.test(texts[0])) {
-        const buy = parseNum(texts[2]), sell = parseNum(texts[3]);
-        if (buy !== null && sell !== null)
-          cur.brokers.push({ rank: +texts[0], name: texts[1], buy, sell, net: buy - sell });
-      }
-    }
-    if (cur) stocks.push(cur);
-    stocks.forEach(s => { s.total_net = s.brokers.reduce((a, b) => a + b.net, 0); });
-    return { stocks, unit };
-  }
-
-  async function loadLive(tab) {
+async function loadLive(tab) {
     document.getElementById('main-content').innerHTML = '<div class="loading">載入中...</div>';
     try {
       const resp = await fetch(`data/${tab}.json?t=${Date.now()}`);
@@ -261,17 +213,17 @@
   }
 
   async function loadHistory(tab, date) {
+    // date 格式 YYYY-MM-DD
     document.getElementById('main-content').innerHTML = '<div class="loading">查詢中...</div>';
     try {
-      const resp = await fetch(histUrl(tab, date));
-      if (!resp.ok) throw new Error('HTTP ' + resp.status);
-      const html = await resp.text();
-      const data = parseHtmlTable(html, UNITS[tab]);
+      const resp = await fetch(`data/hist/${date}-${tab}.json?t=${Date.now()}`);
+      if (!resp.ok) throw new Error(resp.status === 404 ? '該日無資料（假日或資料未公布）' : 'HTTP ' + resp.status);
+      const data = await resp.json();
       document.getElementById('update-time').textContent = `歷史資料：${date}`;
       render(data);
     } catch (e) {
       document.getElementById('main-content').innerHTML =
-        `<div class="error">查詢失敗：${e.message}<br><small>假日或資料未公布時無資料</small></div>`;
+        `<div class="error">${e.message}</div>`;
     }
   }
 
@@ -353,7 +305,7 @@
       liveCache[tab] ? render(liveCache[tab]) : loadLive(tab);
     } else {
       const date = document.getElementById('hist-date').value;
-      if (date) loadHistory(tab, date.replace(/-/g, '/'));
+      if (date) loadHistory(tab, date);
     }
   }
 
@@ -365,7 +317,7 @@
   function queryHistory() {
     const date = document.getElementById('hist-date').value;
     if (!date) { alert('請選擇日期'); return; }
-    loadHistory(currentTab, date.replace(/-/g, '/'));
+    loadHistory(currentTab, date);
   }
 
   document.getElementById('hist-date').max = new Date().toISOString().slice(0, 10);
