@@ -18,10 +18,10 @@
     .header {
       background: linear-gradient(135deg, #1a3a6b 0%, #2563a8 100%);
       color: white;
-      padding: 10px 16px;
+      padding: 8px 14px;
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
       flex-wrap: wrap;
       box-shadow: 0 2px 8px rgba(0,0,0,0.25);
       position: sticky;
@@ -30,51 +30,40 @@
     }
 
     .header h1 { font-size: 15px; font-weight: bold; letter-spacing: 0.5px; white-space: nowrap; }
+    .divider { width: 1px; height: 20px; background: rgba(255,255,255,0.3); flex-shrink: 0; }
+    .tab-group { display: flex; gap: 5px; }
 
-    .divider { width: 1px; height: 20px; background: rgba(255,255,255,0.3); }
-
-    .tab-group { display: flex; gap: 6px; }
-
-    .tab-btn {
-      padding: 5px 14px;
-      border: 1.5px solid rgba(255,255,255,0.5);
+    .tab-btn, .mode-btn, .refresh-btn, .query-btn {
+      padding: 5px 13px;
       border-radius: 20px;
-      background: transparent;
-      color: rgba(255,255,255,0.85);
       cursor: pointer;
       font-size: 12px;
       transition: all .2s;
+      white-space: nowrap;
+    }
+    .tab-btn {
+      border: 1.5px solid rgba(255,255,255,0.5);
+      background: transparent;
+      color: rgba(255,255,255,0.85);
     }
     .tab-btn:hover { background: rgba(255,255,255,0.15); }
     .tab-btn.active { background: white; color: #1a3a6b; font-weight: bold; border-color: white; }
 
-    /* 歷史模式按鈕：用不同底色區隔 */
     .mode-btn {
-      padding: 5px 14px;
       border: 1.5px solid rgba(255,255,255,0.5);
-      border-radius: 20px;
       background: transparent;
       color: rgba(255,255,255,0.85);
-      cursor: pointer;
-      font-size: 12px;
-      transition: all .2s;
     }
     .mode-btn:hover { background: rgba(255,255,255,0.15); }
-    .mode-btn.active { background: #f0a500; color: #fff; border-color: #f0a500; font-weight: bold; }
+    .mode-btn.active { background: #f0a500; color: white; border-color: #f0a500; font-weight: bold; }
 
     .refresh-btn {
-      padding: 5px 12px;
       border: 1.5px solid rgba(255,255,255,0.5);
-      border-radius: 20px;
       background: transparent;
       color: white;
-      cursor: pointer;
-      font-size: 12px;
-      transition: all .2s;
     }
     .refresh-btn:hover { background: rgba(255,255,255,0.15); }
 
-    /* 日期選擇區 */
     #hist-controls { display: none; align-items: center; gap: 6px; }
     #hist-controls input[type=date] {
       padding: 4px 8px;
@@ -85,47 +74,37 @@
       font-size: 12px;
       outline: none;
     }
-    #hist-controls input[type=date]::-webkit-calendar-picker-indicator { filter: invert(1); }
-    .query-btn {
-      padding: 5px 14px;
-      border: none;
-      border-radius: 20px;
-      background: #f0a500;
-      color: white;
-      cursor: pointer;
-      font-size: 12px;
-      font-weight: bold;
-      transition: all .2s;
-    }
+    #hist-controls input[type=date]::-webkit-calendar-picker-indicator { filter: invert(1); cursor: pointer; }
+
+    .query-btn { border: none; background: #f0a500; color: white; font-weight: bold; }
     .query-btn:hover { background: #d4920a; }
 
-    .update-time { font-size: 11px; opacity: 0.75; margin-left: auto; white-space: nowrap; }
+    .update-time { font-size: 11px; opacity: 0.8; margin-left: auto; white-space: nowrap; }
 
     /* ── 主內容 ── */
-    .content { padding: 14px; max-width: 1400px; margin: 0 auto; }
-    .loading { text-align: center; padding: 60px; color: #666; font-size: 14px; }
-    .error { text-align: center; padding: 30px; color: #c00; font-size: 13px; }
+    .content { padding: 12px; max-width: 1400px; margin: 0 auto; }
+    .loading { text-align: center; padding: 60px; color: #888; font-size: 14px; }
+    .error   { text-align: center; padding: 20px; color: #c00; font-size: 13px; line-height: 1.8; }
 
     /* ── 卡片 ── */
-    .card { background: white; border-radius: 8px; box-shadow: 0 1px 6px rgba(0,0,0,0.1); overflow: hidden; margin-bottom: 14px; }
-    .card-title { background: linear-gradient(90deg, #1a3a6b, #2563a8); color: white; padding: 8px 14px; font-weight: bold; font-size: 13px; }
+    .card { background: white; border-radius: 8px; box-shadow: 0 1px 6px rgba(0,0,0,0.1); overflow: hidden; margin-bottom: 12px; }
+    .card-title { background: linear-gradient(90deg, #1a3a6b, #2563a8); color: white; padding: 7px 14px; font-weight: bold; font-size: 13px; }
 
-    /* ── 彙總表 ── */
-    .summary-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
+    /* ── 彙總表（桌機：兩欄 / 手機：單欄）── */
+    .summary-grid { display: grid; grid-template-columns: 1fr 1fr; }
     .sum-table { width: 100%; border-collapse: collapse; }
     .sum-table th { background: #dde6f0; color: #1a3a6b; padding: 5px 10px; font-size: 12px; text-align: center; border-bottom: 1px solid #c5d0de; }
     .sum-table td { padding: 4px 10px; border-bottom: 1px solid #edf0f4; font-size: 12px; }
-    .sum-table td:first-child { color: #333; }
     .sum-table td:last-child { text-align: right; font-weight: bold; }
     .sum-table tr:hover td { background: #f5f8fc; }
     .sum-table:first-child { border-right: 1px solid #d0d9e4; }
 
     /* ── 明細表 ── */
     .detail-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
-    .main-table { width: 100%; border-collapse: collapse; min-width: 480px; }
-    .main-table thead th { background: #dde6f0; color: #1a3a6b; padding: 7px 10px; text-align: center; border-bottom: 2px solid #b0c4d8; white-space: nowrap; font-size: 12px; }
+    .main-table { width: 100%; border-collapse: collapse; min-width: 440px; }
+    .main-table thead th { background: #dde6f0; color: #1a3a6b; padding: 6px 10px; text-align: center; border-bottom: 2px solid #b0c4d8; white-space: nowrap; font-size: 12px; }
     .main-table td { padding: 4px 10px; border-bottom: 1px solid #edf0f4; font-size: 12px; }
-    .main-table tbody tr:not(.stock-hdr) td:first-child { text-align: center; color: #666; width: 40px; }
+    .main-table tbody tr:not(.stock-hdr) td:first-child { text-align: center; color: #888; width: 36px; }
     .main-table td:nth-child(3), .main-table td:nth-child(4), .main-table td:nth-child(5) { text-align: right; }
     .main-table tbody tr:not(.stock-hdr):hover td { background: #f5f8fc; }
 
@@ -139,14 +118,34 @@
     .stock-hdr .pos { background: #ff9999 !important; color: #7b0000; border-radius: 3px; padding: 1px 5px; }
     .stock-hdr .neg { background: #99dd99 !important; color: #145214; border-radius: 3px; padding: 1px 5px; }
 
-    /* ── 手機版 ── */
-    @media (max-width: 600px) {
-      .content { padding: 8px; }
-      .summary-grid { grid-template-columns: 1fr; }
-      .sum-table:first-child { border-right: none; border-bottom: 1px solid #d0d9e4; }
-      .header h1 { font-size: 13px; }
-      .update-time { width: 100%; margin-left: 0; }
+    /* ══ 手機版 RWD ══ */
+    @media (max-width: 640px) {
+      /* 頁首：標題佔一整行，其餘換行排列 */
+      .header { padding: 7px 10px; gap: 6px; }
+      .header h1 { font-size: 14px; width: 100%; }
       .divider { display: none; }
+      .update-time { margin-left: 0; font-size: 11px; width: 100%; order: 99; }
+
+      .tab-btn, .mode-btn, .refresh-btn, .query-btn { padding: 5px 11px; font-size: 12px; }
+      #hist-controls input[type=date] { font-size: 12px; padding: 4px 7px; max-width: 140px; }
+
+      /* 內容：減少邊距 */
+      .content { padding: 7px; }
+      .card { border-radius: 6px; margin-bottom: 8px; }
+      .card-title { padding: 6px 10px; font-size: 12px; }
+
+      /* 彙總：單欄 */
+      .summary-grid { grid-template-columns: 1fr; }
+      .sum-table:first-child { border-right: none; border-bottom: 2px solid #b0c4d8; }
+      .sum-table th { padding: 4px 8px; font-size: 12px; }
+      .sum-table td { padding: 4px 8px; font-size: 12px; }
+
+      /* 明細表：緊湊 */
+      .main-table { min-width: 360px; }
+      .main-table thead th { padding: 5px 6px; font-size: 11px; }
+      .main-table td { padding: 4px 6px; font-size: 12px; }
+      .main-table tbody tr.stock-hdr td { padding: 5px 8px; font-size: 12px; }
+      .main-table tbody tr:not(.stock-hdr) td:first-child { width: 28px; }
     }
   </style>
 </head>
@@ -155,7 +154,6 @@
 <div class="header">
   <h1>熱門股券商進出排行</h1>
 
-  <!-- 即時 / 歷史 模式 -->
   <div class="tab-group">
     <button class="mode-btn active" id="mode-live" onclick="switchMode('live')">即時</button>
     <button class="mode-btn" id="mode-hist" onclick="switchMode('hist')">歷史</button>
@@ -163,16 +161,13 @@
 
   <div class="divider"></div>
 
-  <!-- 金額 / 張數 tab -->
   <div class="tab-group">
     <button class="tab-btn active" id="btn-amt" onclick="switchTab('amt')">依成交金額</button>
     <button class="tab-btn" id="btn-vol" onclick="switchTab('vol')">依成交張數</button>
   </div>
 
-  <!-- 即時：重新整理 -->
   <button class="refresh-btn" id="live-refresh" onclick="manualRefresh()">↻ 重新整理</button>
 
-  <!-- 歷史：日期選擇 -->
   <div id="hist-controls">
     <input type="date" id="hist-date">
     <button class="query-btn" onclick="queryHistory()">查詢</button>
@@ -186,18 +181,20 @@
 </div>
 
 <script>
-  let currentMode = 'live'; // 'live' | 'hist'
-  let currentTab  = 'amt';  // 'amt' | 'vol'
+  let currentMode = 'live';
+  let currentTab  = 'amt';
   let liveCache   = {};
 
-  const CORS = 'https://corsproxy.io/?';
-  const HIST_URLS = {
-    amt: date => `https://www.tpex.org.tw/www/zh-tw/afterTrading/brokerAmt?date=${encodeURIComponent(date)}&id=&response=html`,
-    vol: date => `https://www.tpex.org.tw/www/zh-tw/afterTrading/brokerVol?date=${encodeURIComponent(date)}&id=&response=html`,
-  };
+  // ── CORS proxy：整個 TPEX URL 做 encodeURIComponent，避免 & 符號干擾 proxy ──
+  function histUrl(tab, date) {
+    const base = tab === 'amt'
+      ? `https://www.tpex.org.tw/www/zh-tw/afterTrading/brokerAmt?date=${date}&id=&response=html`
+      : `https://www.tpex.org.tw/www/zh-tw/afterTrading/brokerVol?date=${date}&id=&response=html`;
+    return 'https://corsproxy.io/?url=' + encodeURIComponent(base);
+  }
+
   const UNITS = { amt: '千元', vol: '張' };
 
-  // ── 工具函式 ──
   function fmt(n) { return n == null ? '-' : n.toLocaleString(); }
   function netClass(n) { return n > 0 ? 'pos' : n < 0 ? 'neg' : ''; }
   function netText(n) { if (n == null) return '-'; return (n > 0 ? '+' : '') + n.toLocaleString(); }
@@ -209,7 +206,6 @@
     return isNaN(n) ? null : Math.round(n);
   }
 
-  // ── HTML 表格解析（給歷史模式用）──
   function parseHtmlTable(htmlText, unit) {
     const doc = new DOMParser().parseFromString(htmlText, 'text/html');
     let mainTable = null;
@@ -219,7 +215,7 @@
         mainTable = t; break;
       }
     }
-    if (!mainTable) throw new Error('找不到主表格，可能是假日或尚未收盤');
+    if (!mainTable) throw new Error('找不到主表格，可能是假日或資料尚未公布');
 
     const stocks = [];
     let cur = null;
@@ -231,8 +227,7 @@
       const texts = cells.map(c => c.textContent.trim());
       if (texts[0] === '排行' || texts[0] === '') continue;
 
-      const full = texts.join(' ');
-      const m = full.match(pat);
+      const m = texts.join(' ').match(pat);
       const isHdr = m && (cells.length <= 2 || !/^\d+$/.test(texts[0]));
 
       if (isHdr) {
@@ -248,11 +243,9 @@
     }
     if (cur) stocks.push(cur);
     stocks.forEach(s => { s.total_net = s.brokers.reduce((a, b) => a + b.net, 0); });
-
     return { stocks, unit };
   }
 
-  // ── 即時模式：讀 JSON ──
   async function loadLive(tab) {
     document.getElementById('main-content').innerHTML = '<div class="loading">載入中...</div>';
     try {
@@ -267,12 +260,10 @@
     }
   }
 
-  // ── 歷史模式：CORS proxy 抓 HTML ──
   async function loadHistory(tab, date) {
     document.getElementById('main-content').innerHTML = '<div class="loading">查詢中...</div>';
     try {
-      const url = CORS + HIST_URLS[tab](date);
-      const resp = await fetch(url);
+      const resp = await fetch(histUrl(tab, date));
       if (!resp.ok) throw new Error('HTTP ' + resp.status);
       const html = await resp.text();
       const data = parseHtmlTable(html, UNITS[tab]);
@@ -280,23 +271,20 @@
       render(data);
     } catch (e) {
       document.getElementById('main-content').innerHTML =
-        `<div class="error">查詢失敗：${e.message}</div>`;
+        `<div class="error">查詢失敗：${e.message}<br><small>假日或資料未公布時無資料</small></div>`;
     }
   }
 
-  // ── 渲染（即時 & 歷史共用）──
   function render(data) {
     const { unit, stocks } = data;
     if (data.updated_at)
       document.getElementById('update-time').textContent = `資料時間：${data.updated_at}`;
 
     const half = Math.ceil(stocks.length / 2);
-    function sumRows(arr) {
-      return arr.map(s => `<tr>
-        <td>${s.rank} - ${s.name}(${s.code})</td>
-        <td class="${netClass(s.total_net)}">${netText(s.total_net)}</td>
-      </tr>`).join('');
-    }
+    const sumRows = arr => arr.map(s => `<tr>
+      <td>${s.rank} - ${s.name}(${s.code})</td>
+      <td class="${netClass(s.total_net)}">${netText(s.total_net)}</td>
+    </tr>`).join('');
 
     const summaryHtml = `
       <div class="card">
@@ -327,7 +315,7 @@
         <td class="${netClass(b.net)}">${netText(b.net)}</td>
       </tr>`).join('')}`).join('');
 
-    const detailHtml = `
+    document.getElementById('main-content').innerHTML = summaryHtml + `
       <div class="card">
         <div class="card-title">券商明細</div>
         <div class="detail-wrap">
@@ -340,35 +328,27 @@
           </table>
         </div>
       </div>`;
-
-    document.getElementById('main-content').innerHTML = summaryHtml + detailHtml;
   }
 
-  // ── 切換即時 / 歷史 ──
   function switchMode(mode) {
     currentMode = mode;
     document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
     document.getElementById(`mode-${mode}`).classList.add('active');
-
     const isHist = mode === 'hist';
     document.getElementById('hist-controls').style.display = isHist ? 'flex' : 'none';
     document.getElementById('live-refresh').style.display  = isHist ? 'none' : '';
-
     if (mode === 'live') {
       liveCache[currentTab] ? render(liveCache[currentTab]) : loadLive(currentTab);
     } else {
-      document.getElementById('main-content').innerHTML =
-        '<div class="loading">請選擇日期後按查詢</div>';
+      document.getElementById('main-content').innerHTML = '<div class="loading">請選擇日期後按查詢</div>';
       document.getElementById('update-time').textContent = '';
     }
   }
 
-  // ── 切換金額 / 張數 ──
   function switchTab(tab) {
     currentTab = tab;
     document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
     document.getElementById(`btn-${tab}`).classList.add('active');
-
     if (currentMode === 'live') {
       liveCache[tab] ? render(liveCache[tab]) : loadLive(tab);
     } else {
@@ -377,23 +357,19 @@
     }
   }
 
-  // ── 即時重新整理 ──
   function manualRefresh() {
     delete liveCache[currentTab];
     loadLive(currentTab);
   }
 
-  // ── 歷史查詢 ──
   function queryHistory() {
     const date = document.getElementById('hist-date').value;
     if (!date) { alert('請選擇日期'); return; }
     loadHistory(currentTab, date.replace(/-/g, '/'));
   }
 
-  // 設定日期選擇器最大值為今天
   document.getElementById('hist-date').max = new Date().toISOString().slice(0, 10);
 
-  // 每小時自動刷新（只在即時模式有效）
   setInterval(() => {
     if (currentMode === 'live') { delete liveCache[currentTab]; loadLive(currentTab); }
   }, 60 * 60 * 1000);
