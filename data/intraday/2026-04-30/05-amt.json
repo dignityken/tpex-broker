@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026/04/30 05:00",
+  "updated_at": "2026/04/30 05:30",
   "unit": "千元",
   "stocks": [
     {
@@ -2343,5 +2343,5 @@
       "total_net": -44060
     }
   ],
-  "snapshot_time": "05:00"
+  "snapshot_time": "05:30"
 }
