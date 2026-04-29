@@ -94,18 +94,30 @@
 
     /* ── RWD ── */
     @media (max-width: 640px) {
+      /* 頁首 */
       .header { padding: 7px 10px; gap: 6px; }
       .header h1 { font-size: 14px; width: 100%; }
       .divider { display: none; }
       .update-time { margin-left: 0; font-size: 11px; width: 100%; order: 99; }
       .tab-btn, .mode-btn, .refresh-btn, .query-btn { padding: 5px 10px; font-size: 11px; }
       #hist-controls input[type=date] { font-size: 11px; max-width: 130px; }
-      .content { padding: 7px; }
+      /* 主內容 */
+      .content { padding: 6px; }
+      .card { border-radius: 6px; margin-bottom: 8px; }
+      .card-title { padding: 6px 10px; font-size: 12px; }
+      /* 彙總表：單欄 */
       .summary-grid { grid-template-columns: 1fr; }
       .sum-table:first-child { border-right: none; border-bottom: 2px solid #b0c4d8; }
-      .sum-table th, .sum-table td { padding: 4px 7px; font-size: 12px; }
-      .main-table { min-width: 360px; }
-      .main-table thead th, .main-table td { padding: 4px 6px; font-size: 11px; }
+      .sum-table th, .sum-table td { padding: 4px 8px; font-size: 12px; }
+      /* 明細表：隱藏買進/賣出，只留名稱+買賣超 */
+      .col-buy, .col-sell, .col-prev { display: none; }
+      .main-table { min-width: 0 !important; width: 100%; }
+      .cmp-table  { min-width: 0 !important; width: 100%; }
+      .main-table thead th { padding: 5px 8px; font-size: 12px; }
+      .main-table td { padding: 4px 8px; font-size: 12px; }
+      .main-table tbody tr.stock-hdr td { padding: 5px 8px; font-size: 12px; }
+      .main-table tbody tr:not(.stock-hdr) td:first-child { width: 28px; }
+      .cmp-table thead th, .cmp-table td { padding: 4px 8px; font-size: 12px; }
     }
   </style>
 </head>
@@ -179,6 +191,13 @@
   function netText(n)   { if (n == null) return '-'; return (n > 0 ? '+' : '') + n.toLocaleString(); }
   function setStatus(msg) { document.getElementById('main-content').innerHTML = `<div class="loading">${msg}</div>`; }
   function setError(msg)  { document.getElementById('main-content').innerHTML = `<div class="error">${msg}</div>`; }
+
+  // 手機版隱藏買進/賣出欄時，stock-hdr 的 colspan 從 4 改為 2
+  function fixColspan() {
+    const mobile = window.innerWidth <= 640;
+    document.querySelectorAll('.hdr-name').forEach(td => { td.colSpan = mobile ? 2 : 4; });
+  }
+  window.addEventListener('resize', fixColspan);
 
   // ── HTML 解析（歷史直抓用）──
   function parseNum(s) {
@@ -375,7 +394,7 @@
           <td>${rankChange(s.rank, pRank)}</td>
           <td>${s.rank} - ${s.name}(${s.code})</td>
           <td class="${netClass(s.total_net)}">${netText(s.total_net)}</td>
-          <td>${pNet != null ? netText(pNet) : '—'}</td>
+          <td class="col-prev">${pNet != null ? netText(pNet) : '—'}</td>
           <td>${deltaText(s.total_net, pNet)}</td>
         </tr>`;
       }).join('');
@@ -387,7 +406,9 @@
             <table class="cmp-table">
               <thead><tr>
                 <th>排名變化</th><th>股票</th>
-                <th>當前 (${unit})</th><th>前期 (${unit})</th><th>變化量</th>
+                <th>當前 (${unit})</th>
+                <th class="col-prev">前期 (${unit})</th>
+                <th>變化量</th>
               </tr></thead>
               <tbody>${rows}</tbody>
             </table>
@@ -417,12 +438,13 @@
 
     const detailRows = stocks.map(s => `
       <tr class="stock-hdr">
-        <td colspan="4">${s.rank} - ${s.name}(${s.code})</td>
+        <td class="hdr-name" colspan="4">${s.rank} - ${s.name}(${s.code})</td>
         <td><span class="${netClass(s.total_net)}">${netText(s.total_net)}</span></td>
       </tr>
       ${s.brokers.map(b => `<tr>
         <td>${b.rank}</td><td>${b.name}</td>
-        <td>${fmt(b.buy)}</td><td>${fmt(b.sell)}</td>
+        <td class="col-buy">${fmt(b.buy)}</td>
+        <td class="col-sell">${fmt(b.sell)}</td>
         <td class="${netClass(b.net)}">${netText(b.net)}</td>
       </tr>`).join('')}`).join('');
 
@@ -444,12 +466,15 @@
           <table class="main-table">
             <thead><tr>
               <th>排行</th><th>證商名稱</th>
-              <th>${buyLabel}</th><th>${sellLabel}</th><th>買賣超 (${unit})</th>
+              <th class="col-buy">${buyLabel}</th>
+              <th class="col-sell">${sellLabel}</th>
+              <th>買賣超 (${unit})</th>
             </tr></thead>
             <tbody>${detailRows}</tbody>
           </table>
         </div>
       </div>`;
+    fixColspan();
   }
 
   // ── 切換模式 ──
