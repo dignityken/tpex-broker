@@ -2,7 +2,7 @@ name: Fetch TPEX Data
 
 on:
   schedule:
-    - cron: '5 * * * *'
+    - cron: '5 1-6 * * 1-5'
   workflow_dispatch:
     inputs:
       hist_date:
