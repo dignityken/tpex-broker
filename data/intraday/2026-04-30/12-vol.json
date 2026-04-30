@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026/04/30 12:00",
+  "updated_at": "2026/04/30 12:01",
   "unit": "張",
   "stocks": [
     {
@@ -2343,5 +2343,5 @@
       "total_net": 9
     }
   ],
-  "snapshot_time": "12:00"
+  "snapshot_time": "12:01"
 }
