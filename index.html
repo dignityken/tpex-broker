@@ -58,7 +58,8 @@
     .sum-table th { background: #dde6f0; color: #1a3a6b; padding: 5px 10px; font-size: 12px; text-align: center; border-bottom: 1px solid #c5d0de; }
     .sum-table td { padding: 4px 10px; border-bottom: 1px solid #edf0f4; font-size: 12px; }
     .sum-table td:last-child { text-align: right; font-weight: bold; }
-    .sum-table tr:hover td { background: #f5f8fc; }
+    .sum-table tr:not(:first-child):hover td { background: #e8f0fa; cursor: pointer; }
+    .sum-table tr[data-code] td:first-child::after { content: ' ↓'; font-size: 10px; opacity: 0.4; }
     .sum-table:first-child { border-right: 1px solid #d0d9e4; }
 
     /* ── 明細表 ── */
@@ -91,6 +92,10 @@
     .neg { background: #e4f4e4 !important; color: #27ae60; font-weight: bold; }
     .stock-hdr .pos { background: #ff9999 !important; color: #7b0000; border-radius: 3px; padding: 1px 5px; }
     .stock-hdr .neg { background: #99dd99 !important; color: #145214; border-radius: 3px; padding: 1px 5px; }
+
+    /* ── 回到頂部 ── */
+    #back-to-top { position: fixed; bottom: 24px; right: 20px; background: #1a3a6b; color: white; border: none; border-radius: 50%; width: 40px; height: 40px; font-size: 18px; cursor: pointer; box-shadow: 0 3px 10px rgba(0,0,0,0.3); display: none; z-index: 500; transition: opacity .2s; }
+    #back-to-top:hover { background: #2563a8; }
 
     /* ── RWD ── */
     @media (max-width: 640px) {
@@ -161,6 +166,8 @@
   <div id="main-content" class="loading">資料載入中...</div>
 </div>
 
+<button id="back-to-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="回到頂部">↑</button>
+
 <script>
   // ── 狀態 ──
   let currentMode = 'live';
@@ -191,6 +198,17 @@
   function netText(n)   { if (n == null) return '-'; return (n > 0 ? '+' : '') + n.toLocaleString(); }
   function setStatus(msg) { document.getElementById('main-content').innerHTML = `<div class="loading">${msg}</div>`; }
   function setError(msg)  { document.getElementById('main-content').innerHTML = `<div class="error">${msg}</div>`; }
+
+  function scrollToStock(code) {
+    const el = document.getElementById('stock-' + code);
+    if (!el) return;
+    const headerH = document.querySelector('.header').offsetHeight;
+    const top = el.getBoundingClientRect().top + window.scrollY - headerH - 6;
+    window.scrollTo({ top, behavior: 'smooth' });
+  }
+  window.addEventListener('scroll', () => {
+    document.getElementById('back-to-top').style.display = window.scrollY > 200 ? 'block' : 'none';
+  });
 
   // 手機版隱藏買進/賣出欄時，stock-hdr 的 colspan 從 4 改為 2
   function fixColspan() {
@@ -429,7 +447,8 @@
 
     const half = Math.ceil(stocks.length / 2);
     const sumRows = arr => arr.map(s =>
-      `<tr><td>${s.rank} - ${s.name}(${s.code})</td>
+      `<tr data-code="${s.code}" onclick="scrollToStock('${s.code}')">
+       <td>${s.rank} - ${s.name}(${s.code})</td>
        <td class="${netClass(s.total_net)}">${netText(s.total_net)}</td></tr>`
     ).join('');
 
@@ -437,7 +456,7 @@
     const sellLabel = unit === '千元' ? '賣出金額(千元)' : '總賣量(張)';
 
     const detailRows = stocks.map(s => `
-      <tr class="stock-hdr">
+      <tr class="stock-hdr" id="stock-${s.code}">
         <td class="hdr-name" colspan="4">${s.rank} - ${s.name}(${s.code})</td>
         <td><span class="${netClass(s.total_net)}">${netText(s.total_net)}</span></td>
       </tr>
