@@ -4,6 +4,7 @@ import json
 import os
 import re
 import sys
+import time
 import urllib.parse
 from datetime import datetime, timedelta, timezone, date as date_type
 
@@ -81,16 +82,31 @@ def parse_html(html_text):
     return stocks
 
 
-def fetch_url(url):
-    resp = requests.get(url, headers=HEADERS, timeout=30)
-    resp.encoding = 'utf-8'
-    return resp.text
+def fetch_url(url, retries=3, delay=15):
+    for attempt in range(retries):
+        try:
+            resp = requests.get(url, headers=HEADERS, timeout=30)
+            resp.encoding = 'utf-8'
+            return resp.text
+        except Exception as e:
+            if attempt < retries - 1:
+                print(f'  網路錯誤，{delay}秒後重試（{attempt+1}/{retries}）：{e}')
+                time.sleep(delay)
+            else:
+                raise
 
 
-def fetch_live(mode):
-    stocks = parse_html(fetch_url(LIVE_URLS[mode]))
-    now = datetime.now(TW_TZ)
-    return {'updated_at': now.strftime('%Y/%m/%d %H:%M'), 'unit': UNITS[mode], 'stocks': stocks}
+def fetch_live(mode, retries=3, delay=20):
+    for attempt in range(retries):
+        stocks = parse_html(fetch_url(LIVE_URLS[mode]))
+        now = datetime.now(TW_TZ)
+        if stocks:
+            return {'updated_at': now.strftime('%Y/%m/%d %H:%M'), 'unit': UNITS[mode], 'stocks': stocks}
+        if attempt < retries - 1:
+            print(f'  {mode}: 取得空資料，{delay}秒後重試（{attempt+1}/{retries}）...')
+            time.sleep(delay)
+    print(f'  {mode}: 重試後仍無資料，略過快照')
+    return {'updated_at': now.strftime('%Y/%m/%d %H:%M'), 'unit': UNITS[mode], 'stocks': []}
 
 
 def fetch_historical(day: date_type, mode):
@@ -176,16 +192,20 @@ if __name__ == '__main__':
             print(f'  失敗：{e}')
             raise
 
-    # 2. 盤中快照
+    # 2. 盤中快照（有資料才存）
     intraday_dir = f'data/intraday/{date_key}'
     os.makedirs(intraday_dir, exist_ok=True)
-    for mode in ['amt', 'vol']:
-        snap = dict(live_data[mode])
-        snap['snapshot_time'] = now.strftime('%H:%M')
-        with open(f'{intraday_dir}/{hour_key}-{mode}.json', 'w', encoding='utf-8') as f:
-            json.dump(snap, f, ensure_ascii=False, indent=2)
-    update_intraday_manifest(date_key, hour_key)
-    print(f'[快照] {date_key}/{hour_key} 已儲存')
+    snap_ok = all(live_data.get(m, {}).get('stocks') for m in ['amt', 'vol'])
+    if snap_ok:
+        for mode in ['amt', 'vol']:
+            snap = dict(live_data[mode])
+            snap['snapshot_time'] = now.strftime('%H:%M')
+            with open(f'{intraday_dir}/{hour_key}-{mode}.json', 'w', encoding='utf-8') as f:
+                json.dump(snap, f, ensure_ascii=False, indent=2)
+        update_intraday_manifest(date_key, hour_key)
+        print(f'[快照] {date_key}/{hour_key} 已儲存')
+    else:
+        print(f'[快照] {date_key}/{hour_key} 資料不完整，略過')
 
     # 3. 近期歷史資料（只補還沒有的）
     available = []
@@ -213,7 +233,7 @@ if __name__ == '__main__':
                 with open(path, 'w', encoding='utf-8') as f:
                     json.dump(data, f, ensure_ascii=False, indent=2)
                 print(f'  {mode}: {len(data["stocks"])} 支')
-            except Exception as e:
+            except Exception as e:    
                 print(f'  {mode} 失敗：{e}')
                 ok = False
                 break
