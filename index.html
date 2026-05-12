@@ -74,6 +74,13 @@
     .main-table tbody tr.stock-hdr td:last-child { text-align: right; }
     .main-table tbody tr.stock-hdr:hover td { filter: brightness(1.1); }
 
+    /* ── 盤中比較控制列 ── */
+    .cmp-ctrl { display: flex; align-items: center; gap: 8px; padding: 10px 14px; background: #f0f4fa; border-radius: 8px 8px 0 0; flex-wrap: wrap; margin-bottom: -1px; }
+    .cmp-ctrl label { font-size: 12px; color: #555; white-space: nowrap; }
+    .cmp-ctrl select { padding: 4px 8px; border: 1px solid #b0c4d8; border-radius: 4px; font-size: 12px; background: white; }
+    .cmp-ctrl button { padding: 5px 14px; background: #1a3a6b; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 12px; }
+    .cmp-ctrl button:hover { background: #2563a8; }
+
     /* ── 盤中比較表 ── */
     .cmp-table { width: 100%; border-collapse: collapse; min-width: 560px; }
     .cmp-table thead th { background: #dde6f0; color: #1a3a6b; padding: 6px 10px; text-align: center; border-bottom: 2px solid #b0c4d8; font-size: 12px; white-space: nowrap; }
@@ -204,7 +211,7 @@
     if (!el) return;
     const headerH = document.querySelector('.header').offsetHeight;
     const top = el.getBoundingClientRect().top + window.scrollY - headerH - 6;
-    window.scrollTo({ top, behavior: 'smooth' });
+    window.scrollTo({ top });
   }
   window.addEventListener('scroll', () => {
     document.getElementById('back-to-top').style.display = window.scrollY > 200 ? 'block' : 'none';
@@ -339,104 +346,125 @@
   }
 
   // ── 盤中比較 ──
-  async function loadComparison() {
-    setStatus('載入比較資料...');
+  let cmpManifest = null;
+
+  async function loadComparison(dateKey, fromH, toH) {
     try {
       const mResp = await fetch(`data/intraday/manifest.json?t=${Date.now()}`);
       if (!mResp.ok) throw new Error('尚無盤中快照資料');
-      const manifest = await mResp.json();
+      cmpManifest = await mResp.json();
+    } catch(e) { setError(e.message); return; }
 
-      const today = new Date().toLocaleDateString('zh-TW', {
-        timeZone: 'Asia/Taipei', year: 'numeric', month: '2-digit', day: '2-digit'
-      }).replace(/\//g, '-').replace(/(\d+)-(\d+)-(\d+)/, '$1-$2-$3');
-
-      // 取 YYYY-MM-DD 格式
+    // 預設日期 = 今天（台灣時間）
+    if (!dateKey) {
       const d = new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Taipei' }));
-      const dateKey = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+      dateKey = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+    }
 
-      const hours = manifest[dateKey] || [];
-      if (hours.length < 1) throw new Error('今日尚無快照資料，請等下一整點後再試');
+    const allDates = Object.keys(cmpManifest).sort().reverse();
+    const hours = cmpManifest[dateKey] || [];
 
-      // 取最新與前一份
-      const curHour  = hours[hours.length - 1];
-      const prevHour = hours.length >= 2 ? hours[hours.length - 2] : null;
+    // 15:05 是收盤補抓，預設跳過；以14為終點
+    const meaningful = hours.filter(h => h !== '15');
+    const base = meaningful.length >= 2 ? meaningful : hours;
+    if (!toH   || !hours.includes(toH))   toH   = base[base.length - 1] || '';
+    if (!fromH || !hours.includes(fromH)) fromH = base.length >= 2 ? base[base.length - 2] : base[0] || '';
 
-      const [curAmt, curVol] = await Promise.all([
-        fetch(`data/intraday/${dateKey}/${curHour}-amt.json?t=${Date.now()}`).then(r => r.json()),
-        fetch(`data/intraday/${dateKey}/${curHour}-vol.json?t=${Date.now()}`).then(r => r.json()),
+    const dateOpts   = allDates.map(k => `<option value="${k}" ${k===dateKey?'selected':''}>${k}</option>`).join('');
+    const hourOpts   = sel => hours.map(h => `<option value="${h}" ${h===sel?'selected':''}>${h}:05${h==='15'?' (補抓)':''}</option>`).join('');
+
+    const ctrl = `<div class="cmp-ctrl card">
+      <label>日期</label>
+      <select id="cmp-date" onchange="onCmpDateChange(this.value)">${dateOpts}</select>
+      <label>起</label><select id="cmp-from">${hourOpts(fromH)}</select>
+      <label>→ 迄</label><select id="cmp-to">${hourOpts(toH)}</select>
+      <button onclick="runComparison()">比較</button>
+    </div>`;
+
+    if (hours.length < 2 || !fromH || !toH) {
+      document.getElementById('main-content').innerHTML = ctrl + '<div class="info">此日快照不足，無法比較</div>';
+      document.getElementById('update-time').textContent = dateKey;
+      return;
+    }
+
+    document.getElementById('main-content').innerHTML = ctrl + '<div class="loading">載入中...</div>';
+
+    try {
+      const [toAmt, toVol, fromAmt, fromVol] = await Promise.all([
+        fetch(`data/intraday/${dateKey}/${toH}-amt.json?t=${Date.now()}`).then(r=>r.json()),
+        fetch(`data/intraday/${dateKey}/${toH}-vol.json?t=${Date.now()}`).then(r=>r.json()),
+        fetch(`data/intraday/${dateKey}/${fromH}-amt.json?t=${Date.now()}`).then(r=>r.json()),
+        fetch(`data/intraday/${dateKey}/${fromH}-vol.json?t=${Date.now()}`).then(r=>r.json()),
       ]);
-
-      let prevAmt = null, prevVol = null;
-      if (prevHour) {
-        [prevAmt, prevVol] = await Promise.all([
-          fetch(`data/intraday/${dateKey}/${prevHour}-amt.json?t=${Date.now()}`).then(r => r.json()),
-          fetch(`data/intraday/${dateKey}/${prevHour}-vol.json?t=${Date.now()}`).then(r => r.json()),
-        ]);
-      }
-
-      renderComparison(curAmt, prevAmt, curVol, prevVol, curHour, prevHour);
-    } catch (e) {
-      setError(e.message);
+      document.getElementById('main-content').innerHTML =
+        ctrl + buildCmpSection(toAmt, fromAmt, '千元', fromH, toH) + buildCmpSection(toVol, fromVol, '張', fromH, toH);
+      document.getElementById('update-time').textContent = `${dateKey}　${fromH}:05 → ${toH}:05`;
+    } catch(e) {
+      document.getElementById('main-content').innerHTML = ctrl + `<div class="error">載入失敗：${e.message}</div>`;
     }
   }
 
-  function renderComparison(curAmt, prevAmt, curVol, prevVol, curH, prevH) {
-    const prevLabel = prevH ? `${prevH}:05` : '—';
-    const curLabel  = `${curH}:05`;
-    document.getElementById('update-time').textContent = `比較：${prevLabel} → ${curLabel}`;
+  function onCmpDateChange(dateKey) {
+    if (!cmpManifest) return;
+    const hours = cmpManifest[dateKey] || [];
+    const meaningful = hours.filter(h => h !== '15');
+    const base = meaningful.length >= 2 ? meaningful : hours;
+    const toH   = base[base.length - 1] || '';
+    const fromH = base.length >= 2 ? base[base.length - 2] : base[0] || '';
+    const hourOpts = (sel) => hours.map(h => `<option value="${h}" ${h===sel?'selected':''}>${h}:05${h==='15'?' (補抓)':''}</option>`).join('');
+    document.getElementById('cmp-from').innerHTML = hourOpts(fromH);
+    document.getElementById('cmp-to').innerHTML   = hourOpts(toH);
+  }
 
-    function rankChange(cur, prev) {
-      if (!prev) return '<span class="rank-same">NEW</span>';
-      const d = prev - cur;
-      if (d > 0)  return `<span class="rank-up">▲${d}</span>`;
-      if (d < 0)  return `<span class="rank-down">▼${Math.abs(d)}</span>`;
+  function runComparison() {
+    const dateKey = document.getElementById('cmp-date').value;
+    const fromH   = document.getElementById('cmp-from').value;
+    const toH     = document.getElementById('cmp-to').value;
+    if (fromH === toH) { alert('起訖時段不能相同'); return; }
+    loadComparison(dateKey, fromH, toH);
+  }
+
+  function buildCmpSection(cur, prev, unit, fromH, toH) {
+    function rankChange(c, p) {
+      if (p == null) return '<span class="rank-same">NEW</span>';
+      const d = p - c;
+      if (d > 0) return `<span class="rank-up">▲${d}</span>`;
+      if (d < 0) return `<span class="rank-down">▼${Math.abs(d)}</span>`;
       return '<span class="rank-same">—</span>';
     }
-    function deltaText(cur, prev) {
-      if (prev == null) return '—';
-      const d = cur - prev;
+    function deltaText(c, p) {
+      if (p == null) return '—';
+      const d = c - p;
       if (d > 0) return `<span class="delta-pos">+${d.toLocaleString()}</span>`;
       if (d < 0) return `<span class="delta-neg">${d.toLocaleString()}</span>`;
       return '<span class="rank-same">—</span>';
     }
-
-    function buildCmpSection(cur, prev, unit) {
-      const prevMap = {};
-      if (prev) prev.stocks.forEach(s => { prevMap[s.code] = s; });
-
-      const rows = cur.stocks.map(s => {
-        const p = prevMap[s.code];
-        const pRank = p ? p.rank : null;
-        const pNet  = p ? p.total_net : null;
-        return `<tr>
-          <td>${rankChange(s.rank, pRank)}</td>
-          <td>${s.rank} - ${s.name}(${s.code})</td>
-          <td class="${netClass(s.total_net)}">${netText(s.total_net)}</td>
-          <td class="col-prev">${pNet != null ? netText(pNet) : '—'}</td>
-          <td>${deltaText(s.total_net, pNet)}</td>
-        </tr>`;
-      }).join('');
-
-      return `
-        <div class="card">
-          <div class="card-title">各股買賣超比較（${unit}）　${prevLabel} → ${curLabel}</div>
-          <div class="detail-wrap">
-            <table class="cmp-table">
-              <thead><tr>
-                <th>排名變化</th><th>股票</th>
-                <th>當前 (${unit})</th>
-                <th class="col-prev">前期 (${unit})</th>
-                <th>變化量</th>
-              </tr></thead>
-              <tbody>${rows}</tbody>
-            </table>
-          </div>
-        </div>`;
-    }
-
-    document.getElementById('main-content').innerHTML =
-      buildCmpSection(curAmt, prevAmt, '千元') +
-      buildCmpSection(curVol, prevVol, '張');
+    const prevMap = {};
+    prev.stocks.forEach(s => { prevMap[s.code] = s; });
+    const rows = cur.stocks.map(s => {
+      const p = prevMap[s.code];
+      return `<tr>
+        <td>${rankChange(s.rank, p?.rank ?? null)}</td>
+        <td>${s.rank} - ${s.name}(${s.code})</td>
+        <td class="${netClass(s.total_net)}">${netText(s.total_net)}</td>
+        <td class="col-prev">${p ? netText(p.total_net) : '—'}</td>
+        <td>${deltaText(s.total_net, p?.total_net ?? null)}</td>
+      </tr>`;
+    }).join('');
+    return `<div class="card">
+      <div class="card-title">各股買賣超比較（${unit}）　${fromH}:05 → ${toH}:05</div>
+      <div class="detail-wrap">
+        <table class="cmp-table">
+          <thead><tr>
+            <th>排名變化</th><th>股票</th>
+            <th>迄 ${toH}:05 (${unit})</th>
+            <th class="col-prev">起 ${fromH}:05 (${unit})</th>
+            <th>變化量</th>
+          </tr></thead>
+          <tbody>${rows}</tbody>
+        </table>
+      </div>
+    </div>`;
   }
 
   // ── 渲染主表 ──
