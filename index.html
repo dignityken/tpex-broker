@@ -128,11 +128,10 @@
       .summary-grid { grid-template-columns: 1fr; }
       .sum-table:first-child { border-right: none; border-bottom: 2px solid #b0c4d8; }
       .sum-table th, .sum-table td { padding: 4px 8px; font-size: 12px; }
-      /* 明細表：隱藏買進/賣出/走勢，只留名稱+買賣超 */
+      /* 明細表：隱藏買進/賣出，走勢縮小保留 */
       .col-buy, .col-sell, .col-prev { display: none; }
-      .chart-th { display: none; }
-      .chart-cell { width: 0 !important; min-width: 0 !important; padding: 0 !important; overflow: hidden; border: none !important; }
-      .chart-cell > * { display: none; }
+      .chart-cell { width: 80px !important; min-width: 80px !important; padding: 2px 3px !important; }
+      .chart-cell svg { width: 100%; height: auto; display: block; }
       .main-table { min-width: 0 !important; width: 100%; }
       .cmp-table  { min-width: 0 !important; width: 100%; }
       .main-table thead th { padding: 5px 8px; font-size: 12px; }
@@ -259,7 +258,7 @@
     const toY = p => padT + chartH - Math.round((p - minP) / range * chartH);
     const slot = Math.floor(chartW / bars.length);
     const bodyW = Math.min(16, Math.max(3, slot - 4));
-    let s = `<svg width="${W}" height="${H}" xmlns="http://www.w3.org/2000/svg">`;
+    let s = `<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">`;
     // 最高最低價標籤
     s += `<text x="${W-padR}" y="${padT+5}" text-anchor="end" font-size="7" fill="#888">${maxP}</text>`;
     s += `<text x="${W-padR}" y="${H-padB}" text-anchor="end" font-size="7" fill="#888">${minP}</text>`;
@@ -294,7 +293,7 @@
     const midY = padT + chartH / 2;
     const slot = Math.floor(chartW / pts.length);
     const barW = Math.max(3, slot - 2);
-    let s = `<svg width="${W}" height="${H}" xmlns="http://www.w3.org/2000/svg">`;
+    let s = `<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">`;
     s += `<line x1="${padL}" y1="${midY}" x2="${W-padR}" y2="${midY}" stroke="#555" stroke-width="0.5"/>`;
     pts.forEach((p, i) => {
       const x = padL + i * slot + Math.floor((slot - barW) / 2);
