@@ -13,6 +13,9 @@ HEADERS = {
     'Accept-Language': 'zh-TW,zh;q=0.9',
     'Referer': 'https://www.tpex.org.tw/',
 }
+YF_HEADERS = {
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+}
 
 LIVE_URLS = {
     'amt': 'https://www.tpex.org.tw/www/zh-tw/mostActive/brokerAmt?id=&response=html',
@@ -116,6 +119,55 @@ def fetch_historical(day: date_type, mode):
     return {'date': day.strftime('%Y-%m-%d'), 'unit': UNITS[mode], 'stocks': stocks}
 
 
+def fetch_kline_yahoo(code, date_str):
+    """抓 Yahoo Finance 60 分 K 線，date_str = YYYY-MM-DD"""
+    symbol = f'{code}.TWO'
+    day = datetime.strptime(date_str, '%Y-%m-%d')
+    period1 = int(day.replace(hour=8,  minute=0, tzinfo=TW_TZ).timestamp())
+    period2 = int(day.replace(hour=14, minute=0, tzinfo=TW_TZ).timestamp())
+    url = (f'https://query1.finance.yahoo.com/v8/finance/chart/{symbol}'
+           f'?interval=60m&period1={period1}&period2={period2}&includePrePost=false')
+    try:
+        resp = requests.get(url, headers=YF_HEADERS, timeout=15)
+        data = resp.json()
+        result = data.get('chart', {}).get('result') or []
+        if not result:
+            return []
+        r = result[0]
+        timestamps = r.get('timestamp', [])
+        q = r['indicators']['quote'][0]
+        bars = []
+        for i, ts in enumerate(timestamps):
+            o, h, l, c = q['open'][i], q['high'][i], q['low'][i], q['close'][i]
+            if None in (o, h, l, c):
+                continue
+            tw_t = datetime.fromtimestamp(ts, TW_TZ)
+            bars.append({'time': tw_t.strftime('%H:%M'),
+                         'open': round(o, 2), 'high': round(h, 2),
+                         'low':  round(l, 2), 'close': round(c, 2)})
+        return bars
+    except Exception as e:
+        print(f'    K線 {code} 失敗：{e}')
+        return []
+
+
+def save_klines(codes, date_str, skip_existing=False):
+    os.makedirs('data/kline', exist_ok=True)
+    ok = 0
+    for code in sorted(codes):
+        path = f'data/kline/{date_str}-{code}.json'
+        if skip_existing and os.path.exists(path):
+            ok += 1
+            continue
+        bars = fetch_kline_yahoo(code, date_str)
+        if bars:
+            with open(path, 'w', encoding='utf-8') as f:
+                json.dump(bars, f, ensure_ascii=False)
+            ok += 1
+        time.sleep(0.3)
+    print(f'  K線：{ok}/{len(codes)} 支完成')
+
+
 def get_recent_weekdays(n=15):
     today = datetime.now(TW_TZ).date()
     days, d = [], today - timedelta(days=1)
@@ -159,6 +211,7 @@ if __name__ == '__main__':
             print(f'日期格式錯誤：{HIST_DATE}')
             sys.exit(1)
 
+        codes = set()
         for mode in ['amt', 'vol']:
             path = f'data/hist/{HIST_DATE}-{mode}.json'
             try:
@@ -169,8 +222,12 @@ if __name__ == '__main__':
                     with open(path, 'w', encoding='utf-8') as f:
                         json.dump(data, f, ensure_ascii=False, indent=2)
                     print(f'  {mode}: {len(data["stocks"])} 支')
+                    codes.update(s['code'] for s in data['stocks'])
             except Exception as e:
                 print(f'  {mode} 失敗：{e}')
+        if codes:
+            print(f'[K線] 抓取歷史 {HIST_DATE}...')
+            save_klines(codes, HIST_DATE, skip_existing=True)
         sys.exit(0)
 
     # ── 模式二：一般排程執行 ──
@@ -233,7 +290,7 @@ if __name__ == '__main__':
                 with open(path, 'w', encoding='utf-8') as f:
                     json.dump(data, f, ensure_ascii=False, indent=2)
                 print(f'  {mode}: {len(data["stocks"])} 支')
-            except Exception as e:    
+            except Exception as e:
                 print(f'  {mode} 失敗：{e}')
                 ok = False
                 break
@@ -243,3 +300,12 @@ if __name__ == '__main__':
     with open('data/hist/manifest.json', 'w', encoding='utf-8') as f:
         json.dump(sorted(available, reverse=True), f, ensure_ascii=False, indent=2)
     print(f'[清單] 歷史可用：{len(available)} 天')
+
+    # 4. 今日 K 線
+    codes = set()
+    for mode in ['amt', 'vol']:
+        for s in live_data.get(mode, {}).get('stocks', []):
+            codes.add(s['code'])
+    if codes:
+        print(f'[K線] 抓取今日 {date_key}...')
+        save_klines(codes, date_key, skip_existing=False)
