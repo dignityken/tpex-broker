@@ -104,6 +104,10 @@
     #back-to-top { position: fixed; bottom: 24px; right: 20px; background: #1a3a6b; color: white; border: none; border-radius: 50%; width: 40px; height: 40px; font-size: 18px; cursor: pointer; box-shadow: 0 3px 10px rgba(0,0,0,0.3); display: none; z-index: 500; transition: opacity .2s; }
     #back-to-top:hover { background: #2563a8; }
 
+    /* ── 走勢圖 ── */
+    .chart-cell { vertical-align: top; padding: 6px 8px; width: 176px; min-width: 176px; border-left: 1px solid #e0e8f0; background: #f8fafc; }
+    .chart-cell .no-data { font-size: 10px; color: #aaa; text-align: center; padding-top: 36px; }
+
     /* ── RWD ── */
     @media (max-width: 640px) {
       /* 頁首 */
@@ -121,8 +125,11 @@
       .summary-grid { grid-template-columns: 1fr; }
       .sum-table:first-child { border-right: none; border-bottom: 2px solid #b0c4d8; }
       .sum-table th, .sum-table td { padding: 4px 8px; font-size: 12px; }
-      /* 明細表：隱藏買進/賣出，只留名稱+買賣超 */
+      /* 明細表：隱藏買進/賣出/走勢，只留名稱+買賣超 */
       .col-buy, .col-sell, .col-prev { display: none; }
+      .chart-th { display: none; }
+      .chart-cell { width: 0 !important; min-width: 0 !important; padding: 0 !important; overflow: hidden; border: none !important; }
+      .chart-cell > * { display: none; }
       .main-table { min-width: 0 !important; width: 100%; }
       .cmp-table  { min-width: 0 !important; width: 100%; }
       .main-table thead th { padding: 5px 8px; font-size: 12px; }
@@ -180,8 +187,68 @@
   let currentMode = 'live';
   let currentTab  = 'amt';
   let liveCache   = {};
+  let liveChartCache = {};
   const UNITS = { amt: '千元', vol: '張' };
   const REPO  = 'dignityken/tpex-broker';
+
+  function todayTW() {
+    const d = new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Taipei' }));
+    return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+  }
+
+  // 讀取某日所有小時快照，回傳 { stockCode: [{hour, net}, ...] }
+  const _chartCache = {};
+  async function loadIntradayChart(dateKey, mode) {
+    const key = `${dateKey}-${mode}`;
+    if (_chartCache[key]) return _chartCache[key];
+    try {
+      const mResp = await fetch(`data/intraday/manifest.json?t=${Date.now()}`);
+      if (!mResp.ok) return {};
+      const manifest = await mResp.json();
+      const hours = manifest[dateKey] || [];
+      if (!hours.length) return {};
+      const snaps = await Promise.all(
+        hours.map(h =>
+          fetch(`data/intraday/${dateKey}/${h}-${mode}.json?t=${Date.now()}`)
+            .then(r => r.ok ? r.json() : null).catch(() => null)
+        )
+      );
+      const result = {};
+      snaps.forEach((snap, i) => {
+        if (!snap?.stocks) return;
+        snap.stocks.forEach(s => {
+          if (!result[s.code]) result[s.code] = [];
+          result[s.code].push({ hour: hours[i], net: s.total_net });
+        });
+      });
+      _chartCache[key] = result;
+      return result;
+    } catch(e) { return {}; }
+  }
+
+  function buildMiniChart(points) {
+    if (!points?.length) return '<div class="no-data">無盤中資料</div>';
+    const W = 160, H = 90;
+    const padT = 6, padB = 14, padL = 4, padR = 4;
+    const chartH = H - padT - padB;
+    const chartW = W - padL - padR;
+    const maxAbs = Math.max(...points.map(p => Math.abs(p.net)), 1);
+    const midY = padT + chartH / 2;
+    const slot = Math.floor(chartW / points.length);
+    const barW = Math.max(3, slot - 2);
+    let s = `<svg width="${W}" height="${H}" xmlns="http://www.w3.org/2000/svg">`;
+    s += `<line x1="${padL}" y1="${midY}" x2="${W-padR}" y2="${midY}" stroke="#555" stroke-width="0.5"/>`;
+    points.forEach((p, i) => {
+      const x = padL + i * slot + Math.floor((slot - barW) / 2);
+      const barH = Math.max(1, Math.round(Math.abs(p.net) / maxAbs * (chartH / 2 - 2)));
+      const y = p.net >= 0 ? midY - barH : midY;
+      const fill = p.net >= 0 ? '#c0392b' : '#27ae60';
+      s += `<rect x="${x}" y="${y}" width="${barW}" height="${barH}" fill="${fill}" opacity="0.85" rx="1"/>`;
+      s += `<text x="${x + barW/2}" y="${H-1}" text-anchor="middle" font-size="7" fill="#999">${p.hour}</text>`;
+    });
+    s += '</svg>';
+    return s;
+  }
 
   // ── Token 管理 ──
   function getToken()   { return localStorage.getItem('gh_token') || ''; }
@@ -270,11 +337,16 @@
   async function loadLive(tab) {
     setStatus('載入中...');
     try {
-      const resp = await fetch(`data/${tab}.json?t=${Date.now()}`);
+      const today = todayTW();
+      const [resp, chartData] = await Promise.all([
+        fetch(`data/${tab}.json?t=${Date.now()}`),
+        loadIntradayChart(today, tab),
+      ]);
       if (!resp.ok) throw new Error('HTTP ' + resp.status);
       const data = await resp.json();
       liveCache[tab] = data;
-      render(data);
+      liveChartCache[tab] = chartData;
+      render(data, chartData);
     } catch (e) {
       setError(`載入失敗：${e.message}`);
     }
@@ -340,9 +412,10 @@
     setError('查詢逾時，可能是假日無資料');
   }
 
-  function showHistData(data, date) {
+  async function showHistData(data, date) {
     document.getElementById('update-time').textContent = `歷史資料：${date}`;
-    render(data);
+    const chartData = await loadIntradayChart(date, currentTab);
+    render(data, chartData);
   }
 
   // ── 盤中比較 ──
@@ -468,7 +541,7 @@
   }
 
   // ── 渲染主表 ──
-  function render(data) {
+  function render(data, chartData = {}) {
     const { unit, stocks } = data;
     if (data.updated_at)
       document.getElementById('update-time').textContent = `資料時間：${data.updated_at}`;
@@ -483,17 +556,22 @@
     const buyLabel  = unit === '千元' ? '買進金額(千元)' : '總買量(張)';
     const sellLabel = unit === '千元' ? '賣出金額(千元)' : '總賣量(張)';
 
-    const detailRows = stocks.map(s => `
+    const detailRows = stocks.map(s => {
+      const rowspan = 1 + s.brokers.length;
+      const chart = buildMiniChart(chartData[s.code] || null);
+      return `
       <tr class="stock-hdr" id="stock-${s.code}">
         <td class="hdr-name" colspan="4">${s.rank} - ${s.name}(${s.code})</td>
         <td><span class="${netClass(s.total_net)}">${netText(s.total_net)}</span></td>
+        <td rowspan="${rowspan}" class="chart-cell">${chart}</td>
       </tr>
       ${s.brokers.map(b => `<tr>
         <td>${b.rank}</td><td>${b.name}</td>
         <td class="col-buy">${fmt(b.buy)}</td>
         <td class="col-sell">${fmt(b.sell)}</td>
         <td class="${netClass(b.net)}">${netText(b.net)}</td>
-      </tr>`).join('')}`).join('');
+      </tr>`).join('')}`;
+    }).join('');
 
     document.getElementById('main-content').innerHTML = `
       <div class="card">
@@ -516,6 +594,7 @@
               <th class="col-buy">${buyLabel}</th>
               <th class="col-sell">${sellLabel}</th>
               <th>買賣超 (${unit})</th>
+              <th class="chart-th">走勢</th>
             </tr></thead>
             <tbody>${detailRows}</tbody>
           </table>
@@ -537,7 +616,7 @@
 
     if (mode === 'live') {
       if (currentTab === 'cmp') loadComparison();
-      else liveCache[currentTab] ? render(liveCache[currentTab]) : loadLive(currentTab);
+      else liveCache[currentTab] ? render(liveCache[currentTab], liveChartCache[currentTab]) : loadLive(currentTab);
     } else {
       if (currentTab === 'cmp') switchTab('amt');
       else { setStatus('請選擇日期後按查詢'); document.getElementById('update-time').textContent = ''; }
@@ -552,7 +631,7 @@
 
     if (currentMode === 'live') {
       if (tab === 'cmp') { loadComparison(); return; }
-      liveCache[tab] ? render(liveCache[tab]) : loadLive(tab);
+      liveCache[tab] ? render(liveCache[tab], liveChartCache[tab]) : loadLive(tab);
     } else {
       const date = document.getElementById('hist-date').value;
       if (date) loadHistory(tab, date);
@@ -563,6 +642,7 @@
   function manualRefresh() {
     if (currentTab === 'cmp') { loadComparison(); return; }
     delete liveCache[currentTab];
+    delete liveChartCache[currentTab];
     loadLive(currentTab);
   }
 
@@ -578,6 +658,7 @@
     if (currentMode !== 'live') return;
     if (currentTab === 'cmp') { loadComparison(); return; }
     delete liveCache[currentTab];
+    delete liveChartCache[currentTab];
     loadLive(currentTab);
   }, 60 * 60 * 1000);
 
