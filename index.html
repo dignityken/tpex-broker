@@ -190,8 +190,9 @@
   // ── 狀態 ──
   let currentMode = 'live';
   let currentTab  = 'amt';
-  let liveCache   = {};
+  let liveCache      = {};
   let liveChartCache = {};
+  let liveKlineCache = {};
   const UNITS = { amt: '千元', vol: '張' };
   const REPO  = 'dignityken/tpex-broker';
 
@@ -228,6 +229,56 @@
       _chartCache[key] = result;
       return result;
     } catch(e) { return {}; }
+  }
+
+  // 讀取 K 線資料（同一日期共用，不分 tab）
+  const _klineCache = {};
+  async function loadKlineData(dateKey, stocks) {
+    if (_klineCache[dateKey]) return _klineCache[dateKey];
+    const codes = [...new Set(stocks.map(s => s.code))];
+    const result = {};
+    await Promise.all(codes.map(async code => {
+      try {
+        const r = await fetch(`data/kline/${dateKey}-${code}.json?t=${Date.now()}`);
+        if (r.ok) result[code] = await r.json();
+      } catch(e) {}
+    }));
+    _klineCache[dateKey] = result;
+    return result;
+  }
+
+  function buildKlineChart(bars) {
+    if (!bars?.length) return '';
+    const W = 160, H = 80;
+    const padT = 8, padB = 14, padL = 4, padR = 4;
+    const chartH = H - padT - padB;
+    const chartW = W - padL - padR;
+    const maxP = Math.max(...bars.map(b => b.high));
+    const minP = Math.min(...bars.map(b => b.low));
+    const range = maxP - minP || 1;
+    const toY = p => padT + chartH - Math.round((p - minP) / range * chartH);
+    const slot = Math.floor(chartW / bars.length);
+    const bodyW = Math.min(16, Math.max(3, slot - 4));
+    let s = `<svg width="${W}" height="${H}" xmlns="http://www.w3.org/2000/svg">`;
+    // 最高最低價標籤
+    s += `<text x="${W-padR}" y="${padT+5}" text-anchor="end" font-size="7" fill="#888">${maxP}</text>`;
+    s += `<text x="${W-padR}" y="${H-padB}" text-anchor="end" font-size="7" fill="#888">${minP}</text>`;
+    bars.forEach((b, i) => {
+      const cx = padL + i * slot + Math.floor(slot / 2);
+      const x  = cx - Math.floor(bodyW / 2);
+      const isUp = b.close >= b.open;
+      const col = isUp ? '#c0392b' : '#27ae60';
+      const yH = toY(b.high), yL = toY(b.low);
+      const yO = toY(b.open), yC = toY(b.close);
+      const bodyTop = Math.min(yO, yC);
+      const bodyH = Math.max(1, Math.abs(yC - yO));
+      const label = `${b.time}　O:${b.open} H:${b.high} L:${b.low} C:${b.close}`;
+      s += `<line x1="${cx}" y1="${yH}" x2="${cx}" y2="${yL}" stroke="${col}" stroke-width="1" data-val="${label}"/>`;
+      s += `<rect x="${x}" y="${bodyTop}" width="${bodyW}" height="${bodyH}" fill="${col}" data-val="${label}"/>`;
+      s += `<text x="${cx}" y="${H-1}" text-anchor="middle" font-size="7" fill="#999">${b.time.slice(0,2)}</text>`;
+    });
+    s += '</svg>';
+    return s;
   }
 
   function buildMiniChart(points) {
@@ -382,9 +433,11 @@
       ]);
       if (!resp.ok) throw new Error('HTTP ' + resp.status);
       const data = await resp.json();
+      const klineData = await loadKlineData(today, data.stocks);
       liveCache[tab] = data;
       liveChartCache[tab] = chartData;
-      render(data, chartData);
+      liveKlineCache[tab] = klineData;
+      render(data, chartData, klineData);
     } catch (e) {
       setError(`載入失敗：${e.message}`);
     }
@@ -452,8 +505,11 @@
 
   async function showHistData(data, date) {
     document.getElementById('update-time').textContent = `歷史資料：${date}`;
-    const chartData = await loadIntradayChart(date, currentTab);
-    render(data, chartData);
+    const [chartData, klineData] = await Promise.all([
+      loadIntradayChart(date, currentTab),
+      loadKlineData(date, data.stocks),
+    ]);
+    render(data, chartData, klineData);
   }
 
   // ── 盤中比較 ──
@@ -579,7 +635,7 @@
   }
 
   // ── 渲染主表 ──
-  function render(data, chartData = {}) {
+  function render(data, chartData = {}, klineData = {}) {
     const { unit, stocks } = data;
     if (data.updated_at)
       document.getElementById('update-time').textContent = `資料時間：${data.updated_at}`;
@@ -596,7 +652,11 @@
 
     const detailRows = stocks.map(s => {
       const rowspan = 1 + s.brokers.length;
-      const chart = buildMiniChart(chartData[s.code] || null);
+      const kline = buildKlineChart(klineData[s.code] || null);
+      const net   = buildMiniChart(chartData[s.code] || null);
+      const chart = kline
+        ? `${kline}<div style="border-top:1px solid #dde;margin:2px 0"></div>${net}`
+        : net;
       return `
       <tr class="stock-hdr" id="stock-${s.code}">
         <td class="hdr-name" colspan="4">${s.rank} - ${s.name}(${s.code})</td>
@@ -654,7 +714,7 @@
 
     if (mode === 'live') {
       if (currentTab === 'cmp') loadComparison();
-      else liveCache[currentTab] ? render(liveCache[currentTab], liveChartCache[currentTab]) : loadLive(currentTab);
+      else liveCache[currentTab] ? render(liveCache[currentTab], liveChartCache[currentTab], liveKlineCache[currentTab]) : loadLive(currentTab);
     } else {
       if (currentTab === 'cmp') switchTab('amt');
       else { setStatus('請選擇日期後按查詢'); document.getElementById('update-time').textContent = ''; }
@@ -669,7 +729,7 @@
 
     if (currentMode === 'live') {
       if (tab === 'cmp') { loadComparison(); return; }
-      liveCache[tab] ? render(liveCache[tab], liveChartCache[tab]) : loadLive(tab);
+      liveCache[tab] ? render(liveCache[tab], liveChartCache[tab], liveKlineCache[tab]) : loadLive(tab);
     } else {
       const date = document.getElementById('hist-date').value;
       if (date) loadHistory(tab, date);
@@ -681,6 +741,7 @@
     if (currentTab === 'cmp') { loadComparison(); return; }
     delete liveCache[currentTab];
     delete liveChartCache[currentTab];
+    delete liveKlineCache[currentTab];
     loadLive(currentTab);
   }
 
@@ -697,6 +758,7 @@
     if (currentTab === 'cmp') { loadComparison(); return; }
     delete liveCache[currentTab];
     delete liveChartCache[currentTab];
+    delete liveKlineCache[currentTab];
     loadLive(currentTab);
   }, 60 * 60 * 1000);
 
