@@ -128,10 +128,12 @@
       .summary-grid { grid-template-columns: 1fr; }
       .sum-table:first-child { border-right: none; border-bottom: 2px solid #b0c4d8; }
       .sum-table th, .sum-table td { padding: 4px 8px; font-size: 12px; }
-      /* 明細表：隱藏買進/賣出，走勢縮小保留 */
+      /* 明細表：隱藏買進/賣出 */
       .col-buy, .col-sell, .col-prev { display: none; }
-      .chart-cell { width: 80px !important; min-width: 80px !important; padding: 2px 3px !important; }
-      .chart-cell svg { width: 100%; height: auto; display: block; }
+      /* 走勢圖改為橫排置於股票區塊底部 */
+      .chart-row-mobile td { padding: 4px 6px !important; background: #f8fafc; border-top: 1px solid #e0e8f0; }
+      .chart-row-mobile .chart-inner { display: flex; justify-content: center; gap: 6px; }
+      .chart-row-mobile svg { flex: 1; max-width: 160px; height: auto; }
       .main-table { min-width: 0 !important; width: 100%; }
       .cmp-table  { min-width: 0 !important; width: 100%; }
       .main-table thead th { padding: 5px 8px; font-size: 12px; }
@@ -377,7 +379,16 @@
     const mobile = window.innerWidth <= 640;
     document.querySelectorAll('.hdr-name').forEach(td => { td.colSpan = mobile ? 2 : 4; });
   }
-  window.addEventListener('resize', fixColspan);
+  let _resizeTimer;
+  window.addEventListener('resize', () => {
+    fixColspan();
+    clearTimeout(_resizeTimer);
+    _resizeTimer = setTimeout(() => {
+      if (currentMode === 'live' && currentTab !== 'cmp' && liveCache[currentTab]) {
+        render(liveCache[currentTab], liveChartCache[currentTab], liveKlineCache[currentTab]);
+      }
+    }, 300);
+  });
 
   // ── HTML 解析（歷史直抓用）──
   function parseNum(s) {
@@ -648,27 +659,58 @@
 
     const buyLabel  = unit === '千元' ? '買進金額(千元)' : '總買量(張)';
     const sellLabel = unit === '千元' ? '賣出金額(千元)' : '總賣量(張)';
+    const mobile = window.innerWidth <= 640;
 
-    const detailRows = stocks.map(s => {
-      const rowspan = 1 + s.brokers.length;
-      const kline = buildKlineChart(klineData[s.code] || null);
-      const net   = buildMiniChart(chartData[s.code] || null);
-      const chart = kline
+    const buildChart = (code) => {
+      const kline = buildKlineChart(klineData[code] || null);
+      const net   = buildMiniChart(chartData[code] || null);
+      return kline
         ? `${kline}<div style="border-top:1px solid #dde;margin:2px 0"></div>${net}`
         : net;
-      return `
-      <tr class="stock-hdr" id="stock-${s.code}">
-        <td class="hdr-name" colspan="4">${s.rank} - ${s.name}(${s.code})</td>
-        <td><span class="${netClass(s.total_net)}">${netText(s.total_net)}</span></td>
-        <td rowspan="${rowspan}" class="chart-cell">${chart}</td>
-      </tr>
-      ${s.brokers.map(b => `<tr>
-        <td>${b.rank}</td><td>${b.name}</td>
-        <td class="col-buy">${fmt(b.buy)}</td>
-        <td class="col-sell">${fmt(b.sell)}</td>
-        <td class="${netClass(b.net)}">${netText(b.net)}</td>
-      </tr>`).join('')}`;
-    }).join('');
+    };
+
+    let detailRows;
+    if (mobile) {
+      // 手機版：3欄表格（排行/名稱/買賣超），圖表獨佔一行置底
+      detailRows = stocks.map(s => `
+        <tr class="stock-hdr" id="stock-${s.code}">
+          <td class="hdr-name" colspan="2">${s.rank} - ${s.name}(${s.code})</td>
+          <td><span class="${netClass(s.total_net)}">${netText(s.total_net)}</span></td>
+        </tr>
+        ${s.brokers.map(b => `<tr>
+          <td>${b.rank}</td><td>${b.name}</td>
+          <td class="${netClass(b.net)}">${netText(b.net)}</td>
+        </tr>`).join('')}
+        <tr class="chart-row-mobile"><td colspan="3"><div class="chart-inner">${buildChart(s.code)}</div></td></tr>
+      `).join('');
+    } else {
+      // 桌機版：5欄 + rowspan 走勢欄
+      detailRows = stocks.map(s => {
+        const rowspan = 1 + s.brokers.length;
+        return `
+        <tr class="stock-hdr" id="stock-${s.code}">
+          <td class="hdr-name" colspan="4">${s.rank} - ${s.name}(${s.code})</td>
+          <td><span class="${netClass(s.total_net)}">${netText(s.total_net)}</span></td>
+          <td rowspan="${rowspan}" class="chart-cell">${buildChart(s.code)}</td>
+        </tr>
+        ${s.brokers.map(b => `<tr>
+          <td>${b.rank}</td><td>${b.name}</td>
+          <td class="col-buy">${fmt(b.buy)}</td>
+          <td class="col-sell">${fmt(b.sell)}</td>
+          <td class="${netClass(b.net)}">${netText(b.net)}</td>
+        </tr>`).join('')}`;
+      }).join('');
+    }
+
+    const thead = mobile
+      ? `<tr><th>排行</th><th>證商名稱</th><th>買賣超 (${unit})</th></tr>`
+      : `<tr>
+          <th>排行</th><th>證商名稱</th>
+          <th class="col-buy">${buyLabel}</th>
+          <th class="col-sell">${sellLabel}</th>
+          <th>買賣超 (${unit})</th>
+          <th class="chart-th">走勢</th>
+        </tr>`;
 
     document.getElementById('main-content').innerHTML = `
       <div class="card">
@@ -686,13 +728,7 @@
         <div class="card-title">券商明細</div>
         <div class="detail-wrap">
           <table class="main-table">
-            <thead><tr>
-              <th>排行</th><th>證商名稱</th>
-              <th class="col-buy">${buyLabel}</th>
-              <th class="col-sell">${sellLabel}</th>
-              <th>買賣超 (${unit})</th>
-              <th class="chart-th">走勢</th>
-            </tr></thead>
+            <thead>${thead}</thead>
             <tbody>${detailRows}</tbody>
           </table>
         </div>
