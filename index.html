@@ -106,6 +106,9 @@
 
     /* ── 走勢圖 tooltip ── */
     #chart-tip { position: fixed; background: rgba(20,20,40,0.92); color: #fff; padding: 4px 9px; border-radius: 4px; font-size: 12px; pointer-events: none; display: none; z-index: 999; white-space: nowrap; box-shadow: 0 2px 6px rgba(0,0,0,0.4); }
+    #broker-tip { position: fixed; background: rgba(20,20,40,0.95); color: #fff; padding: 6px 8px; border-radius: 6px; pointer-events: none; display: none; z-index: 998; box-shadow: 0 3px 12px rgba(0,0,0,0.45); min-width: 168px; }
+    #broker-tip .bt-name { font-size: 12px; font-weight: bold; text-align: center; margin-bottom: 3px; color: #cdd; }
+    #broker-tip .bt-chart svg { display: block; }
 
     /* ── 走勢圖 ── */
     .chart-cell { vertical-align: top; padding: 6px 8px; width: 176px; min-width: 176px; border-left: 1px solid #e0e8f0; background: #f8fafc; }
@@ -186,6 +189,7 @@
 
 <button id="back-to-top" onclick="window.scrollTo({top:0})" title="回到頂部">↑</button>
 <div id="chart-tip"></div>
+<div id="broker-tip"><div class="bt-name"></div><div class="bt-chart"></div></div>
 
 <script>
   // ── 狀態 ──
@@ -204,6 +208,9 @@
 
   // 讀取某日所有小時快照，回傳 { stockCode: [{hour, net}, ...] }
   const _chartCache = {};
+  const _brokerChartCache = {}; // key -> { stockCode: { brokerName: [{hour,net}] } }
+  let currentDateKey = '';
+
   async function loadIntradayChart(dateKey, mode) {
     const key = `${dateKey}-${mode}`;
     if (_chartCache[key]) return _chartCache[key];
@@ -219,15 +226,21 @@
             .then(r => r.ok ? r.json() : null).catch(() => null)
         )
       );
-      const result = {};
+      const result = {}, brokers = {};
       snaps.forEach((snap, i) => {
         if (!snap?.stocks) return;
         snap.stocks.forEach(s => {
           if (!result[s.code]) result[s.code] = [];
           result[s.code].push({ hour: hours[i], net: s.total_net });
+          if (!brokers[s.code]) brokers[s.code] = {};
+          (s.brokers || []).forEach(b => {
+            if (!brokers[s.code][b.name]) brokers[s.code][b.name] = [];
+            brokers[s.code][b.name].push({ hour: hours[i], net: b.net });
+          });
         });
       });
       _chartCache[key] = result;
+      _brokerChartCache[key] = brokers;
       return result;
     } catch(e) { return {}; }
   }
@@ -374,6 +387,55 @@
     else _hideTip();
   }, { passive: false });
 
+  // ── 券商走勢 popup ──
+  const _bt = document.getElementById('broker-tip');
+  let _lastBrokerTr = null;
+
+  function _showBrokerChart(x, y, stockCode, brokerName) {
+    const key = `${currentDateKey}-${currentTab}`;
+    const pts = (_brokerChartCache[key]?.[stockCode]?.[brokerName] || [])
+                  .filter(p => parseInt(p.hour) <= 14);
+    if (!pts.length) return;
+    _bt.querySelector('.bt-name').textContent = brokerName;
+    _bt.querySelector('.bt-chart').innerHTML = buildMiniChart(pts);
+    _bt.style.display = 'block';
+    _moveBrokerTip(x, y);
+  }
+  function _moveBrokerTip(x, y) {
+    const W = _bt.offsetWidth || 170, H = _bt.offsetHeight || 120;
+    let left = x + 14, top = y - Math.floor(H / 2);
+    if (left + W > window.innerWidth  - 4) left = x - W - 6;
+    if (top < 4) top = 4;
+    if (top + H > window.innerHeight - 4) top = window.innerHeight - H - 4;
+    _bt.style.left = left + 'px';
+    _bt.style.top  = top  + 'px';
+  }
+  function _hideBrokerChart() { _bt.style.display = 'none'; _lastBrokerTr = null; }
+
+  document.addEventListener('mousemove', e => {
+    const tr = e.target.closest('tr[data-broker]');
+    if (tr !== _lastBrokerTr) {
+      _lastBrokerTr = tr;
+      if (tr) _showBrokerChart(e.clientX, e.clientY, tr.dataset.stock, tr.dataset.broker);
+      else _hideBrokerChart();
+    } else if (tr) {
+      _moveBrokerTip(e.clientX, e.clientY);
+    }
+  });
+
+  // 手機觸控：點一下顯示，再點別處消失
+  document.addEventListener('touchstart', e => {
+    const tr = e.target.closest('tr[data-broker]');
+    if (tr) {
+      if (_lastBrokerTr === tr) { _hideBrokerChart(); return; }
+      const t = e.touches[0];
+      _lastBrokerTr = tr;
+      _showBrokerChart(t.clientX, t.clientY, tr.dataset.stock, tr.dataset.broker);
+    } else if (_bt.style.display !== 'none') {
+      _hideBrokerChart();
+    }
+  }, { passive: true });
+
   // 手機版隱藏買進/賣出欄時，stock-hdr 的 colspan 從 4 改為 2
   function fixColspan() {
     const mobile = window.innerWidth <= 640;
@@ -444,6 +506,7 @@
       if (!resp.ok) throw new Error('HTTP ' + resp.status);
       const data = await resp.json();
       const klineData = await loadKlineData(today, data.stocks);
+      currentDateKey = today;
       liveCache[tab] = data;
       liveChartCache[tab] = chartData;
       liveKlineCache[tab] = klineData;
@@ -514,6 +577,7 @@
   }
 
   async function showHistData(data, date) {
+    currentDateKey = date;
     document.getElementById('update-time').textContent = `歷史資料：${date}`;
     const [chartData, klineData] = await Promise.all([
       loadIntradayChart(date, currentTab),
@@ -677,7 +741,7 @@
           <td class="hdr-name" colspan="2">${s.rank} - ${s.name}(${s.code})</td>
           <td><span class="${netClass(s.total_net)}">${netText(s.total_net)}</span></td>
         </tr>
-        ${s.brokers.map(b => `<tr>
+        ${s.brokers.map(b => `<tr data-stock="${s.code}" data-broker="${b.name}">
           <td>${b.rank}</td><td>${b.name}</td>
           <td class="${netClass(b.net)}">${netText(b.net)}</td>
         </tr>`).join('')}
@@ -693,7 +757,7 @@
           <td><span class="${netClass(s.total_net)}">${netText(s.total_net)}</span></td>
           <td rowspan="${rowspan}" class="chart-cell">${buildChart(s.code)}</td>
         </tr>
-        ${s.brokers.map(b => `<tr>
+        ${s.brokers.map(b => `<tr data-stock="${s.code}" data-broker="${b.name}">
           <td>${b.rank}</td><td>${b.name}</td>
           <td class="col-buy">${fmt(b.buy)}</td>
           <td class="col-sell">${fmt(b.sell)}</td>
