@@ -183,7 +183,7 @@
   #chartEmpty { color: #8a97aa; font-size: 14px; text-align: center; }
   #chartCanvas { display: none; }
   .range-row { display:flex; gap:4px; padding:0 12px 4px; }
-  .range-row input { flex:1; min-width:0; margin:0; padding:3px 5px; border:1px solid #b8c2d0; border-radius:3px; background:#fff; font-size:12px; font-family:inherit; }
+  #chartConfig .range-row input { flex:1; min-width:0; width:auto; margin:0; padding:3px 5px; border:1px solid #b8c2d0; border-radius:3px; background:#fff; font-size:12px; font-family:inherit; }
   .cfg-sep { display:block; padding:5px 12px 2px; font-size:11px; color:#5a6b85; font-weight:600; border-top:1px solid #cfd7e1; margin-top:6px; }
   #chartInfo { padding:2px 12px 4px; font-size:11px; color:#197a4b; min-height:16px; }
 </style>
@@ -788,6 +788,7 @@ function switchToActive(){
   rebuildView();
   buildGrid();
   buildPivotConfig();
+  if ($('#chartPanel').classList.contains('active')) buildChartConfig();
 }
 
 function removeTable(){
