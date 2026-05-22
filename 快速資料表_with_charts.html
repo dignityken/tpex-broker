@@ -182,6 +182,10 @@
   #chartArea { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #fff; padding: 20px; min-width: 0; overflow: hidden; }
   #chartEmpty { color: #8a97aa; font-size: 14px; text-align: center; }
   #chartCanvas { display: none; }
+  .range-row { display:flex; gap:4px; padding:0 12px 4px; }
+  .range-row input { flex:1; min-width:0; margin:0; padding:3px 5px; border:1px solid #b8c2d0; border-radius:3px; background:#fff; font-size:12px; font-family:inherit; }
+  .cfg-sep { display:block; padding:5px 12px 2px; font-size:11px; color:#5a6b85; font-weight:600; border-top:1px solid #cfd7e1; margin-top:6px; }
+  #chartInfo { padding:2px 12px 4px; font-size:11px; color:#197a4b; min-height:16px; }
 </style>
 </head>
 <body>
@@ -284,8 +288,27 @@
       <input type="text" id="chartYLabel" placeholder="（選填）">
       <span class="cfg-lbl">副 Y 軸標籤</span>
       <input type="text" id="chartY2Label" placeholder="（選填）">
+      <span class="cfg-sep">X 軸篩選區間（字串/時間比對，留空不限）</span>
+      <div class="range-row">
+        <input type="text" id="chartXMin" placeholder="從">
+        <input type="text" id="chartXMax" placeholder="至">
+      </div>
+      <span class="cfg-sep">主 Y 軸範圍（留空自動）</span>
+      <div class="range-row">
+        <input type="text" id="chartYMin" placeholder="最小值">
+        <input type="text" id="chartYMax" placeholder="最大值">
+      </div>
+      <span class="cfg-sep">副 Y 軸範圍（留空自動）</span>
+      <div class="range-row">
+        <input type="text" id="chartY2Min" placeholder="最小值">
+        <input type="text" id="chartY2Max" placeholder="最大值">
+      </div>
+      <span class="cfg-sep">效能設定</span>
       <span class="cfg-lbl">最多取列數（0＝全部）</span>
       <input type="text" id="chartMaxRows" placeholder="0">
+      <span class="cfg-lbl">LTTB 降採樣上限（0=關閉，預設 2000）</span>
+      <input type="text" id="chartLttbN" placeholder="2000">
+      <div id="chartInfo"></div>
       <div class="actions">
         <button class="btn" id="btnGenChart">產生圖表</button>
         <button class="btn sec" id="btnExportChart">匯出 PNG</button>
@@ -1739,9 +1762,41 @@ function buildChartConfig(){
     ylist.innerHTML = '<div style="padding:8px;color:#8a97aa;font-size:12px">沒有數值欄位可用</div>';
 }
 
+/* LTTB: Largest-Triangle-Three-Buckets downsampling.
+   Returns indices of rows to keep while preserving visual shape. */
+function lttbIndices(ys, threshold){
+  const n = ys.length;
+  if (threshold <= 0 || n <= threshold) return null; // null = keep all
+  if (threshold < 3) return [0, n - 1];
+  const result = [0];
+  const bk = (n - 2) / (threshold - 2);
+  let a = 0;
+  for (let bucket = 0; bucket < threshold - 2; bucket++){
+    const ns = Math.floor((bucket + 1) * bk) + 1;
+    const ne = Math.min(Math.floor((bucket + 2) * bk) + 1, n);
+    let avgY = 0, avgX = 0, cnt = ne - ns;
+    for (let j = ns; j < ne; j++){ avgY += (ys[j] ?? 0); avgX += j; }
+    avgY /= cnt; avgX /= cnt;
+    const cs = Math.floor(bucket * bk) + 1;
+    const ce = Math.min(Math.floor((bucket + 1) * bk) + 1, n);
+    const ay = ys[a] ?? 0;
+    let maxArea = -1, pick = cs;
+    for (let j = cs; j < ce; j++){
+      const area = Math.abs((a - avgX) * ((ys[j] ?? 0) - ay) - (a - j) * (avgY - ay)) * 0.5;
+      if (area > maxArea){ maxArea = area; pick = j; }
+    }
+    result.push(pick); a = pick;
+  }
+  result.push(n - 1);
+  return result;
+}
+
 function getChartRawData(){
-  const src = $('#chartSrc').value;
-  const maxR = parseInt($('#chartMaxRows').value) || 0;
+  const src   = $('#chartSrc').value;
+  const maxR  = parseInt($('#chartMaxRows').value) || 0;
+  const xMin  = ($('#chartXMin').value || '').trim();
+  const xMax  = ($('#chartXMax').value || '').trim();
+  const xIdx  = +$('#chartXCol').value;
   let rows = [], headers = [];
   if (src === 'data'){
     if (state.active < 0){ alert('請先載入資料'); return null; }
@@ -1755,16 +1810,41 @@ function getChartRawData(){
     const lim = maxR > 0 ? Math.min(pivotOut.length - 1, maxR) : pivotOut.length - 1;
     rows = pivotOut.slice(1, 1 + lim);
   }
+  // X range filter (string/date: lexicographic; numeric: numeric)
+  if (xMin || xMax){
+    const sample = rows.find(r => r[xIdx] != null);
+    const xIsNum = sample && typeof sample[xIdx] === 'number';
+    const lo = xIsNum ? parseFloat(xMin) : xMin;
+    const hi = xIsNum ? parseFloat(xMax) : xMax;
+    rows = rows.filter(r => {
+      const v = r[xIdx];
+      if (xIsNum){
+        const n = typeof v === 'number' ? v : parseNum(v);
+        if (xMin && !isNaN(lo) && n < lo) return false;
+        if (xMax && !isNaN(hi) && n > hi) return false;
+      } else {
+        const s = v == null ? '' : String(v);
+        if (xMin && s < xMin) return false;
+        if (xMax && s > xMax) return false;
+      }
+      return true;
+    });
+  }
   return { rows, headers };
 }
 
 function generateChart(){
-  const type  = $('#chartType').value;
-  const title = $('#chartTitle').value.trim();
-  const xLbl  = $('#chartXLabel').value.trim();
-  const yLbl  = $('#chartYLabel').value.trim();
-  const y2Lbl = $('#chartY2Label').value.trim();
-  const xIdx  = +$('#chartXCol').value;
+  const type   = $('#chartType').value;
+  const title  = $('#chartTitle').value.trim();
+  const xLbl   = $('#chartXLabel').value.trim();
+  const yLbl   = $('#chartYLabel').value.trim();
+  const y2Lbl  = $('#chartY2Label').value.trim();
+  const xIdx   = +$('#chartXCol').value;
+  const lttbN  = parseInt($('#chartLttbN').value ?? '2000') || 2000;
+  const yMin   = parseFloat($('#chartYMin').value);
+  const yMax   = parseFloat($('#chartYMax').value);
+  const y2Min  = parseFloat($('#chartY2Min').value);
+  const y2Max  = parseFloat($('#chartY2Max').value);
 
   const yItems = [...$('#chartYList').querySelectorAll('.chartYItem')]
     .filter(el => el.querySelector('input').checked);
@@ -1772,9 +1852,11 @@ function generateChart(){
 
   const rd = getChartRawData(); if (!rd) return;
   const { rows, headers } = rd;
+  const info = $('#chartInfo');
 
   if (chartInst){ chartInst.destroy(); chartInst = null; }
-  const cv2 = (v) => (v === null || v === undefined || v === '') ? null : (typeof v === 'number' ? v : parseNum(v));
+  const cv2 = (v) => (v === null || v === undefined || v === '') ? null
+                     : (typeof v === 'number' ? v : parseNum(v));
 
   const series = yItems.map(item => ({
     idx:   +item.dataset.idx,
@@ -1790,35 +1872,52 @@ function generateChart(){
   canvas.width  = area.clientWidth  - 40;
   canvas.height = area.clientHeight - 40;
 
-  if (type === 'scatter') return doScatter(canvas, rows, series, headers, xIdx, title, xLbl, yLbl, y2Lbl);
-  if (type === 'boxplot') return doBoxplot(canvas, rows, series, headers, xIdx, title, xLbl, yLbl);
+  if (type === 'scatter') return doScatter(canvas, rows, series, headers, xIdx, title, xLbl, yLbl, y2Lbl, yMin, yMax, y2Min, y2Max, lttbN, info);
+  if (type === 'boxplot') return doBoxplot(canvas, rows, series, headers, xIdx, title, xLbl, yLbl, yMin, yMax);
 
-  const xLabels = rows.map(r => r[xIdx] == null ? '(空白)' : String(r[xIdx]));
-  const isHBar  = type === 'barH', isBar = type === 'bar' || isHBar;
-  const hasY2   = series.some(s => s.y2);
+  let xLabels = rows.map(r => r[xIdx] == null ? '(空白)' : String(r[xIdx]));
+  const isHBar = type === 'barH', isBar = type === 'bar' || isHBar;
+  const hasY2  = series.some(s => s.y2);
+  const origN  = xLabels.length;
 
+  // LTTB downsampling (line chart only; bar charts need all categories)
+  let kept = origN;
+  if (!isBar && origN > lttbN && lttbN > 0){
+    const refY = series[0].data.map(v => v ?? 0);
+    const idx  = lttbIndices(refY, lttbN);
+    if (idx){ xLabels = idx.map(i => xLabels[i]); series.forEach(s => { s.data = idx.map(i => s.data[i]); }); kept = idx.length; }
+  }
+  info.textContent = origN === kept ? \`共 \${origN.toLocaleString()} 點\`
+    : \`LTTB 降採樣：\${origN.toLocaleString()} → \${kept.toLocaleString()} 點\`;
+
+  const large = kept > 5000;
   const datasets = series.map(s => ({
     label: s.name, data: s.data,
     borderColor: s.color,
     backgroundColor: isBar ? s.color + 'cc' : s.color + '28',
-    borderWidth: isBar ? 1 : 2,
-    fill: false, tension: 0.3,
-    pointRadius: xLabels.length > 300 ? 0 : 3,
-    pointHoverRadius: 5,
+    borderWidth: isBar ? 1 : (large ? 1 : 2),
+    fill: false, tension: large ? 0 : 0.3,
+    pointRadius: (isBar || kept > 200) ? 0 : 3,
+    pointHoverRadius: kept > 200 ? 3 : 5,
+    spanGaps: true,
     yAxisID: s.y2 ? 'y2' : 'y'
   }));
 
   const scales = {
     x: { title: { display: !!xLbl, text: xLbl }, ticks: { maxTicksLimit: 40, maxRotation: 45 } },
-    y: { position: 'left', title: { display: !!yLbl, text: yLbl } }
+    y: { position: 'left', title: { display: !!yLbl, text: yLbl },
+         min: isNaN(yMin) ? undefined : yMin, max: isNaN(yMax) ? undefined : yMax }
   };
-  if (hasY2) scales.y2 = { position: 'right', title: { display: !!y2Lbl, text: y2Lbl }, grid: { drawOnChartArea: false } };
+  if (hasY2) scales.y2 = { position: 'right', title: { display: !!y2Lbl, text: y2Lbl },
+    grid: { drawOnChartArea: false },
+    min: isNaN(y2Min) ? undefined : y2Min, max: isNaN(y2Max) ? undefined : y2Max };
 
   chartInst = new Chart(canvas, {
     type: isBar ? 'bar' : 'line',
     data: { labels: xLabels, datasets },
     options: {
-      responsive: false, animation: { duration: 350 },
+      responsive: false,
+      animation: { duration: large ? 0 : 350 },
       indexAxis: isHBar ? 'y' : 'x',
       plugins: {
         title:   { display: !!title, text: title, font: { size: 15 } },
@@ -1831,35 +1930,68 @@ function generateChart(){
   });
 }
 
-function doScatter(canvas, rows, series, headers, xIdx, title, xLbl, yLbl, y2Lbl){
+function doScatter(canvas, rows, series, headers, xIdx, title, xLbl, yLbl, y2Lbl, yMin, yMax, y2Min, y2Max, lttbN, info){
   const xName = headers[xIdx] || '';
   const hasY2 = series.some(s => s.y2);
-  const datasets = series.map(s => ({
-    label: s.name,
-    data: rows.map((r, i) => {
+
+  // Build {x,y} pairs per series, then apply LTTB independently
+  const builtSeries = series.map(s => {
+    const pts = rows.map((r, i) => {
       const x = typeof r[xIdx] === 'number' ? r[xIdx] : parseNum(r[xIdx]);
       const y = s.data[i];
       return (x != null && y != null) ? { x, y } : null;
-    }).filter(Boolean),
-    borderColor: s.color, backgroundColor: s.color + 'aa', pointRadius: 4,
+    }).filter(Boolean);
+    // LTTB on scatter: sort by x, then downsample
+    pts.sort((a, b) => a.x - b.x);
+    const origN = pts.length;
+    let kept = pts;
+    if (lttbN > 0 && origN > lttbN){
+      const ys = pts.map(p => p.y);
+      const idx = lttbIndices(ys, lttbN);
+      if (idx) kept = idx.map(i => pts[i]);
+    }
+    return { ...s, pts: kept, origN };
+  });
+
+  const totalOrig = builtSeries.reduce((a, s) => a + s.origN, 0);
+  const totalKept = builtSeries.reduce((a, s) => a + s.pts.length, 0);
+  if (info) info.textContent = totalOrig === totalKept
+    ? \`共 \${totalOrig.toLocaleString()} 點\`
+    : \`LTTB 降採樣：\${totalOrig.toLocaleString()} → \${totalKept.toLocaleString()} 點\`;
+
+  const large = totalKept > 5000;
+  const datasets = builtSeries.map(s => ({
+    label: s.name, data: s.pts,
+    borderColor: s.color, backgroundColor: s.color + 'aa',
+    pointRadius: large ? 1 : 4,
     yAxisID: s.y2 ? 'y2' : 'y'
   }));
+
+  const xScaleMin = parseFloat($('#chartXMin').value);
+  const xScaleMax = parseFloat($('#chartXMax').value);
   const scales = {
-    x: { type: 'linear', title: { display: !!(xLbl||xName), text: xLbl || xName } },
-    y: { title: { display: !!yLbl, text: yLbl } }
+    x: { type: 'linear',
+         title: { display: !!(xLbl||xName), text: xLbl || xName },
+         min: isNaN(xScaleMin) ? undefined : xScaleMin,
+         max: isNaN(xScaleMax) ? undefined : xScaleMax },
+    y: { title: { display: !!yLbl, text: yLbl },
+         min: isNaN(yMin) ? undefined : yMin, max: isNaN(yMax) ? undefined : yMax }
   };
-  if (hasY2) scales.y2 = { position: 'right', grid: { drawOnChartArea: false }, title: { display: !!y2Lbl, text: y2Lbl } };
+  if (hasY2) scales.y2 = { position: 'right', grid: { drawOnChartArea: false },
+    title: { display: !!y2Lbl, text: y2Lbl },
+    min: isNaN(y2Min) ? undefined : y2Min, max: isNaN(y2Max) ? undefined : y2Max };
+
   chartInst = new Chart(canvas, {
     type: 'scatter', data: { datasets },
     options: {
-      responsive: false, animation: { duration: 300 },
+      responsive: false, animation: { duration: large ? 0 : 300 },
       plugins: { title: { display: !!title, text: title, font: { size: 15 } }, legend: { display: true } },
       scales
     }
   });
 }
 
-function doBoxplot(canvas, rows, series, headers, xIdx, title, xLbl, yLbl){
+function doBoxplot(canvas, rows, series, headers, xIdx, title, xLbl, yLbl, yMin, yMax){
   if (!Chart.registry.controllers.get('boxplot')){
     alert('Box 圖插件載入失敗，請確認檔案完整。'); return;
   }
@@ -1886,7 +2018,8 @@ function doBoxplot(canvas, rows, series, headers, xIdx, title, xLbl, yLbl){
       plugins: { title: { display: !!title, text: title, font: { size: 15 } }, legend: { display: true } },
       scales: {
         x: { title: { display: !!xLbl, text: xLbl } },
-        y: { title: { display: !!yLbl, text: yLbl } }
+        y: { title: { display: !!yLbl, text: yLbl },
+             min: isNaN(yMin) ? undefined : yMin, max: isNaN(yMax) ? undefined : yMax }
       }
     }
   });
