@@ -1887,8 +1887,8 @@ function generateChart(){
     const idx  = lttbIndices(refY, lttbN);
     if (idx){ xLabels = idx.map(i => xLabels[i]); series.forEach(s => { s.data = idx.map(i => s.data[i]); }); kept = idx.length; }
   }
-  info.textContent = origN === kept ? \`共 \${origN.toLocaleString()} 點\`
-    : \`LTTB 降採樣：\${origN.toLocaleString()} → \${kept.toLocaleString()} 點\`;
+  info.textContent = origN === kept ? '共 ' + origN.toLocaleString() + ' 點'
+    : 'LTTB 降採樣：' + origN.toLocaleString() + ' → ' + kept.toLocaleString() + ' 點';
 
   const large = kept > 5000;
   const datasets = series.map(s => ({
@@ -1956,8 +1956,8 @@ function doScatter(canvas, rows, series, headers, xIdx, title, xLbl, yLbl, y2Lbl
   const totalOrig = builtSeries.reduce((a, s) => a + s.origN, 0);
   const totalKept = builtSeries.reduce((a, s) => a + s.pts.length, 0);
   if (info) info.textContent = totalOrig === totalKept
-    ? \`共 \${totalOrig.toLocaleString()} 點\`
-    : \`LTTB 降採樣：\${totalOrig.toLocaleString()} → \${totalKept.toLocaleString()} 點\`;
+    ? '共 ' + totalOrig.toLocaleString() + ' 點'
+    : 'LTTB 降採樣：' + totalOrig.toLocaleString() + ' → ' + totalKept.toLocaleString() + ' 點';
 
   const large = totalKept > 5000;
   const datasets = builtSeries.map(s => ({
