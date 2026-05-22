@@ -186,6 +186,16 @@
   #chartConfig .range-row input { flex:1; min-width:0; width:auto; margin:0; padding:3px 5px; border:1px solid #b8c2d0; border-radius:3px; background:#fff; font-size:12px; font-family:inherit; }
   .cfg-sep { display:block; padding:5px 12px 2px; font-size:11px; color:#5a6b85; font-weight:600; border-top:1px solid #cfd7e1; margin-top:6px; }
   #chartInfo { padding:2px 12px 4px; font-size:11px; color:#197a4b; min-height:16px; }
+
+  /* ==================== Cell Editor ==================== */
+  #cellEditor {
+    position: fixed; z-index: 200; display: none;
+    border: 2px solid #197a4b; border-radius: 3px;
+    background: #fffde7; padding: 0 4px;
+    font-size: 13px; font-family: inherit;
+    box-shadow: 0 2px 8px rgba(0,0,0,.25);
+    box-sizing: border-box;
+  }
 </style>
 </head>
 <body>
@@ -323,6 +333,7 @@
     </div>
   </section>
 </main>
+<input type="text" id="cellEditor" autocomplete="off" spellcheck="false">
 
 <div id="modal" class="modal" hidden>
   <div class="dialog">
@@ -1003,6 +1014,8 @@ function renderBody(){
 }
 
 function renderRows(){
+  const _ed = document.getElementById('cellEditor');
+  if (_ed) _ed.style.display = 'none';
   const scroll = $('#gridScroll');
   const spacer = $('#spacer');
   let top = scroll.scrollTop - spacer.offsetTop;
@@ -1027,11 +1040,11 @@ function renderRows(){
       if (col.type === 'number'){
         const v = col.data[r];
         disp = Number.isNaN(v) ? '' : fmtNum(v);
-        html += '<div class="cell num">' + disp + '</div>';
+        html += '<div class="cell num" data-r="' + r + '" data-c="' + c + '">' + disp + '</div>';
       } else {
         const v = col.data[r];
         disp = v == null ? '' : esc(String(v));
-        html += '<div class="cell">' + disp + '</div>';
+        html += '<div class="cell" data-r="' + r + '" data-c="' + c + '">' + disp + '</div>';
       }
     }
     div.innerHTML = html;
@@ -2033,6 +2046,97 @@ function exportChartPng(){
   a.download = ($('#chartTitle').value.trim() || '圖表') + '.png';
   a.click();
 }
+
+/* ==================== Cell Editor ==================== */
+(function(){
+  const ed = document.getElementById('cellEditor');
+  let _r = -1, _c = -1, _cell = null, _commitLock = false;
+
+  function openEditor(cell){
+    const r = parseInt(cell.dataset.r, 10);
+    const c = parseInt(cell.dataset.c, 10);
+    if (isNaN(r) || isNaN(c)) return;
+    const col = T().columns[c];
+    const raw = col.type === 'number'
+      ? (Number.isNaN(col.data[r]) ? '' : String(col.data[r]))
+      : (col.data[r] == null ? '' : String(col.data[r]));
+
+    _r = r; _c = c; _cell = cell;
+    const rect = cell.getBoundingClientRect();
+    ed.style.left   = rect.left + 'px';
+    ed.style.top    = rect.top + 'px';
+    ed.style.width  = Math.max(rect.width, 80) + 'px';
+    ed.style.height = rect.height + 'px';
+    ed.value = raw;
+    ed.style.display = 'block';
+    ed.focus();
+    ed.select();
+  }
+
+  function commitEdit(){
+    if (_r < 0 || _c < 0) return;
+    const col = T().columns[_c];
+    const val = ed.value;
+    if (col.type === 'number'){
+      const n = parseNum(val);
+      col.data[_r] = (n === null) ? NaN : n;
+      if (_cell) _cell.textContent = (n === null) ? '' : fmtNum(n);
+    } else {
+      col.data[_r] = val === '' ? null : val;
+      if (_cell) _cell.textContent = val;
+    }
+    closeEditor(false);
+  }
+
+  function closeEditor(restoreFocus){
+    ed.style.display = 'none';
+    _r = -1; _c = -1;
+    if (restoreFocus && _cell) _cell.focus();
+    _cell = null;
+  }
+
+  function moveToNext(){
+    if (_r < 0 || _c < 0) return;
+    const cols = T().columns;
+    const nextC = _c + 1 < cols.length ? _c + 1 : _c;
+    const row = _cell && _cell.parentElement;
+    if (!row) return;
+    const cells = row.querySelectorAll('.cell');
+    const target = cells[nextC];
+    if (target) { closeEditor(false); openEditor(target); }
+  }
+
+  ed.addEventListener('keydown', function(e){
+    if (e.key === 'Enter'){
+      e.preventDefault();
+      _commitLock = true;
+      commitEdit();
+      _commitLock = false;
+    } else if (e.key === 'Escape'){
+      e.preventDefault();
+      closeEditor(true);
+    } else if (e.key === 'Tab'){
+      e.preventDefault();
+      _commitLock = true;
+      commitEdit();
+      _commitLock = false;
+      moveToNext();
+    }
+  });
+
+  ed.addEventListener('blur', function(){
+    if (!_commitLock){
+      commitEdit();
+    }
+  });
+
+  document.getElementById('gridScroll').addEventListener('dblclick', function(e){
+    const cell = e.target.closest('.cell');
+    if (!cell) return;
+    if (state.active < 0) return;
+    openEditor(cell);
+  });
+})();
 
 </script>
 </body>
