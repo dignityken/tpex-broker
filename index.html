@@ -245,20 +245,27 @@
     } catch(e) { return {}; }
   }
 
-  // 讀取 K 線資料（同一日期共用，不分 tab）
+  // 讀取 K 線資料（同一日期共用，不分 tab；缺少的代號會補抓）
   const _klineCache = {};
   async function loadKlineData(dateKey, stocks) {
-    if (_klineCache[dateKey]) return _klineCache[dateKey];
-    const codes = [...new Set(stocks.map(s => s.code))];
-    const result = {};
+    const cached = _klineCache[dateKey] || {};
+    const codes = [...new Set(stocks.map(s => s.code))].filter(c => !(c in cached));
+    if (!codes.length) return cached;
     await Promise.all(codes.map(async code => {
       try {
         const r = await fetch(`data/kline/${dateKey}-${code}.json?t=${Date.now()}`);
-        if (r.ok) result[code] = await r.json();
-      } catch(e) {}
+        cached[code] = r.ok ? await r.json() : null;
+      } catch(e) { cached[code] = null; }
     }));
-    _klineCache[dateKey] = result;
-    return result;
+    _klineCache[dateKey] = cached;
+    return cached;
+  }
+
+  // 清掉某日的圖表快取（重新整理時用，讓盤中新增的時段能進來）
+  function clearChartCaches(dateKey, tab) {
+    delete _chartCache[`${dateKey}-${tab}`];
+    delete _brokerChartCache[`${dateKey}-${tab}`];
+    delete _klineCache[dateKey];
   }
 
   function buildKlineChart(bars) {
@@ -446,8 +453,11 @@
     fixColspan();
     clearTimeout(_resizeTimer);
     _resizeTimer = setTimeout(() => {
-      if (currentMode === 'live' && currentTab !== 'cmp' && liveCache[currentTab]) {
+      if (currentTab === 'cmp') return;
+      if (currentMode === 'live' && liveCache[currentTab]) {
         render(liveCache[currentTab], liveChartCache[currentTab], liveKlineCache[currentTab]);
+      } else if (currentMode === 'hist' && _lastHistRender) {
+        render(_lastHistRender.data, _lastHistRender.chartData, _lastHistRender.klineData);
       }
     }, 300);
   });
@@ -555,12 +565,20 @@
     }
     setStatus('觸發 GitHub Action 抓取資料...');
     try {
-      await fetch(
+      const resp = await fetch(
         `https://api.github.com/repos/${REPO}/actions/workflows/fetch.yml/dispatches`,
         { method: 'POST',
           headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
           body: JSON.stringify({ ref: 'main', inputs: { hist_date: date } }) }
       );
+      if (resp.status === 401 || resp.status === 403) {
+        setError('GitHub Token 無效或已過期<br><small>請點右上角 ⚙ 重新設定 Token</small>');
+        return;
+      }
+      if (resp.status !== 204) {
+        setError(`觸發 Action 失敗（HTTP ${resp.status}）`);
+        return;
+      }
     } catch (e) { setError(`觸發失敗：${e.message}`); return; }
 
     // 輪詢
@@ -576,6 +594,7 @@
     setError('查詢逾時，可能是假日無資料');
   }
 
+  let _lastHistRender = null;
   async function showHistData(data, date) {
     currentDateKey = date;
     document.getElementById('update-time').textContent = `歷史資料：${date}`;
@@ -583,6 +602,7 @@
       loadIntradayChart(date, currentTab),
       loadKlineData(date, data.stocks),
     ]);
+    _lastHistRender = { data, chartData, klineData };
     render(data, chartData, klineData);
   }
 
@@ -841,6 +861,7 @@
     delete liveCache[currentTab];
     delete liveChartCache[currentTab];
     delete liveKlineCache[currentTab];
+    clearChartCaches(todayTW(), currentTab);
     loadLive(currentTab);
   }
 
@@ -850,7 +871,7 @@
     loadHistory(currentTab, date);
   }
 
-  document.getElementById('hist-date').max = new Date().toISOString().slice(0, 10);
+  document.getElementById('hist-date').max = todayTW();
 
   setInterval(() => {
     if (currentMode !== 'live') return;
@@ -858,6 +879,7 @@
     delete liveCache[currentTab];
     delete liveChartCache[currentTab];
     delete liveKlineCache[currentTab];
+    clearChartCaches(todayTW(), currentTab);
     loadLive(currentTab);
   }, 60 * 60 * 1000);
 
