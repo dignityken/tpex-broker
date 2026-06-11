@@ -235,19 +235,21 @@ if __name__ == '__main__':
     date_key = now.strftime('%Y-%m-%d')
     hour_key = now.strftime('%H')
 
-    # 1. 即時資料
+    # 1. 即時資料（單一模式失敗不中斷，其餘步驟照常執行）
     live_data = {}
     for mode in ['amt', 'vol']:
         print(f'[即時] 抓取 {mode}...')
         try:
             data = fetch_live(mode)
             live_data[mode] = data
-            with open(f'data/{mode}.json', 'w', encoding='utf-8') as f:
-                json.dump(data, f, ensure_ascii=False, indent=2)
-            print(f'  完成：{len(data["stocks"])} 支')
+            if data['stocks']:
+                with open(f'data/{mode}.json', 'w', encoding='utf-8') as f:
+                    json.dump(data, f, ensure_ascii=False, indent=2)
+                print(f'  完成：{len(data["stocks"])} 支')
+            else:
+                print(f'  無資料，保留原檔')
         except Exception as e:
             print(f'  失敗：{e}')
-            raise
 
     # 2. 盤中快照（有資料才存）
     intraday_dir = f'data/intraday/{date_key}'
