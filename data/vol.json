@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026/11/04 10:05",
+  "updated_at": "2026/11/04 11:05",
   "unit": "張",
   "stocks": [
     {
@@ -10,75 +10,75 @@
         {
           "rank": 1,
           "name": "元大",
-          "buy": 18191,
-          "sell": 15829,
-          "net": 2362
+          "buy": 34620,
+          "sell": 31199,
+          "net": 3421
         },
         {
           "rank": 2,
           "name": "凱基",
-          "buy": 5975,
-          "sell": 7561,
-          "net": -1586
+          "buy": 12352,
+          "sell": 12625,
+          "net": -273
         },
         {
           "rank": 3,
           "name": "國泰綜合",
-          "buy": 6255,
-          "sell": 4873,
-          "net": 1382
+          "buy": 10353,
+          "sell": 9576,
+          "net": 777
         },
         {
           "rank": 4,
           "name": "永豐金",
-          "buy": 4656,
-          "sell": 4039,
-          "net": 617
+          "buy": 9188,
+          "sell": 7351,
+          "net": 1837
         },
         {
           "rank": 5,
           "name": "富邦",
-          "buy": 3586,
-          "sell": 3472,
-          "net": 114
+          "buy": 8019,
+          "sell": 6494,
+          "net": 1525
         },
         {
           "rank": 6,
           "name": "美商高盛亞",
-          "buy": 3623,
-          "sell": 2918,
-          "net": 705
+          "buy": 6806,
+          "sell": 7222,
+          "net": -416
         },
         {
           "rank": 7,
           "name": "台新",
-          "buy": 3086,
-          "sell": 2651,
-          "net": 435
+          "buy": 6049,
+          "sell": 5507,
+          "net": 542
         },
         {
           "rank": 8,
           "name": "群益",
-          "buy": 2441,
-          "sell": 2356,
-          "net": 85
+          "buy": 5408,
+          "sell": 5158,
+          "net": 250
         },
         {
           "rank": 9,
           "name": "摩根士丹利",
-          "buy": 786,
-          "sell": 3533,
-          "net": -2747
+          "buy": 1869,
+          "sell": 6086,
+          "net": -4217
         },
         {
           "rank": 10,
           "name": "華南永昌",
-          "buy": 2278,
-          "sell": 1510,
-          "net": 768
+          "buy": 3518,
+          "sell": 2944,
+          "net": 574
         }
       ],
-      "total_net": 2135
+      "total_net": 4020
     },
     {
       "rank": 2,
@@ -88,1323 +88,1323 @@
         {
           "rank": 1,
           "name": "元大",
-          "buy": 3392,
-          "sell": 2863,
-          "net": 529
+          "buy": 4839,
+          "sell": 4046,
+          "net": 793
         },
         {
           "rank": 2,
           "name": "凱基",
-          "buy": 839,
-          "sell": 1446,
-          "net": -607
+          "buy": 1516,
+          "sell": 2068,
+          "net": -552
         },
         {
           "rank": 3,
           "name": "摩根士丹利",
-          "buy": 643,
-          "sell": 1457,
-          "net": -814
+          "buy": 1213,
+          "sell": 1944,
+          "net": -731
         },
         {
           "rank": 4,
-          "name": "國泰綜合",
-          "buy": 990,
-          "sell": 1087,
-          "net": -97
+          "name": "富邦",
+          "buy": 1693,
+          "sell": 1432,
+          "net": 261
         },
         {
           "rank": 5,
-          "name": "富邦",
-          "buy": 1030,
-          "sell": 839,
-          "net": 191
+          "name": "國泰綜合",
+          "buy": 1367,
+          "sell": 1745,
+          "net": -378
         },
         {
           "rank": 6,
           "name": "永豐金",
-          "buy": 861,
-          "sell": 721,
-          "net": 140
+          "buy": 1314,
+          "sell": 1139,
+          "net": 175
         },
         {
           "rank": 7,
           "name": "星洲瑞銀",
-          "buy": 740,
-          "sell": 531,
-          "net": 209
+          "buy": 1321,
+          "sell": 619,
+          "net": 702
         },
         {
           "rank": 8,
           "name": "群益",
-          "buy": 608,
-          "sell": 645,
-          "net": -37
+          "buy": 1024,
+          "sell": 903,
+          "net": 121
         },
         {
           "rank": 9,
           "name": "美商高盛亞",
-          "buy": 8,
-          "sell": 1102,
-          "net": -1094
+          "buy": 13,
+          "sell": 1446,
+          "net": -1433
         },
         {
           "rank": 10,
           "name": "台新",
-          "buy": 571,
-          "sell": 389,
-          "net": 182
+          "buy": 809,
+          "sell": 646,
+          "net": 163
         }
       ],
-      "total_net": -1398
+      "total_net": -879
     },
     {
       "rank": 3,
-      "name": "光洋科",
-      "code": "1785",
-      "brokers": [
-        {
-          "rank": 1,
-          "name": "永豐金",
-          "buy": 350,
-          "sell": 4155,
-          "net": -3805
-        },
-        {
-          "rank": 2,
-          "name": "元大",
-          "buy": 1827,
-          "sell": 1847,
-          "net": -20
-        },
-        {
-          "rank": 3,
-          "name": "國票",
-          "buy": 83,
-          "sell": 3396,
-          "net": -3313
-        },
-        {
-          "rank": 4,
-          "name": "摩根士丹利",
-          "buy": 2298,
-          "sell": 49,
-          "net": 2249
-        },
-        {
-          "rank": 5,
-          "name": "凱基",
-          "buy": 1339,
-          "sell": 797,
-          "net": 542
-        },
-        {
-          "rank": 6,
-          "name": "美商高盛亞",
-          "buy": 1637,
-          "sell": 366,
-          "net": 1271
-        },
-        {
-          "rank": 7,
-          "name": "群益",
-          "buy": 842,
-          "sell": 534,
-          "net": 308
-        },
-        {
-          "rank": 8,
-          "name": "星洲瑞銀",
-          "buy": 1056,
-          "sell": 165,
-          "net": 891
-        },
-        {
-          "rank": 9,
-          "name": "富邦",
-          "buy": 354,
-          "sell": 329,
-          "net": 25
-        },
-        {
-          "rank": 10,
-          "name": "台新",
-          "buy": 436,
-          "sell": 210,
-          "net": 226
-        }
-      ],
-      "total_net": -1626
-    },
-    {
-      "rank": 4,
-      "name": "驊宏資",
-      "code": "6148",
-      "brokers": [
-        {
-          "rank": 1,
-          "name": "元大",
-          "buy": 3471,
-          "sell": 3857,
-          "net": -386
-        },
-        {
-          "rank": 2,
-          "name": "凱基",
-          "buy": 1179,
-          "sell": 1447,
-          "net": -268
-        },
-        {
-          "rank": 3,
-          "name": "富邦",
-          "buy": 1212,
-          "sell": 1276,
-          "net": -64
-        },
-        {
-          "rank": 4,
-          "name": "群益",
-          "buy": 791,
-          "sell": 846,
-          "net": -55
-        },
-        {
-          "rank": 5,
-          "name": "國泰綜合",
-          "buy": 727,
-          "sell": 735,
-          "net": -8
-        },
-        {
-          "rank": 6,
-          "name": "台新",
-          "buy": 697,
-          "sell": 590,
-          "net": 107
-        },
-        {
-          "rank": 7,
-          "name": "永豐金",
-          "buy": 554,
-          "sell": 594,
-          "net": -40
-        },
-        {
-          "rank": 8,
-          "name": "華南永昌",
-          "buy": 436,
-          "sell": 478,
-          "net": -42
-        },
-        {
-          "rank": 9,
-          "name": "統一",
-          "buy": 437,
-          "sell": 404,
-          "net": 33
-        },
-        {
-          "rank": 10,
-          "name": "新光",
-          "buy": 281,
-          "sell": 277,
-          "net": 4
-        }
-      ],
-      "total_net": -719
-    },
-    {
-      "rank": 5,
-      "name": "濱川",
-      "code": "1569",
-      "brokers": [
-        {
-          "rank": 1,
-          "name": "元大",
-          "buy": 2585,
-          "sell": 2571,
-          "net": 14
-        },
-        {
-          "rank": 2,
-          "name": "群益",
-          "buy": 1013,
-          "sell": 1236,
-          "net": -223
-        },
-        {
-          "rank": 3,
-          "name": "富邦",
-          "buy": 907,
-          "sell": 896,
-          "net": 11
-        },
-        {
-          "rank": 4,
-          "name": "國泰綜合",
-          "buy": 1031,
-          "sell": 672,
-          "net": 359
-        },
-        {
-          "rank": 5,
-          "name": "凱基",
-          "buy": 838,
-          "sell": 857,
-          "net": -19
-        },
-        {
-          "rank": 6,
-          "name": "台新",
-          "buy": 871,
-          "sell": 722,
-          "net": 149
-        },
-        {
-          "rank": 7,
-          "name": "永豐金",
-          "buy": 611,
-          "sell": 818,
-          "net": -207
-        },
-        {
-          "rank": 8,
-          "name": "美商高盛亞",
-          "buy": 499,
-          "sell": 739,
-          "net": -240
-        },
-        {
-          "rank": 9,
-          "name": "統一",
-          "buy": 504,
-          "sell": 515,
-          "net": -11
-        },
-        {
-          "rank": 10,
-          "name": "華南永昌",
-          "buy": 483,
-          "sell": 469,
-          "net": 14
-        }
-      ],
-      "total_net": -153
-    },
-    {
-      "rank": 6,
       "name": "合晶",
       "code": "6182",
       "brokers": [
         {
           "rank": 1,
           "name": "元大",
-          "buy": 2573,
-          "sell": 3410,
-          "net": -837
+          "buy": 4683,
+          "sell": 5036,
+          "net": -353
         },
         {
           "rank": 2,
           "name": "凱基",
-          "buy": 1910,
-          "sell": 1823,
-          "net": 87
+          "buy": 3423,
+          "sell": 2793,
+          "net": 630
         },
         {
           "rank": 3,
           "name": "摩根士丹利",
-          "buy": 1025,
-          "sell": 694,
-          "net": 331
+          "buy": 1500,
+          "sell": 1077,
+          "net": 423
         },
         {
           "rank": 4,
           "name": "國泰綜合",
-          "buy": 800,
-          "sell": 730,
-          "net": 70
+          "buy": 1164,
+          "sell": 1231,
+          "net": -67
         },
         {
           "rank": 5,
           "name": "富邦",
-          "buy": 934,
-          "sell": 479,
-          "net": 455
+          "buy": 1340,
+          "sell": 960,
+          "net": 380
         },
         {
           "rank": 6,
-          "name": "群益",
-          "buy": 345,
-          "sell": 566,
-          "net": -221
+          "name": "統一",
+          "buy": 183,
+          "sell": 1870,
+          "net": -1687
         },
         {
           "rank": 7,
-          "name": "永豐金",
-          "buy": 391,
-          "sell": 489,
-          "net": -98
+          "name": "美商高盛亞",
+          "buy": 1361,
+          "sell": 313,
+          "net": 1048
         },
         {
           "rank": 8,
           "name": "台新",
-          "buy": 603,
-          "sell": 277,
-          "net": 326
+          "buy": 869,
+          "sell": 781,
+          "net": 88
         },
         {
           "rank": 9,
-          "name": "統一",
-          "buy": 95,
-          "sell": 640,
-          "net": -545
+          "name": "摩根大通",
+          "buy": 392,
+          "sell": 1108,
+          "net": -716
         },
         {
           "rank": 10,
-          "name": "摩根大通",
-          "buy": 113,
-          "sell": 608,
-          "net": -495
+          "name": "群益",
+          "buy": 638,
+          "sell": 809,
+          "net": -171
         }
       ],
-      "total_net": -927
+      "total_net": -425
     },
     {
-      "rank": 7,
-      "name": "強新",
-      "code": "5013",
+      "rank": 4,
+      "name": "濱川",
+      "code": "1569",
       "brokers": [
         {
           "rank": 1,
           "name": "元大",
-          "buy": 3214,
-          "sell": 2618,
-          "net": 596
+          "buy": 4025,
+          "sell": 3628,
+          "net": 397
         },
         {
           "rank": 2,
-          "name": "凱基",
-          "buy": 831,
-          "sell": 1505,
-          "net": -674
+          "name": "群益",
+          "buy": 1446,
+          "sell": 2039,
+          "net": -593
         },
         {
           "rank": 3,
-          "name": "永豐金",
-          "buy": 936,
-          "sell": 1117,
-          "net": -181
+          "name": "凱基",
+          "buy": 1234,
+          "sell": 1527,
+          "net": -293
         },
         {
           "rank": 4,
-          "name": "國泰綜合",
-          "buy": 1081,
-          "sell": 488,
-          "net": 593
+          "name": "富邦",
+          "buy": 1299,
+          "sell": 1429,
+          "net": -130
         },
         {
           "rank": 5,
-          "name": "富邦",
-          "buy": 738,
-          "sell": 724,
-          "net": 14
+          "name": "台新",
+          "buy": 1292,
+          "sell": 1357,
+          "net": -65
         },
         {
           "rank": 6,
-          "name": "群益",
-          "buy": 549,
-          "sell": 740,
-          "net": -191
+          "name": "國泰綜合",
+          "buy": 1419,
+          "sell": 1008,
+          "net": 411
         },
         {
           "rank": 7,
-          "name": "台新",
-          "buy": 463,
-          "sell": 319,
-          "net": 144
+          "name": "永豐金",
+          "buy": 866,
+          "sell": 999,
+          "net": -133
         },
         {
           "rank": 8,
-          "name": "華南永昌",
-          "buy": 328,
-          "sell": 211,
-          "net": 117
+          "name": "美商高盛亞",
+          "buy": 747,
+          "sell": 919,
+          "net": -172
         },
         {
           "rank": 9,
           "name": "統一",
-          "buy": 190,
-          "sell": 307,
-          "net": -117
+          "buy": 710,
+          "sell": 718,
+          "net": -8
         },
         {
           "rank": 10,
-          "name": "玉山證券",
-          "buy": 265,
-          "sell": 205,
-          "net": 60
+          "name": "華南永昌",
+          "buy": 653,
+          "sell": 611,
+          "net": 42
         }
       ],
-      "total_net": 361
+      "total_net": -544
     },
     {
-      "rank": 8,
+      "rank": 5,
+      "name": "驊宏資",
+      "code": "6148",
+      "brokers": [
+        {
+          "rank": 1,
+          "name": "元大",
+          "buy": 4187,
+          "sell": 4526,
+          "net": -339
+        },
+        {
+          "rank": 2,
+          "name": "凱基",
+          "buy": 1311,
+          "sell": 1751,
+          "net": -440
+        },
+        {
+          "rank": 3,
+          "name": "富邦",
+          "buy": 1444,
+          "sell": 1584,
+          "net": -140
+        },
+        {
+          "rank": 4,
+          "name": "群益",
+          "buy": 1021,
+          "sell": 1156,
+          "net": -135
+        },
+        {
+          "rank": 5,
+          "name": "國泰綜合",
+          "buy": 926,
+          "sell": 992,
+          "net": -66
+        },
+        {
+          "rank": 6,
+          "name": "台新",
+          "buy": 924,
+          "sell": 771,
+          "net": 153
+        },
+        {
+          "rank": 7,
+          "name": "永豐金",
+          "buy": 648,
+          "sell": 689,
+          "net": -41
+        },
+        {
+          "rank": 8,
+          "name": "華南永昌",
+          "buy": 521,
+          "sell": 612,
+          "net": -91
+        },
+        {
+          "rank": 9,
+          "name": "統一",
+          "buy": 551,
+          "sell": 466,
+          "net": 85
+        },
+        {
+          "rank": 10,
+          "name": "摩根士丹利",
+          "buy": 711,
+          "sell": 197,
+          "net": 514
+        }
+      ],
+      "total_net": -500
+    },
+    {
+      "rank": 6,
+      "name": "光洋科",
+      "code": "1785",
+      "brokers": [
+        {
+          "rank": 1,
+          "name": "永豐金",
+          "buy": 417,
+          "sell": 4228,
+          "net": -3811
+        },
+        {
+          "rank": 2,
+          "name": "元大",
+          "buy": 2169,
+          "sell": 2241,
+          "net": -72
+        },
+        {
+          "rank": 3,
+          "name": "國票",
+          "buy": 117,
+          "sell": 3414,
+          "net": -3297
+        },
+        {
+          "rank": 4,
+          "name": "摩根士丹利",
+          "buy": 2468,
+          "sell": 165,
+          "net": 2303
+        },
+        {
+          "rank": 5,
+          "name": "凱基",
+          "buy": 1595,
+          "sell": 883,
+          "net": 712
+        },
+        {
+          "rank": 6,
+          "name": "美商高盛亞",
+          "buy": 1799,
+          "sell": 438,
+          "net": 1361
+        },
+        {
+          "rank": 7,
+          "name": "群益",
+          "buy": 898,
+          "sell": 578,
+          "net": 320
+        },
+        {
+          "rank": 8,
+          "name": "星洲瑞銀",
+          "buy": 1107,
+          "sell": 245,
+          "net": 862
+        },
+        {
+          "rank": 9,
+          "name": "台新",
+          "buy": 590,
+          "sell": 296,
+          "net": 294
+        },
+        {
+          "rank": 10,
+          "name": "富邦",
+          "buy": 413,
+          "sell": 399,
+          "net": 14
+        }
+      ],
+      "total_net": -1314
+    },
+    {
+      "rank": 7,
       "name": "環球晶",
       "code": "6488",
       "brokers": [
         {
           "rank": 1,
           "name": "元大",
-          "buy": 2679,
-          "sell": 1892,
-          "net": 787
+          "buy": 3835,
+          "sell": 2933,
+          "net": 902
         },
         {
           "rank": 2,
           "name": "凱基",
-          "buy": 966,
-          "sell": 1081,
-          "net": -115
+          "buy": 1227,
+          "sell": 1504,
+          "net": -277
         },
         {
           "rank": 3,
           "name": "富邦",
-          "buy": 528,
-          "sell": 1043,
-          "net": -515
+          "buy": 899,
+          "sell": 1349,
+          "net": -450
         },
         {
           "rank": 4,
           "name": "摩根士丹利",
-          "buy": 247,
-          "sell": 1321,
-          "net": -1074
+          "buy": 501,
+          "sell": 1739,
+          "net": -1238
         },
         {
           "rank": 5,
           "name": "美商高盛亞",
-          "buy": 470,
-          "sell": 930,
-          "net": -460
+          "buy": 833,
+          "sell": 1180,
+          "net": -347
         },
         {
           "rank": 6,
           "name": "台新",
-          "buy": 525,
-          "sell": 513,
-          "net": 12
+          "buy": 698,
+          "sell": 802,
+          "net": -104
         },
         {
           "rank": 7,
           "name": "國泰綜合",
-          "buy": 636,
-          "sell": 331,
-          "net": 305
+          "buy": 873,
+          "sell": 536,
+          "net": 337
         },
         {
           "rank": 8,
           "name": "永豐金",
-          "buy": 516,
-          "sell": 364,
-          "net": 152
+          "buy": 772,
+          "sell": 557,
+          "net": 215
         },
         {
           "rank": 9,
           "name": "群益",
-          "buy": 278,
-          "sell": 408,
-          "net": -130
+          "buy": 497,
+          "sell": 581,
+          "net": -84
         },
         {
           "rank": 10,
           "name": "星洲瑞銀",
-          "buy": 244,
-          "sell": 441,
-          "net": -197
+          "buy": 314,
+          "sell": 610,
+          "net": -296
         }
       ],
-      "total_net": -1235
+      "total_net": -1342
     },
     {
-      "rank": 9,
-      "name": "晉泰",
-      "code": "6221",
-      "brokers": [
-        {
-          "rank": 1,
-          "name": "元大",
-          "buy": 2523,
-          "sell": 2482,
-          "net": 41
-        },
-        {
-          "rank": 2,
-          "name": "凱基",
-          "buy": 1730,
-          "sell": 616,
-          "net": 1114
-        },
-        {
-          "rank": 3,
-          "name": "富邦",
-          "buy": 854,
-          "sell": 990,
-          "net": -136
-        },
-        {
-          "rank": 4,
-          "name": "台新",
-          "buy": 636,
-          "sell": 835,
-          "net": -199
-        },
-        {
-          "rank": 5,
-          "name": "群益",
-          "buy": 646,
-          "sell": 626,
-          "net": 20
-        },
-        {
-          "rank": 6,
-          "name": "永豐金",
-          "buy": 445,
-          "sell": 510,
-          "net": -65
-        },
-        {
-          "rank": 7,
-          "name": "統一",
-          "buy": 316,
-          "sell": 250,
-          "net": 66
-        },
-        {
-          "rank": 8,
-          "name": "兆豐",
-          "buy": 236,
-          "sell": 294,
-          "net": -58
-        },
-        {
-          "rank": 9,
-          "name": "華南永昌",
-          "buy": 196,
-          "sell": 315,
-          "net": -119
-        },
-        {
-          "rank": 10,
-          "name": "大昌",
-          "buy": 228,
-          "sell": 243,
-          "net": -15
-        }
-      ],
-      "total_net": 649
-    },
-    {
-      "rank": 10,
+      "rank": 8,
       "name": "金山電",
       "code": "8042",
       "brokers": [
         {
           "rank": 1,
           "name": "元大",
-          "buy": 2505,
-          "sell": 2343,
-          "net": 162
+          "buy": 4001,
+          "sell": 3658,
+          "net": 343
         },
         {
           "rank": 2,
           "name": "凱基",
-          "buy": 1054,
-          "sell": 942,
-          "net": 112
+          "buy": 1607,
+          "sell": 1396,
+          "net": 211
         },
         {
           "rank": 3,
           "name": "永豐金",
-          "buy": 531,
-          "sell": 754,
-          "net": -223
+          "buy": 946,
+          "sell": 1056,
+          "net": -110
         },
         {
           "rank": 4,
           "name": "國泰綜合",
-          "buy": 696,
-          "sell": 541,
-          "net": 155
+          "buy": 1045,
+          "sell": 921,
+          "net": 124
         },
         {
           "rank": 5,
           "name": "富邦",
-          "buy": 531,
-          "sell": 520,
-          "net": 11
+          "buy": 900,
+          "sell": 917,
+          "net": -17
         },
         {
           "rank": 6,
           "name": "群益",
-          "buy": 345,
-          "sell": 529,
-          "net": -184
+          "buy": 613,
+          "sell": 845,
+          "net": -232
         },
         {
           "rank": 7,
           "name": "台新",
-          "buy": 489,
-          "sell": 345,
-          "net": 144
+          "buy": 732,
+          "sell": 579,
+          "net": 153
         },
         {
           "rank": 8,
-          "name": "美商高盛亞",
-          "buy": 328,
-          "sell": 311,
-          "net": 17
+          "name": "新光",
+          "buy": 594,
+          "sell": 590,
+          "net": 4
         },
         {
           "rank": 9,
-          "name": "新光",
-          "buy": 478,
-          "sell": 136,
-          "net": 342
+          "name": "美商高盛亞",
+          "buy": 486,
+          "sell": 476,
+          "net": 10
         },
         {
           "rank": 10,
           "name": "華南永昌",
-          "buy": 270,
-          "sell": 294,
-          "net": -24
+          "buy": 493,
+          "sell": 424,
+          "net": 69
         }
       ],
-      "total_net": 512
+      "total_net": 555
     },
     {
-      "rank": 11,
-      "name": "建榮",
-      "code": "5340",
+      "rank": 9,
+      "name": "強新",
+      "code": "5013",
       "brokers": [
         {
           "rank": 1,
           "name": "元大",
-          "buy": 1726,
-          "sell": 1894,
-          "net": -168
+          "buy": 3904,
+          "sell": 3325,
+          "net": 579
         },
         {
           "rank": 2,
           "name": "凱基",
-          "buy": 748,
-          "sell": 1114,
-          "net": -366
+          "buy": 1088,
+          "sell": 1841,
+          "net": -753
         },
         {
           "rank": 3,
-          "name": "富邦",
-          "buy": 516,
-          "sell": 724,
-          "net": -208
+          "name": "永豐金",
+          "buy": 1193,
+          "sell": 1374,
+          "net": -181
         },
         {
           "rank": 4,
           "name": "國泰綜合",
-          "buy": 678,
-          "sell": 394,
-          "net": 284
+          "buy": 1413,
+          "sell": 716,
+          "net": 697
         },
         {
           "rank": 5,
-          "name": "永豐金",
-          "buy": 398,
-          "sell": 482,
-          "net": -84
+          "name": "富邦",
+          "buy": 1037,
+          "sell": 865,
+          "net": 172
         },
         {
           "rank": 6,
           "name": "群益",
-          "buy": 351,
-          "sell": 510,
-          "net": -159
+          "buy": 769,
+          "sell": 963,
+          "net": -194
         },
         {
           "rank": 7,
           "name": "台新",
-          "buy": 404,
-          "sell": 347,
-          "net": 57
+          "buy": 593,
+          "sell": 547,
+          "net": 46
         },
         {
           "rank": 8,
           "name": "華南永昌",
-          "buy": 281,
-          "sell": 213,
-          "net": 68
+          "buy": 524,
+          "sell": 346,
+          "net": 178
         },
         {
           "rank": 9,
           "name": "統一",
-          "buy": 175,
-          "sell": 295,
-          "net": -120
+          "buy": 274,
+          "sell": 452,
+          "net": -178
         },
         {
           "rank": 10,
-          "name": "新光",
-          "buy": 303,
-          "sell": 145,
-          "net": 158
+          "name": "玉山證券",
+          "buy": 359,
+          "sell": 304,
+          "net": 55
         }
       ],
-      "total_net": -538
+      "total_net": 421
     },
     {
-      "rank": 12,
+      "rank": 10,
+      "name": "晉泰",
+      "code": "6221",
+      "brokers": [
+        {
+          "rank": 1,
+          "name": "元大",
+          "buy": 3004,
+          "sell": 2944,
+          "net": 60
+        },
+        {
+          "rank": 2,
+          "name": "凱基",
+          "buy": 2185,
+          "sell": 2040,
+          "net": 145
+        },
+        {
+          "rank": 3,
+          "name": "富邦",
+          "buy": 1106,
+          "sell": 1205,
+          "net": -99
+        },
+        {
+          "rank": 4,
+          "name": "台新",
+          "buy": 722,
+          "sell": 927,
+          "net": -205
+        },
+        {
+          "rank": 5,
+          "name": "群益",
+          "buy": 783,
+          "sell": 692,
+          "net": 91
+        },
+        {
+          "rank": 6,
+          "name": "永豐金",
+          "buy": 687,
+          "sell": 681,
+          "net": 6
+        },
+        {
+          "rank": 7,
+          "name": "港商野村",
+          "buy": 755,
+          "sell": 182,
+          "net": 573
+        },
+        {
+          "rank": 8,
+          "name": "統一",
+          "buy": 379,
+          "sell": 344,
+          "net": 35
+        },
+        {
+          "rank": 9,
+          "name": "合庫",
+          "buy": 338,
+          "sell": 346,
+          "net": -8
+        },
+        {
+          "rank": 10,
+          "name": "兆豐",
+          "buy": 335,
+          "sell": 348,
+          "net": -13
+        }
+      ],
+      "total_net": 585
+    },
+    {
+      "rank": 11,
       "name": "頎邦",
       "code": "6147",
       "brokers": [
         {
           "rank": 1,
           "name": "元大",
-          "buy": 1671,
-          "sell": 1697,
-          "net": -26
+          "buy": 2662,
+          "sell": 2435,
+          "net": 227
         },
         {
           "rank": 2,
           "name": "凱基",
-          "buy": 822,
-          "sell": 849,
-          "net": -27
+          "buy": 1530,
+          "sell": 1913,
+          "net": -383
         },
         {
           "rank": 3,
-          "name": "富邦",
-          "buy": 543,
-          "sell": 365,
-          "net": 178
+          "name": "永豐金",
+          "buy": 542,
+          "sell": 1242,
+          "net": -700
         },
         {
           "rank": 4,
-          "name": "摩根士丹利",
-          "buy": 253,
-          "sell": 624,
-          "net": -371
+          "name": "美商高盛亞",
+          "buy": 940,
+          "sell": 680,
+          "net": 260
         },
         {
           "rank": 5,
-          "name": "摩根大通",
-          "buy": 132,
-          "sell": 652,
-          "net": -520
+          "name": "富邦",
+          "buy": 792,
+          "sell": 691,
+          "net": 101
         },
         {
           "rank": 6,
-          "name": "國泰綜合",
-          "buy": 432,
-          "sell": 211,
-          "net": 221
+          "name": "摩根士丹利",
+          "buy": 531,
+          "sell": 828,
+          "net": -297
         },
         {
           "rank": 7,
-          "name": "美商高盛亞",
-          "buy": 305,
-          "sell": 321,
-          "net": -16
+          "name": "星洲瑞銀",
+          "buy": 780,
+          "sell": 448,
+          "net": 332
         },
         {
           "rank": 8,
-          "name": "永豐金",
-          "buy": 340,
-          "sell": 283,
-          "net": 57
+          "name": "國泰綜合",
+          "buy": 550,
+          "sell": 484,
+          "net": 66
         },
         {
           "rank": 9,
-          "name": "台新",
-          "buy": 331,
-          "sell": 220,
-          "net": 111
+          "name": "摩根大通",
+          "buy": 213,
+          "sell": 744,
+          "net": -531
         },
         {
           "rank": 10,
           "name": "群益",
-          "buy": 215,
-          "sell": 318,
-          "net": -103
+          "buy": 344,
+          "sell": 451,
+          "net": -107
         }
       ],
-      "total_net": -496
+      "total_net": -1032
+    },
+    {
+      "rank": 12,
+      "name": "建榮",
+      "code": "5340",
+      "brokers": [
+        {
+          "rank": 1,
+          "name": "元大",
+          "buy": 2943,
+          "sell": 3163,
+          "net": -220
+        },
+        {
+          "rank": 2,
+          "name": "凱基",
+          "buy": 1299,
+          "sell": 1632,
+          "net": -333
+        },
+        {
+          "rank": 3,
+          "name": "國泰綜合",
+          "buy": 1144,
+          "sell": 865,
+          "net": 279
+        },
+        {
+          "rank": 4,
+          "name": "富邦",
+          "buy": 753,
+          "sell": 1024,
+          "net": -271
+        },
+        {
+          "rank": 5,
+          "name": "群益",
+          "buy": 599,
+          "sell": 783,
+          "net": -184
+        },
+        {
+          "rank": 6,
+          "name": "永豐金",
+          "buy": 638,
+          "sell": 667,
+          "net": -29
+        },
+        {
+          "rank": 7,
+          "name": "台新",
+          "buy": 679,
+          "sell": 609,
+          "net": 70
+        },
+        {
+          "rank": 8,
+          "name": "華南永昌",
+          "buy": 507,
+          "sell": 333,
+          "net": 174
+        },
+        {
+          "rank": 9,
+          "name": "統一",
+          "buy": 280,
+          "sell": 436,
+          "net": -156
+        },
+        {
+          "rank": 10,
+          "name": "新光",
+          "buy": 360,
+          "sell": 273,
+          "net": 87
+        }
+      ],
+      "total_net": -583
     },
     {
       "rank": 13,
-      "name": "世紀*",
-      "code": "5314",
-      "brokers": [
-        {
-          "rank": 1,
-          "name": "元大",
-          "buy": 1410,
-          "sell": 1534,
-          "net": -124
-        },
-        {
-          "rank": 2,
-          "name": "凱基",
-          "buy": 1336,
-          "sell": 750,
-          "net": 586
-        },
-        {
-          "rank": 3,
-          "name": "美商高盛亞",
-          "buy": 1221,
-          "sell": 386,
-          "net": 835
-        },
-        {
-          "rank": 4,
-          "name": "富邦",
-          "buy": 349,
-          "sell": 730,
-          "net": -381
-        },
-        {
-          "rank": 5,
-          "name": "台新",
-          "buy": 341,
-          "sell": 351,
-          "net": -10
-        },
-        {
-          "rank": 6,
-          "name": "群益",
-          "buy": 159,
-          "sell": 528,
-          "net": -369
-        },
-        {
-          "rank": 7,
-          "name": "國泰綜合",
-          "buy": 222,
-          "sell": 385,
-          "net": -163
-        },
-        {
-          "rank": 8,
-          "name": "永豐金",
-          "buy": 177,
-          "sell": 368,
-          "net": -191
-        },
-        {
-          "rank": 9,
-          "name": "摩根士丹利",
-          "buy": 455,
-          "sell": 73,
-          "net": 382
-        },
-        {
-          "rank": 10,
-          "name": "兆豐",
-          "buy": 217,
-          "sell": 275,
-          "net": -58
-        }
-      ],
-      "total_net": 507
-    },
-    {
-      "rank": 14,
-      "name": "金居",
-      "code": "8358",
-      "brokers": [
-        {
-          "rank": 1,
-          "name": "元大",
-          "buy": 1377,
-          "sell": 1387,
-          "net": -10
-        },
-        {
-          "rank": 2,
-          "name": "凱基",
-          "buy": 707,
-          "sell": 951,
-          "net": -244
-        },
-        {
-          "rank": 3,
-          "name": "群益",
-          "buy": 346,
-          "sell": 419,
-          "net": -73
-        },
-        {
-          "rank": 4,
-          "name": "富邦",
-          "buy": 433,
-          "sell": 307,
-          "net": 126
-        },
-        {
-          "rank": 5,
-          "name": "國泰綜合",
-          "buy": 460,
-          "sell": 215,
-          "net": 245
-        },
-        {
-          "rank": 6,
-          "name": "台新",
-          "buy": 382,
-          "sell": 267,
-          "net": 115
-        },
-        {
-          "rank": 7,
-          "name": "摩根士丹利",
-          "buy": 331,
-          "sell": 216,
-          "net": 115
-        },
-        {
-          "rank": 8,
-          "name": "永豐金",
-          "buy": 259,
-          "sell": 276,
-          "net": -17
-        },
-        {
-          "rank": 9,
-          "name": "新光",
-          "buy": 217,
-          "sell": 164,
-          "net": 53
-        },
-        {
-          "rank": 10,
-          "name": "摩根大通",
-          "buy": 11,
-          "sell": 360,
-          "net": -349
-        }
-      ],
-      "total_net": -39
-    },
-    {
-      "rank": 15,
-      "name": "聯光通",
-      "code": "4903",
-      "brokers": [
-        {
-          "rank": 1,
-          "name": "元大",
-          "buy": 1096,
-          "sell": 1021,
-          "net": 75
-        },
-        {
-          "rank": 2,
-          "name": "凱基",
-          "buy": 494,
-          "sell": 744,
-          "net": -250
-        },
-        {
-          "rank": 3,
-          "name": "富邦",
-          "buy": 538,
-          "sell": 587,
-          "net": -49
-        },
-        {
-          "rank": 4,
-          "name": "群益",
-          "buy": 313,
-          "sell": 579,
-          "net": -266
-        },
-        {
-          "rank": 5,
-          "name": "永豐金",
-          "buy": 370,
-          "sell": 410,
-          "net": -40
-        },
-        {
-          "rank": 6,
-          "name": "美商高盛亞",
-          "buy": 355,
-          "sell": 304,
-          "net": 51
-        },
-        {
-          "rank": 7,
-          "name": "台新",
-          "buy": 336,
-          "sell": 289,
-          "net": 47
-        },
-        {
-          "rank": 8,
-          "name": "摩根大通",
-          "buy": 147,
-          "sell": 321,
-          "net": -174
-        },
-        {
-          "rank": 9,
-          "name": "兆豐",
-          "buy": 231,
-          "sell": 233,
-          "net": -2
-        },
-        {
-          "rank": 10,
-          "name": "統一",
-          "buy": 110,
-          "sell": 175,
-          "net": -65
-        }
-      ],
-      "total_net": -673
-    },
-    {
-      "rank": 16,
-      "name": "台燿",
-      "code": "6274",
-      "brokers": [
-        {
-          "rank": 1,
-          "name": "元大",
-          "buy": 1044,
-          "sell": 971,
-          "net": 73
-        },
-        {
-          "rank": 2,
-          "name": "凱基",
-          "buy": 643,
-          "sell": 767,
-          "net": -124
-        },
-        {
-          "rank": 3,
-          "name": "富邦",
-          "buy": 285,
-          "sell": 605,
-          "net": -320
-        },
-        {
-          "rank": 4,
-          "name": "永豐金",
-          "buy": 515,
-          "sell": 277,
-          "net": 238
-        },
-        {
-          "rank": 5,
-          "name": "美商高盛亞",
-          "buy": 339,
-          "sell": 384,
-          "net": -45
-        },
-        {
-          "rank": 6,
-          "name": "摩根士丹利",
-          "buy": 289,
-          "sell": 342,
-          "net": -53
-        },
-        {
-          "rank": 7,
-          "name": "國泰綜合",
-          "buy": 347,
-          "sell": 149,
-          "net": 198
-        },
-        {
-          "rank": 8,
-          "name": "台新",
-          "buy": 173,
-          "sell": 116,
-          "net": 57
-        },
-        {
-          "rank": 9,
-          "name": "星洲瑞銀",
-          "buy": 60,
-          "sell": 226,
-          "net": -166
-        },
-        {
-          "rank": 10,
-          "name": "群益",
-          "buy": 121,
-          "sell": 153,
-          "net": -32
-        }
-      ],
-      "total_net": -174
-    },
-    {
-      "rank": 17,
       "name": "協易機",
       "code": "4533",
       "brokers": [
         {
           "rank": 1,
           "name": "元大",
-          "buy": 753,
-          "sell": 1144,
-          "net": -391
+          "buy": 2490,
+          "sell": 3239,
+          "net": -749
         },
         {
           "rank": 2,
-          "name": "群益",
-          "buy": 545,
-          "sell": 384,
-          "net": 161
+          "name": "凱基",
+          "buy": 2063,
+          "sell": 2167,
+          "net": -104
         },
         {
           "rank": 3,
-          "name": "凱基",
-          "buy": 353,
-          "sell": 395,
-          "net": -42
+          "name": "美商高盛亞",
+          "buy": 1219,
+          "sell": 227,
+          "net": 992
         },
         {
           "rank": 4,
-          "name": "富邦",
-          "buy": 298,
-          "sell": 382,
-          "net": -84
+          "name": "群益",
+          "buy": 719,
+          "sell": 646,
+          "net": 73
         },
         {
           "rank": 5,
-          "name": "永豐金",
-          "buy": 300,
-          "sell": 308,
-          "net": -8
+          "name": "富邦",
+          "buy": 552,
+          "sell": 785,
+          "net": -233
         },
         {
           "rank": 6,
-          "name": "國泰綜合",
-          "buy": 205,
-          "sell": 254,
-          "net": -49
+          "name": "永豐金",
+          "buy": 490,
+          "sell": 573,
+          "net": -83
         },
         {
           "rank": 7,
           "name": "台新",
-          "buy": 205,
-          "sell": 215,
-          "net": -10
+          "buy": 548,
+          "sell": 471,
+          "net": 77
         },
         {
           "rank": 8,
-          "name": "摩根士丹利",
-          "buy": 328,
-          "sell": 54,
-          "net": 274
+          "name": "港商野村",
+          "buy": 839,
+          "sell": 69,
+          "net": 770
         },
         {
           "rank": 9,
-          "name": "美商高盛亞",
-          "buy": 152,
-          "sell": 146,
-          "net": 6
+          "name": "國泰綜合",
+          "buy": 258,
+          "sell": 507,
+          "net": -249
         },
         {
           "rank": 10,
-          "name": "港商野村",
-          "buy": 224,
-          "sell": 54,
-          "net": 170
+          "name": "摩根士丹利",
+          "buy": 436,
+          "sell": 209,
+          "net": 227
         }
       ],
-      "total_net": 27
+      "total_net": 721
     },
     {
-      "rank": 18,
-      "name": "鈺創",
-      "code": "5351",
+      "rank": 14,
+      "name": "世紀*",
+      "code": "5314",
       "brokers": [
         {
           "rank": 1,
           "name": "元大",
-          "buy": 697,
-          "sell": 641,
-          "net": 56
+          "buy": 2007,
+          "sell": 2373,
+          "net": -366
         },
         {
           "rank": 2,
           "name": "凱基",
-          "buy": 419,
-          "sell": 516,
-          "net": -97
+          "buy": 2164,
+          "sell": 1196,
+          "net": 968
         },
         {
           "rank": 3,
           "name": "美商高盛亞",
-          "buy": 113,
-          "sell": 814,
-          "net": -701
+          "buy": 1462,
+          "sell": 734,
+          "net": 728
         },
         {
           "rank": 4,
-          "name": "星洲瑞銀",
-          "buy": 265,
-          "sell": 300,
-          "net": -35
+          "name": "富邦",
+          "buy": 631,
+          "sell": 874,
+          "net": -243
         },
         {
           "rank": 5,
-          "name": "富邦",
-          "buy": 273,
-          "sell": 157,
-          "net": 116
+          "name": "台新",
+          "buy": 477,
+          "sell": 510,
+          "net": -33
         },
         {
           "rank": 6,
-          "name": "合庫",
-          "buy": 68,
-          "sell": 333,
-          "net": -265
+          "name": "永豐金",
+          "buy": 314,
+          "sell": 627,
+          "net": -313
         },
         {
           "rank": 7,
           "name": "群益",
-          "buy": 166,
-          "sell": 180,
-          "net": -14
+          "buy": 283,
+          "sell": 618,
+          "net": -335
         },
         {
           "rank": 8,
-          "name": "摩根士丹利",
-          "buy": 218,
-          "sell": 125,
-          "net": 93
+          "name": "國泰綜合",
+          "buy": 327,
+          "sell": 563,
+          "net": -236
         },
         {
           "rank": 9,
-          "name": "華南永昌",
-          "buy": 226,
-          "sell": 90,
-          "net": 136
+          "name": "摩根士丹利",
+          "buy": 624,
+          "sell": 143,
+          "net": 481
         },
         {
           "rank": 10,
-          "name": "富隆",
-          "buy": 155,
-          "sell": 155,
-          "net": 0
+          "name": "兆豐",
+          "buy": 334,
+          "sell": 388,
+          "net": -54
         }
       ],
-      "total_net": -711
+      "total_net": 597
+    },
+    {
+      "rank": 15,
+      "name": "台燿",
+      "code": "6274",
+      "brokers": [
+        {
+          "rank": 1,
+          "name": "元大",
+          "buy": 2121,
+          "sell": 1885,
+          "net": 236
+        },
+        {
+          "rank": 2,
+          "name": "凱基",
+          "buy": 1247,
+          "sell": 1298,
+          "net": -51
+        },
+        {
+          "rank": 3,
+          "name": "美商高盛亞",
+          "buy": 542,
+          "sell": 1006,
+          "net": -464
+        },
+        {
+          "rank": 4,
+          "name": "永豐金",
+          "buy": 847,
+          "sell": 560,
+          "net": 287
+        },
+        {
+          "rank": 5,
+          "name": "富邦",
+          "buy": 432,
+          "sell": 858,
+          "net": -426
+        },
+        {
+          "rank": 6,
+          "name": "摩根士丹利",
+          "buy": 477,
+          "sell": 518,
+          "net": -41
+        },
+        {
+          "rank": 7,
+          "name": "國泰綜合",
+          "buy": 541,
+          "sell": 342,
+          "net": 199
+        },
+        {
+          "rank": 8,
+          "name": "台新",
+          "buy": 254,
+          "sell": 252,
+          "net": 2
+        },
+        {
+          "rank": 9,
+          "name": "群益",
+          "buy": 224,
+          "sell": 258,
+          "net": -34
+        },
+        {
+          "rank": 10,
+          "name": "兆豐",
+          "buy": 282,
+          "sell": 157,
+          "net": 125
+        }
+      ],
+      "total_net": -167
+    },
+    {
+      "rank": 16,
+      "name": "金居",
+      "code": "8358",
+      "brokers": [
+        {
+          "rank": 1,
+          "name": "元大",
+          "buy": 2076,
+          "sell": 2094,
+          "net": -18
+        },
+        {
+          "rank": 2,
+          "name": "凱基",
+          "buy": 1255,
+          "sell": 1315,
+          "net": -60
+        },
+        {
+          "rank": 3,
+          "name": "富邦",
+          "buy": 623,
+          "sell": 510,
+          "net": 113
+        },
+        {
+          "rank": 4,
+          "name": "國泰綜合",
+          "buy": 592,
+          "sell": 409,
+          "net": 183
+        },
+        {
+          "rank": 5,
+          "name": "群益",
+          "buy": 466,
+          "sell": 514,
+          "net": -48
+        },
+        {
+          "rank": 6,
+          "name": "台新",
+          "buy": 547,
+          "sell": 425,
+          "net": 122
+        },
+        {
+          "rank": 7,
+          "name": "摩根士丹利",
+          "buy": 531,
+          "sell": 393,
+          "net": 138
+        },
+        {
+          "rank": 8,
+          "name": "永豐金",
+          "buy": 387,
+          "sell": 409,
+          "net": -22
+        },
+        {
+          "rank": 9,
+          "name": "新光",
+          "buy": 344,
+          "sell": 244,
+          "net": 100
+        },
+        {
+          "rank": 10,
+          "name": "摩根大通",
+          "buy": 46,
+          "sell": 435,
+          "net": -389
+        }
+      ],
+      "total_net": 119
+    },
+    {
+      "rank": 17,
+      "name": "聯光通",
+      "code": "4903",
+      "brokers": [
+        {
+          "rank": 1,
+          "name": "元大",
+          "buy": 1439,
+          "sell": 1326,
+          "net": 113
+        },
+        {
+          "rank": 2,
+          "name": "凱基",
+          "buy": 672,
+          "sell": 1021,
+          "net": -349
+        },
+        {
+          "rank": 3,
+          "name": "富邦",
+          "buy": 640,
+          "sell": 661,
+          "net": -21
+        },
+        {
+          "rank": 4,
+          "name": "群益",
+          "buy": 480,
+          "sell": 664,
+          "net": -184
+        },
+        {
+          "rank": 5,
+          "name": "永豐金",
+          "buy": 487,
+          "sell": 500,
+          "net": -13
+        },
+        {
+          "rank": 6,
+          "name": "台新",
+          "buy": 473,
+          "sell": 395,
+          "net": 78
+        },
+        {
+          "rank": 7,
+          "name": "美商高盛亞",
+          "buy": 406,
+          "sell": 370,
+          "net": 36
+        },
+        {
+          "rank": 8,
+          "name": "兆豐",
+          "buy": 310,
+          "sell": 276,
+          "net": 34
+        },
+        {
+          "rank": 9,
+          "name": "摩根大通",
+          "buy": 208,
+          "sell": 378,
+          "net": -170
+        },
+        {
+          "rank": 10,
+          "name": "統一",
+          "buy": 167,
+          "sell": 229,
+          "net": -62
+        }
+      ],
+      "total_net": -538
+    },
+    {
+      "rank": 18,
+      "name": "信昌電",
+      "code": "6173",
+      "brokers": [
+        {
+          "rank": 1,
+          "name": "元大",
+          "buy": 1499,
+          "sell": 1213,
+          "net": 286
+        },
+        {
+          "rank": 2,
+          "name": "凱基",
+          "buy": 877,
+          "sell": 863,
+          "net": 14
+        },
+        {
+          "rank": 3,
+          "name": "富邦",
+          "buy": 462,
+          "sell": 476,
+          "net": -14
+        },
+        {
+          "rank": 4,
+          "name": "摩根士丹利",
+          "buy": 283,
+          "sell": 588,
+          "net": -305
+        },
+        {
+          "rank": 5,
+          "name": "美商高盛亞",
+          "buy": 368,
+          "sell": 503,
+          "net": -135
+        },
+        {
+          "rank": 6,
+          "name": "國泰綜合",
+          "buy": 406,
+          "sell": 414,
+          "net": -8
+        },
+        {
+          "rank": 7,
+          "name": "台新",
+          "buy": 318,
+          "sell": 286,
+          "net": 32
+        },
+        {
+          "rank": 8,
+          "name": "華南永昌",
+          "buy": 357,
+          "sell": 128,
+          "net": 229
+        },
+        {
+          "rank": 9,
+          "name": "兆豐",
+          "buy": 167,
+          "sell": 312,
+          "net": -145
+        },
+        {
+          "rank": 10,
+          "name": "美林證券",
+          "buy": 92,
+          "sell": 361,
+          "net": -269
+        }
+      ],
+      "total_net": -315
     },
     {
       "rank": 19,
@@ -1414,231 +1414,231 @@
         {
           "rank": 1,
           "name": "凱基",
-          "buy": 604,
-          "sell": 820,
-          "net": -216
+          "buy": 861,
+          "sell": 999,
+          "net": -138
         },
         {
           "rank": 2,
           "name": "元大",
-          "buy": 604,
-          "sell": 614,
-          "net": -10
+          "buy": 930,
+          "sell": 870,
+          "net": 60
         },
         {
           "rank": 3,
           "name": "美商高盛亞",
-          "buy": 412,
-          "sell": 433,
-          "net": -21
+          "buy": 658,
+          "sell": 777,
+          "net": -119
         },
         {
           "rank": 4,
-          "name": "星洲瑞銀",
-          "buy": 245,
-          "sell": 245,
-          "net": 0
+          "name": "富邦",
+          "buy": 303,
+          "sell": 295,
+          "net": 8
         },
         {
           "rank": 5,
-          "name": "富邦",
-          "buy": 226,
-          "sell": 222,
-          "net": 4
+          "name": "摩根大通",
+          "buy": 188,
+          "sell": 370,
+          "net": -182
         },
         {
           "rank": 6,
-          "name": "港商野村",
-          "buy": 28,
-          "sell": 347,
-          "net": -319
+          "name": "星洲瑞銀",
+          "buy": 268,
+          "sell": 273,
+          "net": -5
         },
         {
           "rank": 7,
-          "name": "永豐金",
-          "buy": 142,
-          "sell": 230,
-          "net": -88
+          "name": "港商野村",
+          "buy": 29,
+          "sell": 466,
+          "net": -437
         },
         {
           "rank": 8,
-          "name": "摩根大通",
-          "buy": 113,
-          "sell": 217,
-          "net": -104
+          "name": "永豐金",
+          "buy": 202,
+          "sell": 291,
+          "net": -89
         },
         {
           "rank": 9,
-          "name": "摩根士丹利",
-          "buy": 200,
-          "sell": 128,
-          "net": 72
+          "name": "國泰綜合",
+          "buy": 252,
+          "sell": 159,
+          "net": 93
         },
         {
           "rank": 10,
-          "name": "國泰綜合",
-          "buy": 166,
-          "sell": 109,
-          "net": 57
+          "name": "中國信託證",
+          "buy": 233,
+          "sell": 164,
+          "net": 69
         }
       ],
-      "total_net": -625
+      "total_net": -740
     },
     {
       "rank": 20,
-      "name": "信昌電",
-      "code": "6173",
+      "name": "鈺創",
+      "code": "5351",
       "brokers": [
         {
           "rank": 1,
           "name": "元大",
-          "buy": 899,
-          "sell": 720,
-          "net": 179
+          "buy": 1084,
+          "sell": 915,
+          "net": 169
         },
         {
           "rank": 2,
           "name": "凱基",
-          "buy": 558,
-          "sell": 603,
-          "net": -45
+          "buy": 553,
+          "sell": 638,
+          "net": -85
         },
         {
           "rank": 3,
+          "name": "美商高盛亞",
+          "buy": 171,
+          "sell": 1009,
+          "net": -838
+        },
+        {
+          "rank": 4,
+          "name": "星洲瑞銀",
+          "buy": 329,
+          "sell": 341,
+          "net": -12
+        },
+        {
+          "rank": 5,
           "name": "富邦",
-          "buy": 315,
-          "sell": 331,
+          "buy": 341,
+          "sell": 288,
+          "net": 53
+        },
+        {
+          "rank": 6,
+          "name": "華南永昌",
+          "buy": 302,
+          "sell": 144,
+          "net": 158
+        },
+        {
+          "rank": 7,
+          "name": "摩根士丹利",
+          "buy": 270,
+          "sell": 169,
+          "net": 101
+        },
+        {
+          "rank": 8,
+          "name": "群益",
+          "buy": 211,
+          "sell": 227,
           "net": -16
         },
         {
-          "rank": 4,
-          "name": "美商高盛亞",
-          "buy": 181,
-          "sell": 388,
-          "net": -207
-        },
-        {
-          "rank": 5,
-          "name": "國泰綜合",
-          "buy": 256,
-          "sell": 257,
-          "net": -1
-        },
-        {
-          "rank": 6,
-          "name": "摩根士丹利",
-          "buy": 145,
-          "sell": 341,
-          "net": -196
-        },
-        {
-          "rank": 7,
-          "name": "台新",
-          "buy": 210,
-          "sell": 160,
-          "net": 50
-        },
-        {
-          "rank": 8,
-          "name": "華南永昌",
-          "buy": 277,
-          "sell": 62,
-          "net": 215
-        },
-        {
           "rank": 9,
-          "name": "星洲瑞銀",
-          "buy": 97,
-          "sell": 197,
-          "net": -100
+          "name": "合庫",
+          "buy": 74,
+          "sell": 345,
+          "net": -271
         },
         {
           "rank": 10,
-          "name": "永豐金",
-          "buy": 141,
-          "sell": 124,
-          "net": 17
+          "name": "台新",
+          "buy": 256,
+          "sell": 155,
+          "net": 101
         }
       ],
-      "total_net": -104
+      "total_net": -640
     },
     {
       "rank": 21,
-      "name": "華星光",
-      "code": "4979",
+      "name": "世界",
+      "code": "5347",
       "brokers": [
         {
           "rank": 1,
-          "name": "元大",
-          "buy": 522,
-          "sell": 391,
-          "net": 131
+          "name": "美商高盛亞",
+          "buy": 482,
+          "sell": 869,
+          "net": -387
         },
         {
           "rank": 2,
           "name": "凱基",
-          "buy": 328,
-          "sell": 443,
-          "net": -115
+          "buy": 455,
+          "sell": 810,
+          "net": -355
         },
         {
           "rank": 3,
-          "name": "美商高盛亞",
-          "buy": 478,
-          "sell": 247,
-          "net": 231
+          "name": "元大",
+          "buy": 721,
+          "sell": 461,
+          "net": 260
         },
         {
           "rank": 4,
           "name": "星洲瑞銀",
-          "buy": 124,
-          "sell": 588,
-          "net": -464
+          "buy": 506,
+          "sell": 457,
+          "net": 49
         },
         {
           "rank": 5,
-          "name": "富邦",
-          "buy": 440,
-          "sell": 232,
-          "net": 208
+          "name": "摩根士丹利",
+          "buy": 341,
+          "sell": 379,
+          "net": -38
         },
         {
           "rank": 6,
-          "name": "摩根士丹利",
-          "buy": 243,
-          "sell": 209,
-          "net": 34
+          "name": "兆豐",
+          "buy": 118,
+          "sell": 526,
+          "net": -408
         },
         {
           "rank": 7,
-          "name": "群益",
-          "buy": 79,
-          "sell": 260,
-          "net": -181
+          "name": "玉山證券",
+          "buy": 179,
+          "sell": 424,
+          "net": -245
         },
         {
           "rank": 8,
-          "name": "統一",
-          "buy": 70,
-          "sell": 180,
-          "net": -110
+          "name": "合庫",
+          "buy": 438,
+          "sell": 17,
+          "net": 421
         },
         {
           "rank": 9,
-          "name": "國泰綜合",
-          "buy": 146,
-          "sell": 95,
-          "net": 51
+          "name": "富邦",
+          "buy": 309,
+          "sell": 136,
+          "net": 173
         },
         {
           "rank": 10,
-          "name": "港商野村",
-          "buy": 87,
-          "sell": 147,
-          "net": -60
+          "name": "美林證券",
+          "buy": 328,
+          "sell": 97,
+          "net": 231
         }
       ],
-      "total_net": -275
+      "total_net": -299
     },
     {
       "rank": 22,
@@ -1648,153 +1648,153 @@
         {
           "rank": 1,
           "name": "元大",
-          "buy": 894,
-          "sell": 816,
-          "net": 78
+          "buy": 1625,
+          "sell": 1461,
+          "net": 164
         },
         {
           "rank": 2,
           "name": "凱基",
-          "buy": 197,
-          "sell": 358,
-          "net": -161
+          "buy": 438,
+          "sell": 528,
+          "net": -90
         },
         {
           "rank": 3,
           "name": "台新",
-          "buy": 99,
-          "sell": 393,
-          "net": -294
+          "buy": 149,
+          "sell": 450,
+          "net": -301
         },
         {
           "rank": 4,
-          "name": "星洲瑞銀",
-          "buy": 168,
-          "sell": 206,
-          "net": -38
+          "name": "富邦",
+          "buy": 318,
+          "sell": 257,
+          "net": 61
         },
         {
           "rank": 5,
-          "name": "群益",
-          "buy": 171,
-          "sell": 194,
-          "net": -23
+          "name": "玉山證券",
+          "buy": 319,
+          "sell": 236,
+          "net": 83
         },
         {
           "rank": 6,
-          "name": "富邦",
-          "buy": 198,
-          "sell": 167,
-          "net": 31
+          "name": "國泰綜合",
+          "buy": 277,
+          "sell": 260,
+          "net": 17
         },
         {
           "rank": 7,
-          "name": "美商高盛亞",
-          "buy": 11,
-          "sell": 295,
-          "net": -284
+          "name": "群益",
+          "buy": 219,
+          "sell": 263,
+          "net": -44
         },
         {
           "rank": 8,
-          "name": "國泰綜合",
-          "buy": 189,
-          "sell": 114,
-          "net": 75
+          "name": "永豐金",
+          "buy": 223,
+          "sell": 194,
+          "net": 29
         },
         {
           "rank": 9,
-          "name": "摩根士丹利",
-          "buy": 191,
-          "sell": 42,
-          "net": 149
+          "name": "星洲瑞銀",
+          "buy": 192,
+          "sell": 218,
+          "net": -26
         },
         {
           "rank": 10,
-          "name": "玉山證券",
-          "buy": 197,
-          "sell": 23,
-          "net": 174
+          "name": "美林證券",
+          "buy": 111,
+          "sell": 250,
+          "net": -139
         }
       ],
-      "total_net": -293
+      "total_net": -246
     },
     {
       "rank": 23,
-      "name": "振發",
-      "code": "5426",
+      "name": "華星光",
+      "code": "4979",
       "brokers": [
         {
           "rank": 1,
           "name": "元大",
-          "buy": 844,
-          "sell": 668,
-          "net": 176
+          "buy": 778,
+          "sell": 650,
+          "net": 128
         },
         {
           "rank": 2,
           "name": "凱基",
-          "buy": 212,
-          "sell": 644,
-          "net": -432
+          "buy": 559,
+          "sell": 652,
+          "net": -93
         },
         {
           "rank": 3,
-          "name": "國泰綜合",
-          "buy": 280,
-          "sell": 191,
-          "net": 89
+          "name": "美商高盛亞",
+          "buy": 847,
+          "sell": 297,
+          "net": 550
         },
         {
           "rank": 4,
-          "name": "富邦",
-          "buy": 230,
-          "sell": 236,
-          "net": -6
+          "name": "星洲瑞銀",
+          "buy": 235,
+          "sell": 719,
+          "net": -484
         },
         {
           "rank": 5,
-          "name": "台新",
-          "buy": 293,
-          "sell": 122,
-          "net": 171
+          "name": "富邦",
+          "buy": 490,
+          "sell": 315,
+          "net": 175
         },
         {
           "rank": 6,
-          "name": "群益",
-          "buy": 132,
-          "sell": 205,
-          "net": -73
+          "name": "摩根士丹利",
+          "buy": 410,
+          "sell": 237,
+          "net": 173
         },
         {
           "rank": 7,
-          "name": "永豐金",
-          "buy": 129,
-          "sell": 186,
-          "net": -57
+          "name": "統一",
+          "buy": 88,
+          "sell": 535,
+          "net": -447
         },
         {
           "rank": 8,
-          "name": "美商高盛亞",
-          "buy": 106,
-          "sell": 139,
-          "net": -33
+          "name": "群益",
+          "buy": 149,
+          "sell": 324,
+          "net": -175
         },
         {
           "rank": 9,
-          "name": "兆豐",
-          "buy": 105,
-          "sell": 56,
-          "net": 49
+          "name": "永豐金",
+          "buy": 200,
+          "sell": 148,
+          "net": 52
         },
         {
           "rank": 10,
-          "name": "新光",
-          "buy": 124,
-          "sell": 32,
-          "net": 92
+          "name": "台新",
+          "buy": 174,
+          "sell": 158,
+          "net": 16
         }
       ],
-      "total_net": -24
+      "total_net": -105
     },
     {
       "rank": 24,
@@ -1804,309 +1804,309 @@
         {
           "rank": 1,
           "name": "元大",
-          "buy": 979,
-          "sell": 848,
-          "net": 131
+          "buy": 1625,
+          "sell": 1540,
+          "net": 85
         },
         {
           "rank": 2,
           "name": "群益",
-          "buy": 189,
-          "sell": 472,
-          "net": -283
+          "buy": 345,
+          "sell": 616,
+          "net": -271
         },
         {
           "rank": 3,
-          "name": "華南永昌",
-          "buy": 489,
-          "sell": 71,
-          "net": 418
+          "name": "凱基",
+          "buy": 349,
+          "sell": 385,
+          "net": -36
         },
         {
           "rank": 4,
-          "name": "凱基",
-          "buy": 222,
-          "sell": 282,
-          "net": -60
+          "name": "華南永昌",
+          "buy": 558,
+          "sell": 110,
+          "net": 448
         },
         {
           "rank": 5,
           "name": "永豐金",
-          "buy": 183,
-          "sell": 167,
-          "net": 16
+          "buy": 286,
+          "sell": 304,
+          "net": -18
         },
         {
           "rank": 6,
           "name": "富邦",
-          "buy": 174,
-          "sell": 165,
+          "buy": 277,
+          "sell": 268,
           "net": 9
         },
         {
           "rank": 7,
           "name": "台新",
-          "buy": 132,
-          "sell": 138,
-          "net": -6
+          "buy": 202,
+          "sell": 252,
+          "net": -50
         },
         {
           "rank": 8,
-          "name": "摩根大通",
-          "buy": 33,
-          "sell": 205,
-          "net": -172
+          "name": "國泰綜合",
+          "buy": 192,
+          "sell": 165,
+          "net": 27
         },
         {
           "rank": 9,
           "name": "統一",
-          "buy": 77,
-          "sell": 130,
-          "net": -53
+          "buy": 98,
+          "sell": 168,
+          "net": -70
         },
         {
           "rank": 10,
-          "name": "國泰綜合",
-          "buy": 96,
-          "sell": 79,
-          "net": 17
+          "name": "摩根大通",
+          "buy": 33,
+          "sell": 205,
+          "net": -172
         }
       ],
-      "total_net": 17
+      "total_net": -48
     },
     {
       "rank": 25,
-      "name": "世界",
-      "code": "5347",
-      "brokers": [
-        {
-          "rank": 1,
-          "name": "美商高盛亞",
-          "buy": 355,
-          "sell": 512,
-          "net": -157
-        },
-        {
-          "rank": 2,
-          "name": "凱基",
-          "buy": 238,
-          "sell": 623,
-          "net": -385
-        },
-        {
-          "rank": 3,
-          "name": "元大",
-          "buy": 428,
-          "sell": 287,
-          "net": 141
-        },
-        {
-          "rank": 4,
-          "name": "星洲瑞銀",
-          "buy": 317,
-          "sell": 369,
-          "net": -52
-        },
-        {
-          "rank": 5,
-          "name": "摩根士丹利",
-          "buy": 141,
-          "sell": 227,
-          "net": -86
-        },
-        {
-          "rank": 6,
-          "name": "美林證券",
-          "buy": 232,
-          "sell": 57,
-          "net": 175
-        },
-        {
-          "rank": 7,
-          "name": "富邦",
-          "buy": 182,
-          "sell": 72,
-          "net": 110
-        },
-        {
-          "rank": 8,
-          "name": "永豐金",
-          "buy": 88,
-          "sell": 157,
-          "net": -69
-        },
-        {
-          "rank": 9,
-          "name": "兆豐",
-          "buy": 72,
-          "sell": 126,
-          "net": -54
-        },
-        {
-          "rank": 10,
-          "name": "玉山證券",
-          "buy": 127,
-          "sell": 57,
-          "net": 70
-        }
-      ],
-      "total_net": -307
-    },
-    {
-      "rank": 26,
       "name": "中美晶",
       "code": "5483",
       "brokers": [
         {
           "rank": 1,
-          "name": "凱基",
-          "buy": 463,
-          "sell": 557,
-          "net": -94
+          "name": "元大",
+          "buy": 700,
+          "sell": 711,
+          "net": -11
         },
         {
           "rank": 2,
-          "name": "元大",
-          "buy": 338,
-          "sell": 486,
-          "net": -148
+          "name": "凱基",
+          "buy": 714,
+          "sell": 687,
+          "net": 27
         },
         {
           "rank": 3,
           "name": "美商高盛亞",
-          "buy": 465,
-          "sell": 268,
-          "net": 197
+          "buy": 605,
+          "sell": 470,
+          "net": 135
         },
         {
           "rank": 4,
           "name": "摩根士丹利",
-          "buy": 268,
-          "sell": 129,
-          "net": 139
+          "buy": 394,
+          "sell": 286,
+          "net": 108
         },
         {
           "rank": 5,
           "name": "富邦",
-          "buy": 159,
-          "sell": 143,
-          "net": 16
+          "buy": 253,
+          "sell": 280,
+          "net": -27
         },
         {
           "rank": 6,
-          "name": "群益",
-          "buy": 131,
-          "sell": 101,
-          "net": 30
+          "name": "國泰綜合",
+          "buy": 235,
+          "sell": 182,
+          "net": 53
         },
         {
           "rank": 7,
-          "name": "國泰綜合",
-          "buy": 142,
-          "sell": 88,
-          "net": 54
+          "name": "台新",
+          "buy": 196,
+          "sell": 202,
+          "net": -6
         },
         {
           "rank": 8,
-          "name": "星洲瑞銀",
-          "buy": 110,
-          "sell": 105,
-          "net": 5
+          "name": "永豐金",
+          "buy": 210,
+          "sell": 155,
+          "net": 55
         },
         {
           "rank": 9,
-          "name": "永豐金",
-          "buy": 112,
-          "sell": 83,
-          "net": 29
+          "name": "星洲瑞銀",
+          "buy": 178,
+          "sell": 159,
+          "net": 19
         },
         {
           "rank": 10,
-          "name": "台新",
-          "buy": 92,
-          "sell": 70,
-          "net": 22
+          "name": "群益",
+          "buy": 166,
+          "sell": 165,
+          "net": 1
         }
       ],
-      "total_net": 250
+      "total_net": 354
     },
     {
-      "rank": 27,
-      "name": "力新",
-      "code": "5202",
+      "rank": 26,
+      "name": "振發",
+      "code": "5426",
       "brokers": [
         {
           "rank": 1,
-          "name": "富邦",
-          "buy": 716,
-          "sell": 390,
-          "net": 326
+          "name": "元大",
+          "buy": 1063,
+          "sell": 848,
+          "net": 215
         },
         {
           "rank": 2,
           "name": "凱基",
-          "buy": 651,
-          "sell": 352,
-          "net": 299
+          "buy": 272,
+          "sell": 744,
+          "net": -472
+        },
+        {
+          "rank": 3,
+          "name": "富邦",
+          "buy": 295,
+          "sell": 299,
+          "net": -4
+        },
+        {
+          "rank": 4,
+          "name": "國泰綜合",
+          "buy": 305,
+          "sell": 235,
+          "net": 70
+        },
+        {
+          "rank": 5,
+          "name": "台新",
+          "buy": 367,
+          "sell": 158,
+          "net": 209
+        },
+        {
+          "rank": 6,
+          "name": "永豐金",
+          "buy": 197,
+          "sell": 227,
+          "net": -30
+        },
+        {
+          "rank": 7,
+          "name": "群益",
+          "buy": 166,
+          "sell": 238,
+          "net": -72
+        },
+        {
+          "rank": 8,
+          "name": "美商高盛亞",
+          "buy": 121,
+          "sell": 168,
+          "net": -47
+        },
+        {
+          "rank": 9,
+          "name": "摩根士丹利",
+          "buy": 48,
+          "sell": 195,
+          "net": -147
+        },
+        {
+          "rank": 10,
+          "name": "兆豐",
+          "buy": 132,
+          "sell": 77,
+          "net": 55
+        }
+      ],
+      "total_net": -223
+    },
+    {
+      "rank": 27,
+      "name": "天品",
+      "code": "6199",
+      "brokers": [
+        {
+          "rank": 1,
+          "name": "群益",
+          "buy": 1826,
+          "sell": 1425,
+          "net": 401
+        },
+        {
+          "rank": 2,
+          "name": "凱基",
+          "buy": 1149,
+          "sell": 1400,
+          "net": -251
         },
         {
           "rank": 3,
           "name": "元大",
-          "buy": 249,
-          "sell": 404,
+          "buy": 261,
+          "sell": 416,
           "net": -155
         },
         {
           "rank": 4,
-          "name": "永豐金",
-          "buy": 229,
-          "sell": 283,
-          "net": -54
+          "name": "國票",
+          "buy": 253,
+          "sell": 27,
+          "net": 226
         },
         {
           "rank": 5,
-          "name": "國票",
-          "buy": 30,
-          "sell": 331,
-          "net": -301
+          "name": "摩根士丹利",
+          "buy": 95,
+          "sell": 108,
+          "net": -13
         },
         {
           "rank": 6,
-          "name": "華南永昌",
-          "buy": 249,
-          "sell": 52,
-          "net": 197
+          "name": "美商高盛亞",
+          "buy": 35,
+          "sell": 139,
+          "net": -104
         },
         {
           "rank": 7,
-          "name": "台新",
-          "buy": 87,
-          "sell": 167,
-          "net": -80
+          "name": "永豐金",
+          "buy": 28,
+          "sell": 102,
+          "net": -74
         },
         {
           "rank": 8,
-          "name": "群益",
-          "buy": 57,
-          "sell": 139,
-          "net": -82
+          "name": "港商野村",
+          "buy": 39,
+          "sell": 79,
+          "net": -40
         },
         {
           "rank": 9,
-          "name": "星洲瑞銀",
-          "buy": 181,
-          "sell": 14,
-          "net": 167
+          "name": "台新",
+          "buy": 27,
+          "sell": 55,
+          "net": -28
         },
         {
           "rank": 10,
-          "name": "新光",
-          "buy": 86,
-          "sell": 98,
-          "net": -12
+          "name": "國泰綜合",
+          "buy": 70,
+          "sell": 8,
+          "net": 62
         }
       ],
-      "total_net": 305
+      "total_net": 24
     },
     {
       "rank": 28,
@@ -2116,231 +2116,231 @@
         {
           "rank": 1,
           "name": "元大",
-          "buy": 571,
-          "sell": 729,
-          "net": -158
+          "buy": 703,
+          "sell": 789,
+          "net": -86
         },
         {
           "rank": 2,
           "name": "富邦",
-          "buy": 476,
-          "sell": 275,
-          "net": 201
+          "buy": 699,
+          "sell": 709,
+          "net": -10
         },
         {
           "rank": 3,
           "name": "凱基",
-          "buy": 384,
-          "sell": 260,
-          "net": 124
+          "buy": 521,
+          "sell": 413,
+          "net": 108
         },
         {
           "rank": 4,
-          "name": "群益",
-          "buy": 146,
-          "sell": 138,
-          "net": 8
+          "name": "國票",
+          "buy": 339,
+          "sell": 355,
+          "net": -16
         },
         {
           "rank": 5,
-          "name": "台新",
-          "buy": 110,
-          "sell": 135,
-          "net": -25
+          "name": "群益",
+          "buy": 187,
+          "sell": 151,
+          "net": 36
         },
         {
           "rank": 6,
-          "name": "國泰綜合",
-          "buy": 105,
-          "sell": 129,
-          "net": -24
+          "name": "華南永昌",
+          "buy": 135,
+          "sell": 153,
+          "net": -18
         },
         {
           "rank": 7,
-          "name": "華南永昌",
-          "buy": 103,
-          "sell": 131,
-          "net": -28
+          "name": "永豐金",
+          "buy": 109,
+          "sell": 178,
+          "net": -69
         },
         {
           "rank": 8,
-          "name": "永豐金",
-          "buy": 71,
-          "sell": 135,
-          "net": -64
+          "name": "台新",
+          "buy": 125,
+          "sell": 152,
+          "net": -27
         },
         {
           "rank": 9,
-          "name": "國票",
-          "buy": 132,
-          "sell": 33,
-          "net": 99
+          "name": "國泰綜合",
+          "buy": 105,
+          "sell": 148,
+          "net": -43
         },
         {
           "rank": 10,
           "name": "統一",
-          "buy": 65,
-          "sell": 90,
-          "net": -25
+          "buy": 154,
+          "sell": 91,
+          "net": 63
         }
       ],
-      "total_net": 108
+      "total_net": -62
     },
     {
       "rank": 29,
+      "name": "瀧澤科",
+      "code": "6609",
+      "brokers": [
+        {
+          "rank": 1,
+          "name": "凱基",
+          "buy": 1071,
+          "sell": 681,
+          "net": 390
+        },
+        {
+          "rank": 2,
+          "name": "元大",
+          "buy": 543,
+          "sell": 649,
+          "net": -106
+        },
+        {
+          "rank": 3,
+          "name": "富邦",
+          "buy": 304,
+          "sell": 474,
+          "net": -170
+        },
+        {
+          "rank": 4,
+          "name": "華南永昌",
+          "buy": 276,
+          "sell": 307,
+          "net": -31
+        },
+        {
+          "rank": 5,
+          "name": "台新",
+          "buy": 138,
+          "sell": 359,
+          "net": -221
+        },
+        {
+          "rank": 6,
+          "name": "永豐金",
+          "buy": 193,
+          "sell": 188,
+          "net": 5
+        },
+        {
+          "rank": 7,
+          "name": "美商高盛亞",
+          "buy": 317,
+          "sell": 54,
+          "net": 263
+        },
+        {
+          "rank": 8,
+          "name": "群益",
+          "buy": 216,
+          "sell": 135,
+          "net": 81
+        },
+        {
+          "rank": 9,
+          "name": "港商野村",
+          "buy": 256,
+          "sell": 5,
+          "net": 251
+        },
+        {
+          "rank": 10,
+          "name": "兆豐",
+          "buy": 11,
+          "sell": 211,
+          "net": -200
+        }
+      ],
+      "total_net": 262
+    },
+    {
+      "rank": 30,
       "name": "高僑",
       "code": "6234",
       "brokers": [
         {
           "rank": 1,
           "name": "元大",
-          "buy": 779,
-          "sell": 867,
-          "net": -88
+          "buy": 1064,
+          "sell": 1120,
+          "net": -56
         },
         {
           "rank": 2,
           "name": "凱基",
-          "buy": 171,
-          "sell": 247,
-          "net": -76
+          "buy": 233,
+          "sell": 326,
+          "net": -93
         },
         {
           "rank": 3,
           "name": "富邦",
-          "buy": 156,
-          "sell": 215,
-          "net": -59
+          "buy": 251,
+          "sell": 282,
+          "net": -31
         },
         {
           "rank": 4,
-          "name": "群益",
-          "buy": 158,
-          "sell": 182,
-          "net": -24
+          "name": "永豐金",
+          "buy": 196,
+          "sell": 251,
+          "net": -55
         },
         {
           "rank": 5,
-          "name": "永豐金",
-          "buy": 149,
-          "sell": 166,
-          "net": -17
+          "name": "群益",
+          "buy": 205,
+          "sell": 237,
+          "net": -32
         },
         {
           "rank": 6,
           "name": "國泰綜合",
-          "buy": 158,
-          "sell": 91,
-          "net": 67
+          "buy": 248,
+          "sell": 165,
+          "net": 83
         },
         {
           "rank": 7,
+          "name": "台新",
+          "buy": 212,
+          "sell": 147,
+          "net": 65
+        },
+        {
+          "rank": 8,
+          "name": "美商高盛亞",
+          "buy": 152,
+          "sell": 152,
+          "net": 0
+        },
+        {
+          "rank": 9,
           "name": "統一",
-          "buy": 99,
-          "sell": 119,
-          "net": -20
-        },
-        {
-          "rank": 8,
-          "name": "台新",
-          "buy": 132,
-          "sell": 74,
-          "net": 58
-        },
-        {
-          "rank": 9,
-          "name": "美商高盛亞",
-          "buy": 96,
-          "sell": 80,
-          "net": 16
-        },
-        {
-          "rank": 10,
-          "name": "兆豐",
-          "buy": 62,
-          "sell": 84,
-          "net": -22
-        }
-      ],
-      "total_net": -165
-    },
-    {
-      "rank": 30,
-      "name": "撼訊",
-      "code": "6150",
-      "brokers": [
-        {
-          "rank": 1,
-          "name": "凱基",
-          "buy": 592,
-          "sell": 627,
-          "net": -35
-        },
-        {
-          "rank": 2,
-          "name": "元大",
-          "buy": 469,
-          "sell": 367,
-          "net": 102
-        },
-        {
-          "rank": 3,
-          "name": "永豐金",
-          "buy": 245,
-          "sell": 248,
-          "net": -3
-        },
-        {
-          "rank": 4,
-          "name": "富邦",
-          "buy": 223,
-          "sell": 258,
-          "net": -35
-        },
-        {
-          "rank": 5,
-          "name": "美商高盛亞",
-          "buy": 282,
-          "sell": 98,
-          "net": 184
-        },
-        {
-          "rank": 6,
-          "name": "國票",
-          "buy": 175,
-          "sell": 73,
-          "net": 102
-        },
-        {
-          "rank": 7,
-          "name": "台新",
-          "buy": 120,
-          "sell": 121,
-          "net": -1
-        },
-        {
-          "rank": 8,
-          "name": "新光",
-          "buy": 45,
-          "sell": 193,
-          "net": -148
-        },
-        {
-          "rank": 9,
-          "name": "摩根士丹利",
           "buy": 117,
-          "sell": 79,
-          "net": 38
+          "sell": 150,
+          "net": -33
         },
         {
           "rank": 10,
-          "name": "群益",
-          "buy": 64,
-          "sell": 72,
-          "net": -8
+          "name": "華南永昌",
+          "buy": 158,
+          "sell": 76,
+          "net": 82
         }
       ],
-      "total_net": 196
+      "total_net": -70
     }
   ]
 }
